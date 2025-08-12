@@ -6,7 +6,7 @@ interface LoadingProps {
 }
 
 export const Loading: FC<LoadingProps> = ({ className }) => {
-  return <div className={cn("spin-1 text-primary-500 w-20", className)}></div>
+  return <div className={cn("loader text-primary-500 w-20 h-20", className)}></div>
 }
 
 Loading.displayName = "Loading"
