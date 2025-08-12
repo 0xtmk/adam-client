@@ -21,7 +21,7 @@
 }
 
 .bg-link-header {
-  background: linear-gradient( rgba(89, 161, 255, 0.2) -27.86%, rgba(62, 134, 228, 0.2) 82.05%);
+  background: linear-gradient(rgba(89, 161, 255, 0.2) -27.86%, rgba(62, 134, 228, 0.2) 82.05%);
 }
 
 .bg-link-header-active {
@@ -36,4 +36,27 @@
 
 .bg-border {
   background: linear-gradient(#235994, #112237);
+}
+
+.card-daily-quest {
+  border-radius: 38px;
+  background: rgba(16, 38, 68, 0.2);
+  box-shadow:
+    0 4px 4px 0 rgba(163, 163, 163, 0.25) inset,
+    0 4px 6.5px 0 rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(5px);
+}
+
+.bg-start {
+  border-radius: 6.667px;
+  border: 1px solid #d9d9d9!important;
+  background: linear-gradient(180deg, #3971b7 0%, #61a8ff 100%)!important;
+  box-shadow:
+    0 4px 4px 0 rgba(255, 255, 255, 0.25) inset,
+    0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  transition: background 0.2s;
+}
+
+.bg-start:hover {
+  background: linear-gradient(180deg, #61a8ff 0%, #3971b7 100%)!important;
 }
