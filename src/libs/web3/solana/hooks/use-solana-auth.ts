@@ -20,7 +20,6 @@ export const useSolanaAuth = () => {
 
   const handleLogin = useCallback(async () => {
     if (!address || disconnecting || !connected || checkedFirstLoginRef.current) return
-
     const isExpired = token && jwtDecode<{ exp: number }>(token).exp * 1000 <= Date.now()
     const isInvalidToken = !token || isExpired
     const isKeepedAddress = userInfo?.address && address?.toLowerCase() === userInfo?.address?.toLowerCase()
@@ -28,7 +27,6 @@ export const useSolanaAuth = () => {
     if (isKeepedAddress && !isInvalidToken) {
       return true
     }
-
     try {
       const { nonce } = await Service.auth.getNonce(address)
 

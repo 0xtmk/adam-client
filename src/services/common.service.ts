@@ -1,12 +1,33 @@
 import { axiosInstance } from "@/libs/axios/axios-instance"
 
 export class CommonService {
-  async getUrlGame() {
-    const { data } = await axiosInstance.request<{ url: string }>({
+  async getTwitterUrl() {
+    const { data } = await axiosInstance.request({
       method: "GET",
-      url: "/game/get-link",
-      params: {},
+      url: "/twitter/link",
     })
+
+    return data
+  }
+
+  async callbackTwitter(code: string) {
+    const { data } = await axiosInstance.request({
+      method: "POST",
+      url: "/twitter/connect-callback",
+      data: {
+        code,
+      },
+    })
+
+    return data
+  }
+
+  async logoutTwitter() {
+    const { data } = await axiosInstance.request({
+      method: "POST",
+      url: "/twitter/logout",
+    })
+
     return data
   }
 }

@@ -6,7 +6,7 @@ interface EmptyLayoutProps {}
 export const EmptyLayout: FC<EmptyLayoutProps> = () => {
   return (
     <div>
-      <main className="pt-20">
+      <main className="pt-10">
         <Outlet />
       </main>
     </div>

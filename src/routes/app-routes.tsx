@@ -4,9 +4,10 @@ import { RouteObject, useRoutes } from "react-router-dom"
 import { DefaultLayout } from "@/layouts/default-layout"
 import { EmptyLayout } from "@/layouts/empty-layout"
 import { HomePage } from "@/pages/home"
-import NotFoundPage from "@/pages/not-found"
-import { routePath } from "./routes"
 import { LeaderboardPage } from "@/pages/leaderboard"
+import NotFoundPage from "@/pages/not-found"
+import TestPage from "@/pages/test"
+import { routePath } from "./routes"
 
 interface AppRoutesProps {}
 
@@ -25,7 +26,10 @@ const routes: RouteObject[] = [
   // Routes with empty layout
   {
     element: <EmptyLayout />,
-    children: [{ path: routePath.notFound, element: <NotFoundPage /> }],
+    children: [
+      { path: routePath.test, element: <TestPage /> },
+      { path: routePath.notFound, element: <NotFoundPage /> },
+    ],
   },
 ]
 

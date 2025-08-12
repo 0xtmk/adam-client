@@ -1,1 +1,3 @@
-export const linkBuy = ""
+export enum PARAMS_CODE {
+  code = "code",
+}

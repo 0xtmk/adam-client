@@ -1,6 +1,6 @@
 import { AuthService } from "./auth.service"
 import { CommonService } from "./common.service"
-import { GameService } from "./game.service"
+import MissionService from "./mission.service"
 import { UserService } from "./user.service"
 import { Web3Service } from "./web3.service"
 
@@ -9,5 +9,5 @@ export const Service = {
   user: new UserService(),
   web3: new Web3Service(),
   common: new CommonService(),
-  game: new GameService(),
+  mission: new MissionService(),
 }

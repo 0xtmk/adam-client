@@ -16,4 +16,5 @@ export interface UserInfo {
   created_time?: string
   updated_time?: string
   token?: string
+  [key: string]: any
 }

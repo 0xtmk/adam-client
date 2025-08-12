@@ -4,7 +4,7 @@ export const routePath = {
   home: "/",
   comingSoon: "/coming-soon",
   notFound: "*",
-  // bless: "/bless",
+  test: "/test",
   leaderboard: "/leaderboard",
 } as const
 
