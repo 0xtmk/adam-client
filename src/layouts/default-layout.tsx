@@ -8,7 +8,7 @@ export const DefaultLayout: FC<DefaultLayoutProps> = () => {
   return (
     <div >
       <Header />
-      <main >
+      <main className="pt-6" >
         <Outlet />
       </main>
     </div>

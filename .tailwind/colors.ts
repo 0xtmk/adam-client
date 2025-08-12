@@ -39,8 +39,7 @@ const config = {
   dark: {
     default: colors.gray[900],
     primary: appendDefault(primary),
-    body: "rgba(8,17,22,1)",
-    // body: colors.gray[950],
+    body: "#081116",
     component: colors.gray[800],
     modal: colors.gray[800],
     table: colors.zinc[900],

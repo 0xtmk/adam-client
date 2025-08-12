@@ -1,3 +1,39 @@
 .bg-fill {
   background-size: 100% 100%;
 }
+
+.header-bg-linear {
+  background: var(
+    --background,
+    linear-gradient(137deg, rgba(16, 127, 255, 0.2) 18.92%, rgba(89, 118, 136, 0.14) 82.06%)
+  );
+}
+
+.header-navlink {
+  box-shadow:
+    0 0.842px 0.842px 0 rgba(163, 163, 163, 0.25) inset,
+    0 0.842px 1.368px 0 rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(1.0524057149887085px);
+}
+
+.bg-leaderboard-gradient {
+  background: linear-gradient(172deg, rgba(89, 161, 255, 0.2), rgba(62, 134, 228, 0.2));
+}
+
+.bg-link-header {
+  background: linear-gradient( rgba(89, 161, 255, 0.2) -27.86%, rgba(62, 134, 228, 0.2) 82.05%);
+}
+
+.bg-link-header-active {
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),
+    linear-gradient(172deg, rgba(89, 161, 255, 0.2) -27.86%, rgba(62, 134, 228, 0.2) 82.05%);
+}
+
+.bg-border {
+  background: linear-gradient(#235994, #112237);
+}

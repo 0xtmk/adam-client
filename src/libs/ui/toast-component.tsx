@@ -24,7 +24,7 @@ export const ToastComponent: FC<ToastComponentProps> = ({ title, message, type, 
       {toastIcon[type]}
       <div className="space-y-1">
         <p className={cn("text-lg font-medium capitalize leading-none text-black")}>{_title}</p>
-        <p className="text-sm text-stone-900 text-neueMachinaBold">{message}</p>
+        <p className="text-sm text-stone-900 font-neueMachinaBold">{message}</p>
       </div>
       {/* <p
         className={cn(
