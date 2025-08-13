@@ -16,7 +16,6 @@ export const HomePage: FC<HomePageProps> = () => {
 
   const [missionCheckingList, setMissionCheckingList] = useState<number[]>([])
   const [missionCountdowns, setMissionCountdowns] = useState<{ [id: number]: number }>({})
-  const [missionRetry, setMissionRetry] = useState<{ [id: number]: boolean }>({})
   const [missionDone, setMissionDone] = useState<{ [id: number]: boolean }>({})
 
   const { data: missionList, isLoading: gettingMissionList } = useSWR(["get-mission-list", token], async () => {
@@ -28,44 +27,28 @@ export const HomePage: FC<HomePageProps> = () => {
     const res = await Service.mission.checkMission(missionId)
     if (res?.url) {
       setMissionCheckingList((prev) => [...prev, missionId])
-      setMissionCountdowns((prev) => ({ ...prev, [missionId]: 60 }))
+      setMissionCountdowns((prev) => ({ ...prev, [missionId]: 10 }))
       openLinkInNewTab(res?.url)
     }
 
-    if(res === true){
+    if (res === true) {
       setMissionDone((prev) => ({ ...prev, [missionId]: true }))
     }
   }
 
   useEffect(() => {
-    const idsToCheck = missionCheckingList.filter(
-      (id) => missionCountdowns[id] === 0 && !missionDone[id] && !missionRetry[id],
-    )
-    if (idsToCheck.length === 0) return
-    idsToCheck.forEach(async (id) => {
-      const res = await Service.mission.checkMission(id)
-      if (!res?.url) {
-        setMissionDone((prev) => ({ ...prev, [id]: true }))
-      } else {
-        setMissionRetry((prev) => ({ ...prev, [id]: true }))
-      }
-    })
-  }, [missionCountdowns, missionCheckingList, missionDone, missionRetry])
-
-  useEffect(() => {
-    missionCheckingList.forEach(async (id) => {
-      if (missionCountdowns[id] === 0 && !missionDone[id] && !missionRetry[id]) {
-        const res = await Service.mission.checkMission(id)
-        if (!res?.url) {
-          setMissionDone((prev) => ({ ...prev, [id]: true }))
-        } else {
-          setMissionRetry((prev) => ({ ...prev, [id]: true }))
-        }
-      }
-    })
-  }, [missionCountdowns, missionCheckingList, missionDone, missionRetry])
-
-  console.log("missionList", missionList, missionCheckingList)
+    if (missionCheckingList.length === 0) return
+    const interval = setInterval(() => {
+      setMissionCountdowns((prev) => {
+        const updated = { ...prev }
+        missionCheckingList.forEach((id) => {
+          if (updated[id] > 0) updated[id] = updated[id] - 1
+        })
+        return updated
+      })
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [missionCheckingList])
 
   return (
     <Container>
@@ -86,8 +69,7 @@ export const HomePage: FC<HomePageProps> = () => {
               {missionList?.map((item, index) => {
                 const isChecking = missionCheckingList.includes(item?.id)
                 const countdown = missionCountdowns[item?.id] || 0
-                const isDone = missionDone[item?.id]
-                const isRetry = missionRetry[item?.id]
+                const isDone = missionDone[item?.id] || item?.user_status === MISSION_STATUS.DONE
 
                 return (
                   <div
@@ -98,27 +80,26 @@ export const HomePage: FC<HomePageProps> = () => {
                       <img src="/icons/twitter.png" className="h-10 w-10" alt="" />
                       <Text className="text-2xl">{item?.name}</Text>
                     </div>
-                    {item?.user_status === MISSION_STATUS.UNDONE && !isDone && (
-                      <Button onClick={() => handleCheckMission(item?.id)} className="bg-start h-9 min-w-40">
-                        <Text className="font-neueMachinaBold text-xl text-black">Start</Text>
-                      </Button>
-                    )}
-
-                    {isChecking && countdown > 0 && (
-                      <div className="flex h-9 min-w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#FF4444]">
-                        <Text className="font-neueMachinaBold text-xl text-black">{countdown}s</Text>
-                      </div>
-                    )}
-
-                    {(item?.user_status === MISSION_STATUS.DONE || isDone) && (
+                    {isDone ? (
                       <div className="flex h-9 min-w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#C8C8C8]">
                         <Text className="font-neueMachinaBold text-xl text-black">Claimed</Text>
                       </div>
-                    )}
-
-                    {isChecking && countdown === 0 && isRetry && (
-                      <Button className="h-9 min-w-40 !border-[#D9D9D9] !bg-[#FFCB3D]">
-                        <Text className="font-neueMachinaBold text-xl text-black">Retry</Text>
+                    ) : isChecking ? (
+                      countdown > 0 ? (
+                        <div className="flex h-9 min-w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#FF4444]">
+                          <Text className="font-neueMachinaBold text-xl text-black">{countdown}s</Text>
+                        </div>
+                      ) : (
+                        <Button
+                          onClick={() => handleCheckMission(item?.id)}
+                          className="h-9 min-w-40 !border-[#D9D9D9] !bg-[#FFCB3D]"
+                        >
+                          <Text className="font-neueMachinaBold text-xl text-black">Retry</Text>
+                        </Button>
+                      )
+                    ) : (
+                      <Button onClick={() => handleCheckMission(item?.id)} className="bg-start h-9 min-w-40">
+                        <Text className="font-neueMachinaBold text-xl text-black">Start</Text>
                       </Button>
                     )}
                   </div>
