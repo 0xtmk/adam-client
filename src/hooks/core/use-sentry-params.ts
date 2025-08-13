@@ -21,7 +21,7 @@ const useSentryParams = () => {
     }
 
     execute()
-  }, [userInfo, code])
+  }, [code, userInfo?.twitter_id])
 }
 
 export default useSentryParams
