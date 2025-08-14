@@ -18,3 +18,25 @@ export interface UserInfo {
   token?: string
   [key: string]: any
 }
+
+export interface RLeaderboard {
+  list_top: Listtop[]
+  user_rank: Userrank
+}
+
+interface Userrank {
+  id: number
+  twitter_username: null
+  address: null
+  balance: number
+  rank: number
+  total_invite: number
+}
+
+interface Listtop {
+  id: number
+  twitter_username: string
+  address: string
+  total_invite: number
+  balance: string
+}

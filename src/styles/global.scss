@@ -73,3 +73,8 @@
   background: linear-gradient(180deg, #4781cc -80.75%, #111b27 100%);
 }
 
+.twitter-connect-btn:hover {
+  background: rgba(16,38,68,0.35);
+  box-shadow: 0 6px 0 rgba(0,0,0,0.30), inset 0 6px 8px rgba(163,163,163,0.30);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}

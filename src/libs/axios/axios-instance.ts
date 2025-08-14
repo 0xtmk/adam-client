@@ -6,6 +6,7 @@ import { isProduction } from "@/configs/env.config"
 import { useUserStore } from "@/hooks/stores/use-user-store"
 import { toast } from "react-toastify"
 import { useWeb3Store } from "../web3/evm/hooks/stores/use-web3-store"
+import { toastContent } from "@/utils/toast"
 
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_URL,
@@ -53,6 +54,18 @@ function onResponseRejected(error: AxiosError) {
     })
   }
 
+  const errorCode = (error?.response as any)?.data?.error_code
+
+  switch (errorCode) {
+    case "TWITTER_IS_CONNECTED": {
+      toastContent({
+        type: "error",
+        message: "Twitter is already connected!",
+      })
+      break
+    }
+
+  }
   return Promise.reject(error)
 }
 
