@@ -4,6 +4,7 @@ import { useUserStore } from "@/hooks/stores/use-user-store"
 import { Loading } from "@/libs/ui/loading"
 import { Text } from "@/libs/ui/text"
 import { Service } from "@/services/app.service"
+import { cn } from "@/utils/classnames"
 import { openLinkInNewTab } from "@/utils/common"
 import { Button } from "antd"
 import { FC, useEffect, useState } from "react"
@@ -19,6 +20,7 @@ export const HomePage: FC<HomePageProps> = () => {
   const [missionDone, setMissionDone] = useState<{ [id: number]: boolean }>({})
 
   const { data: missionList, isLoading: gettingMissionList } = useSWR(["get-mission-list", token], async () => {
+    if (!token) return
     const res = await Service.mission.getListMissions()
     return res
   })
@@ -77,6 +79,18 @@ export const HomePage: FC<HomePageProps> = () => {
             <div className="flex items-center justify-center">
               <Loading />
             </div>
+          ) : token ? (
+            <div className="flex justify-center">
+              <button
+                onClick={handleConnectX}
+                className="spin-btn flex h-10 w-32 items-center justify-center gap-1 rounded-full bg-[rgba(16,38,68,0.2)] shadow-[0_4px_0_rgba(0,0,0,0.25),inset_0_4px_4px_rgba(163,163,163,0.25)] backdrop-blur-[10px] active:scale-95"
+              >
+                <Text variant="span" className="font-neueMachinaBold text-base text-black">
+                  Connect
+                </Text>
+                <img src="/images/twitter.png" className="h-3 w-3" alt="" />
+              </button>
+            </div>
           ) : Number(missionList?.length) ? (
             <div className="space-y-6">
               {missionList?.map((item, index) => {
@@ -124,8 +138,8 @@ export const HomePage: FC<HomePageProps> = () => {
       </div>
       {/* spinning */}
       <div className="card-daily-quest mt-16 !rounded-b-none px-14 py-10">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-4">
+        <div className={cn("flex items-start justify-between")}>
+          <div className={cn("flex items-start justify-between", !userInfo?.twitter_id && "hidden")}>
             <img src={userInfo?.avatar} className="h-14 w-14 flex-shrink-0 rounded-full" alt="" />
             <Text className="font-neueMachinaBold">{userInfo?.twitter_full_name}</Text>
           </div>
@@ -147,7 +161,7 @@ export const HomePage: FC<HomePageProps> = () => {
         <div className="mt-4 flex items-center gap-6">
           {socials.map((item, index) => {
             return (
-              <div className="cursor-pointer active:scale-95 hover:scale-105" key={index}>
+              <div className="cursor-pointer hover:scale-105 active:scale-95" key={index}>
                 <img src={item.image} className="h-14 w-14" alt="" />
               </div>
             )
