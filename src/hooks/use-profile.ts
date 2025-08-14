@@ -1,113 +1,159 @@
+import { useSolana } from "@/libs/web3/solana/hooks/use-solana"
+import { useSolanaContracts } from "@/libs/web3/solana/hooks/use-solana-contracts"
 import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
+import { adamIdl } from "@/libs/web3/solana/idls/adam-idl"
 import { Service } from "@/services/app.service"
+import { getErrorMessage } from "@/utils/common"
+import { toastContent } from "@/utils/toast"
 import * as anchor from "@coral-xyz/anchor"
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token"
-import { useWallet } from "@solana/wallet-adapter-react"
-import { Connection, PublicKey, SystemProgram, SYSVAR_INSTRUCTIONS_PUBKEY, Transaction } from "@solana/web3.js"
+import { useAnchorWallet } from "@solana/wallet-adapter-react"
+import { ComputeBudgetProgram, PublicKey } from "@solana/web3.js"
 import BN from "bn.js"
 import { ethers } from "ethers"
+import { useState } from "react"
 
 const useProfile = () => {
-  const { address } = useSolanaWallet()
-  const { publicKey, signTransaction, sendTransaction } = useWallet()
-  const connection = new Connection("https://api.devnet.solana.com")
+  const [isClaiming, setIsClaiming] = useState(false)
 
-  // const handleClaim = async () => {
-  //   try {
-  //     if (!publicKey || !signTransaction) {
-  //       throw new Error("Wallet not connected")
-  //     }
-  //     const response = await Service.common.withdrawal()
-  //     console.log("response", response)
-  //     if (!response) return
-  //     const sign_data = response?.sign_data
+  const wallet = useSolanaWallet()
 
-  //     const full_sig_bytes = ethers.utils.arrayify(sign_data.signature)
-  //     const signature = full_sig_bytes.slice(0, 64)
-  //     const recoveryId = full_sig_bytes[64] - 27
+  const anchorWallet = useAnchorWallet()
 
-  //     const msg_digest = ethers.utils.arrayify(
-  //       ethers.utils.solidityKeccak256(
-  //         ["string", "uint64", "uint64", "uint64", "string"],
-  //         [sign_data.user_address, sign_data.claim_id, sign_data.user_id, sign_data.expireTime, sign_data.amount],
-  //       ),
-  //     )
-  //     const actual_message = Buffer.concat([Buffer.from("\x19Ethereum Signed Message:\n32"), msg_digest])
-  //     const USDC_ADDRESS = new PublicKey("Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr")
+  const { solana } = useSolana()
 
-  //     // Anchor program
-  //     const idl = await fetch("/idl/adam.json").then((res) => res.json())
-  //     const programId = new PublicKey("YOUR_PROGRAM_ID") // <-- Thay bằng programId thực tế
-  //     const wallet = {
-  //       publicKey,
-  //       signTransaction,
-  //       sendTransaction,
-  //     }
-  //     const provider = new anchor.AnchorProvider(connection, wallet as any, {})
-  //     const program = new anchor.Program(idl, programId, provider)
+  const { WALLET_SIGNATURE, USDC } = useSolanaContracts()
 
-  //     const [userClaimInfo] = anchor.web3.PublicKey.findProgramAddressSync(
-  //       [Buffer.from("user_claim"), new BN(sign_data.claim_id).toBuffer("le", 8), publicKey.toBuffer()],
-  //       program.programId,
-  //     )
-  //     const [vault] = anchor.web3.PublicKey.findProgramAddressSync(
-  //       [Buffer.from("vault_usdc"), USDC_ADDRESS.toBuffer()],
-  //       program.programId,
-  //     )
-  //     const vaultTokenAccount = await getAssociatedTokenAddress(USDC_ADDRESS, vault, true)
-  //     const userTokenAccount = await getAssociatedTokenAddress(USDC_ADDRESS, publicKey)
+  const handleClaim = async () => {
+    try {
+      if (!anchorWallet || !wallet?.publicKey || !wallet?.signTransaction) {
+        return
+      }
+      setIsClaiming(true)
 
-  //     let transaction = new Transaction()
-  //       .add(
-  //         anchor.web3.Secp256k1Program.createInstructionWithEthAddress({
-  //           ethAddress: sign_data.user_address,
-  //           message: actual_message,
-  //           signature: signature,
-  //           recoveryId: recoveryId,
-  //         }),
-  //       )
-  //       .add(
-  //         await program.methods
-  //           .claimUsdc(
-  //             new BN(sign_data.claim_id),
-  //             new BN(sign_data.user_id),
-  //             new BN(sign_data.expireTime),
-  //             Array.from(Buffer.from(signature)),
-  //             recoveryId,
-  //             sign_data.amount,
-  //           )
-  //           .accounts({
-  //             user: publicKey,
-  //             userClaimInfo: userClaimInfo,
-  //             tokenMint: USDC_ADDRESS,
-  //             vault: vault,
-  //             vaultTokenAccount: vaultTokenAccount,
-  //             userTokenAccount: userTokenAccount,
-  //             ixSysvar: SYSVAR_INSTRUCTIONS_PUBKEY,
-  //             tokenProgram: TOKEN_PROGRAM_ID,
-  //             associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-  //             systemProgram: SystemProgram.programId,
-  //           })
-  //           .instruction(),
-  //       )
+      const response = await Service.common.withdrawal()
+      if (!response) return
+      const provider = new anchor.AnchorProvider(solana.connection, anchorWallet, {
+        commitment: "finalized",
+        preflightCommitment: "finalized",
+        skipPreflight: false,
+      })
 
-  //     transaction.feePayer = publicKey
-  //     transaction.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
+      anchor.setProvider(provider)
 
-  //     // Gửi transaction cho Phantom ký và gửi
-  //     const signed = await signTransaction(transaction)
-  //     const txid = await connection.sendRawTransaction(signed.serialize(), {
-  //       skipPreflight: false,
-  //       preflightCommitment: "confirmed",
-  //     })
-  //     console.log(`Transaction: https://solscan.io/tx/${txid}?cluster=devnet`)
-  //   } catch (error) {
-  //     console.log("error", error)
-  //   }
-  // }
+      const program = new anchor.Program(adamIdl, provider)
+
+      const user = {
+        claim_id: response?.withdrawal?.id,
+        user_id: response?.withdrawal?.user_id,
+        expireTime: response?.sign_data?.expireTime,
+        amount: response?.sign_data?.amount,
+      }
+
+      const full_sig = response.sign_data.signature
+
+      let full_sig_bytes = ethers.utils.arrayify(full_sig)
+      const signature = full_sig_bytes.slice(0, 64)
+      const recoveryId = full_sig_bytes[64] - 27
+
+      const msg_digest = ethers.utils.arrayify(
+        ethers.utils.solidityKeccak256(
+          ["string", "uint64", "uint64", "uint64", "string"],
+          [wallet.publicKey.toString(), user.claim_id, user.user_id, user.expireTime, user.amount],
+        ),
+      )
+
+      const actual_message = Buffer.concat([Buffer.from("\x19Ethereum Signed Message:\n32"), msg_digest])
+      const eth_address = WALLET_SIGNATURE
+
+      const USDC_ADDRESS = new PublicKey(USDC)
+      console.log("wallet", { wallet, user })
+
+      const [userClaimInfo] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("user_claim"), new BN(user.claim_id).toArrayLike(Buffer, "le", 8), wallet.publicKey.toBuffer()],
+        program.programId,
+      )
+
+      const [vault] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("vault_usdc"), USDC_ADDRESS.toBuffer()],
+        program.programId,
+      )
+      const vaultTokenAccount = await getAssociatedTokenAddress(USDC_ADDRESS, vault, true)
+
+      const userTokenAccount = await getAssociatedTokenAddress(USDC_ADDRESS, wallet.publicKey)
+
+      const transaction = new anchor.web3.Transaction()
+        .add(
+          // Secp256k1 instruction
+          anchor.web3.Secp256k1Program.createInstructionWithEthAddress({
+            ethAddress: eth_address,
+            message: actual_message,
+            signature: signature,
+            recoveryId: recoveryId,
+          }),
+        )
+
+        .add(
+          ComputeBudgetProgram.setComputeUnitPrice({
+            microLamports: 1,
+          }),
+          await program.methods
+            .claimUsdc(
+              new BN(user.claim_id),
+              new BN(user.user_id),
+              new BN(user.expireTime),
+              Array.from(Buffer.from(signature)),
+              recoveryId,
+              user.amount,
+            )
+            .accounts({
+              user: wallet.publicKey,
+              userClaimInfo: userClaimInfo,
+              tokenMint: USDC_ADDRESS,
+              vault: vault,
+              vaultTokenAccount: vaultTokenAccount,
+              userTokenAccount: userTokenAccount,
+              ixSysvar: anchor.web3.SYSVAR_INSTRUCTIONS_PUBKEY,
+              tokenProgram: TOKEN_PROGRAM_ID,
+              associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+              systemProgram: anchor.web3.SystemProgram.programId,
+            })
+            .instruction(),
+        )
+
+      transaction.feePayer = wallet.publicKey
+      transaction.recentBlockhash = (await solana.connection.getLatestBlockhash()).blockhash
+      const hash = await wallet.sendTransaction(transaction, solana.connection)
+      const receipt = await solana.waitForTransactionReceipt({
+        hash,
+      })
+      if (receipt?.value?.err) {
+        toastContent({
+          type: "error",
+          message: "Claim token failed",
+          hash,
+        })
+      } else {
+        toastContent({
+          type: "success",
+          message: "Claim token successfully",
+          hash,
+        })
+      }
+    } catch (error) {
+      console.log("error", error)
+      toastContent({
+        type: "error",
+        message: getErrorMessage(error),
+      })
+    } finally {
+      setIsClaiming(false)
+    }
+  }
 
   return {
-    // handleClaim,
+    handleClaim,
+    isClaiming,
   }
 }
 

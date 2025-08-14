@@ -49,10 +49,10 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
                 {leaderboardData?.user_rank?.twitter_username || leaderboardData?.user_rank?.address || "-"}
               </td>
               <td className="border border-x-0 border-[#5aa5ff] px-4 py-2 text-center">
-                {leaderboardData?.user_rank?.balance}
+                {formatNumber(Number(leaderboardData?.user_rank?.balance || 0))}
               </td>
               <td className="rounded-r-xl border border-l-0 border-[#5aa5ff] px-4 py-2 text-center">
-                {leaderboardData?.user_rank?.total_invite}
+                {formatNumber(Number(leaderboardData?.user_rank?.total_invite || 0))}
               </td>
             </tr>
 
@@ -62,7 +62,7 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
                   {idx === 0 && <img src="/images/top1.png" alt="1" className="inline-block w-20" />}
                   {idx === 1 && <img src="/images/top2.png" alt="2" className="inline-block w-20" />}
                   {idx === 2 && <img src="/images/top3.png" alt="3" className="inline-block w-20" />}
-                  {idx > 2 && <span className="font-bold">{rank?.id}</span>}
+                  {idx > 2 && <span className="font-bold">{idx + 1}</span>}
                 </td>
                 <td className="px-4 py-3 text-left">{rank?.twitter_username || rank?.address || "-"}</td>
                 <td className="px-4 py-3 text-center">{formatNumber(Number(rank?.balance || 0))}</td>

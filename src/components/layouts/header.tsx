@@ -18,7 +18,7 @@ export const Header: FC<HeaderProps> = () => {
   const { connecting, address, disconnectWallet, connectWallet } = useSolanaWallet()
   const { userInfo, token } = useUserStore()
   const { userBalance } = useUserInfo()
-  console.log("userBalance", userBalance)
+  console.log("address", address)
   const location = useLocation()
 
   const handleConnectX = async () => {
@@ -105,7 +105,7 @@ export const Header: FC<HeaderProps> = () => {
                     Total Reward
                   </Text>
                   <Text variant="span" className="font-neueMachinaBold text-[10px] text-xs text-white">
-                    {userBalance?.points || 0} Points
+                    {userBalance?.point || 0} Points
                   </Text>
                 </div>
               </div>

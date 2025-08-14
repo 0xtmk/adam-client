@@ -17,7 +17,7 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
   const { userInfo } = useUserStore()
   const { address } = useSolanaWallet()
   const { userBalance } = useUserInfo()
-  // const { handleClaim } = useProfile()
+  const { handleClaim, isClaiming } = useProfile()
 
   return (
     <Container className="space-y-6">
@@ -118,7 +118,9 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
           </div>
         </div>
         <Button
-          // onClick={handleClaim}
+          loading={isClaiming}
+          onClick={handleClaim}
+          disabled={userBalance?.usd === 0 || isClaiming}
           className="mt-16 h-12 w-44 rounded-xl border border-[#0085FE] !bg-[linear-gradient(180deg,#000_0%,#000_100%)] !text-white shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)]"
         >
           Claim USDC

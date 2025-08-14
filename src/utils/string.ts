@@ -3,12 +3,12 @@ import { Address } from "viem"
 export function truncateAddress(address?: string, numberic = 4) {
   if (!address) return ""
   return (
-    address?.toLowerCase()?.slice(0, numberic > 2 ? numberic : 2) + "..." + address?.toLowerCase()?.slice(-numberic)
+    address?.slice(0, numberic > 2 ? numberic : 2) + "..." + address?.toLowerCase()?.slice(-numberic)
   )
 }
 export function truncateString(address: string, numberic = 4) {
   return (
-    address?.toLowerCase()?.slice(0, numberic > 2 ? numberic : 2) + "..." + address?.toLowerCase()?.slice(-numberic)
+    address?.slice(0, numberic > 2 ? numberic : 2) + "..." + address?.toLowerCase()?.slice(-numberic)
   )
 }
 
