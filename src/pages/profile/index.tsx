@@ -1,6 +1,7 @@
 import { Container } from "@/components/layouts/container"
 import { HOST } from "@/configs/host.config"
 import { useUserStore } from "@/hooks/stores/use-user-store"
+import useProfile from "@/hooks/use-profile"
 import useUserInfo from "@/hooks/use-user-info"
 import { Button } from "@/libs/ui/button"
 import { Text } from "@/libs/ui/text"
@@ -16,6 +17,7 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
   const { userInfo } = useUserStore()
   const { address } = useSolanaWallet()
   const { userBalance } = useUserInfo()
+  // const { handleClaim } = useProfile()
 
   return (
     <Container className="space-y-6">
@@ -115,7 +117,10 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
             </div>
           </div>
         </div>
-        <Button className="mt-16 h-12 w-44 rounded-xl border border-[#0085FE] !bg-[linear-gradient(180deg,#000_0%,#000_100%)] !text-white shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)]">
+        <Button
+          // onClick={handleClaim}
+          className="mt-16 h-12 w-44 rounded-xl border border-[#0085FE] !bg-[linear-gradient(180deg,#000_0%,#000_100%)] !text-white shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)]"
+        >
           Claim USDC
         </Button>
       </div>

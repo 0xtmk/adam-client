@@ -33,6 +33,7 @@
     "axios": "^1.4.0",
     "bs58": "^6.0.0",
     "copy-to-clipboard": "^3.3.3",
+    "ethers": "5.6.2",
     "gsap": "file:gsap-bonus.tgz",
     "humps": "^2.0.1",
     "i18next": "^23.5.1",
@@ -59,6 +60,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^14.0.0",
+    "@types/bn.js": "^5.2.0",
     "@types/humps": "^2.0.3",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.4.4",

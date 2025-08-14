@@ -39,7 +39,6 @@ export const useUserStore = create<UserStore>()(
           },
           setUserInfo(userInfo) {
             set({ userInfo })
-            // set({ userInfo: { ...(get().userInfo ? { ...get().userInfo, ...userInfo } : userInfo) } })
           },
           updateUserInfo(userInfo) {
             if (get().userInfo) {
@@ -50,7 +49,6 @@ export const useUserStore = create<UserStore>()(
           },
           async refreshUserInfo() {
             const userInfo = await Service.user.getUser()
-            console.log("🚀 ~ refreshUserInfo ~ userInfo:", userInfo)
             set((states) => ({ ...states, userInfo }))
           },
         }

@@ -8,7 +8,6 @@ import { useSolanaAuth } from "./use-solana-auth"
 export const useSentrySolanaAuth = () => {
   const { login } = useSolanaAuth()
   const { token, refreshUserInfo } = useUserStore()
-  console.log("🚀 ~ useSentrySolanaAuth ~ token:", token)
   useSWR(
     ["sentry-solana-auth", login],
     async () => {

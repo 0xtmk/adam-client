@@ -30,4 +30,12 @@ export class CommonService {
 
     return data
   }
+
+  async withdrawal() {
+    const { data } = await axiosInstance.request({
+      method: "POST",
+      url: "/withdrawal/withdraw-usd",
+    })
+    return data
+  }
 }
