@@ -108,8 +108,8 @@ export const HomePage: FC<HomePageProps> = () => {
                       <Text className="text-2xl">{item?.name}</Text>
                     </div>
                     {isDone ? (
-                      <div className="flex h-9 min-w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#C8C8C8]">
-                        <Text className="font-neueMachinaBold text-xl text-black">Claimed</Text>
+                      <div className="flex h-9 min-w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#68FD7F]">
+                        <Text className="font-neueMachinaBold text-xl text-black">Done</Text>
                       </div>
                     ) : isChecking ? (
                       countdown > 0 ? (

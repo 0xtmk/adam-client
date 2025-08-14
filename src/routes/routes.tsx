@@ -10,11 +10,6 @@ export const routePath = {
 } as const
 
 export const routes: BaseRoute[] = [
-  // {
-  //   label: "Home",
-  //   to: routePath.home,
-  // },
-
   {
     label: "Bless",
     to: routePath.home,

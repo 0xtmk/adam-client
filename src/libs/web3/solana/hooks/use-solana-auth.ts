@@ -1,3 +1,4 @@
+import { useRefCode } from "@/hooks/use-ref-code"
 import bs58 from "bs58"
 import { jwtDecode } from "jwt-decode"
 import { useCallback, useRef } from "react"
@@ -12,6 +13,7 @@ import { CUSTOM_EVENT_NAME, sendCustomEvent } from "@/utils/custom-events"
 import { toastContent } from "@/utils/toast"
 
 export const useSolanaAuth = () => {
+  const refCode = useRefCode()
   const { address, connected, disconnecting, publicKey, disconnectWallet, signMessage } = useSolanaWallet()
 
   const checkedFirstLoginRef = useRef<boolean>(false)
@@ -43,8 +45,6 @@ export const useSolanaAuth = () => {
         return false
       }
 
-      // Loading....
-
       toastContent(
         {
           type: "loading",
@@ -61,7 +61,13 @@ export const useSolanaAuth = () => {
 
       if (!signedMessage) throw new Error("Signed message is invalid")
 
-      const { user_info, token } = await Service.auth.login(address, bs58.encode(signedMessage!))
+      let loginRes
+      if (refCode) {
+        loginRes = await Service.auth.login(address, bs58.encode(signedMessage!), refCode)
+      } else {
+        loginRes = await Service.auth.login(address, bs58.encode(signedMessage!))
+      }
+      const { user_info, token } = loginRes
 
       updateUserInfo(user_info)
       setToken(token)

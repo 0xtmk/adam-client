@@ -1,5 +1,6 @@
 import { FC } from "react"
-import { Link, NavLink } from "react-router-dom"
+import { Link } from "react-router-dom"
+import { RefLink } from "@/libs/ui/ref-link"
 
 import { useUserStore } from "@/hooks/stores/use-user-store"
 import { ButtonConnect } from "@/libs/ui/button-connect"
@@ -115,19 +116,21 @@ export const Header: FC<HeaderProps> = () => {
             {routes.map((route) => {
               if (route.isAuth && !token) return null
               return (
-                <NavLink key={route.to} to={route.to}>
-                  {({ isActive }) => (
-                    <div className="h-[56px] w-[228px]">
-                      <div className="bg-border h-full overflow-hidden rounded-t-3xl p-[3px]">
-                        <div
-                          className={`${isActive ? "bg-link-header-active" : "bg-link-header"} header-navlink flex h-full w-full items-center justify-center rounded-t-3xl`}
-                        >
-                          <Text className="font-neueMachinaBold text-lg">{route.label}</Text>
-                        </div>
+                <RefLink key={route.to} to={route.to}>
+                  <div className="h-[56px] w-[228px]">
+                    <div className="bg-border h-full overflow-hidden rounded-t-3xl p-[3px]">
+                      <div
+                        className={
+                          location.pathname === route.to
+                            ? "bg-link-header-active header-navlink flex h-full w-full items-center justify-center rounded-t-3xl"
+                            : "bg-link-header header-navlink flex h-full w-full items-center justify-center rounded-t-3xl"
+                        }
+                      >
+                        <Text className="font-neueMachinaBold text-lg">{route.label}</Text>
                       </div>
                     </div>
-                  )}
-                </NavLink>
+                  </div>
+                </RefLink>
               )
             })}
           </div>
