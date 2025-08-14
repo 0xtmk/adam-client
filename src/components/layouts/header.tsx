@@ -1,8 +1,9 @@
+import { RefLink } from "@/libs/ui/ref-link"
 import { FC } from "react"
 import { Link, useLocation } from "react-router-dom"
-import { RefLink } from "@/libs/ui/ref-link"
 
 import { useUserStore } from "@/hooks/stores/use-user-store"
+import useUserInfo from "@/hooks/use-user-info"
 import { ButtonConnect } from "@/libs/ui/button-connect"
 import { Text } from "@/libs/ui/text"
 import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
@@ -15,8 +16,10 @@ interface HeaderProps {}
 
 export const Header: FC<HeaderProps> = () => {
   const { connecting, address, disconnectWallet, connectWallet } = useSolanaWallet()
-  const { userInfo , token } = useUserStore()
-  const location = useLocation();
+  const { userInfo, token } = useUserStore()
+  const { userBalance } = useUserInfo()
+  console.log("userBalance", userBalance)
+  const location = useLocation()
 
   const handleConnectX = async () => {
     try {
@@ -47,7 +50,7 @@ export const Header: FC<HeaderProps> = () => {
     return (
       <button
         onClick={handleConnectX}
-        className="twitter-connect-btn flex h-9 w-28 items-center justify-center gap-1 rounded-full bg-[rgba(16,38,68,0.2)] shadow-[0_4px_0_rgba(0,0,0,0.25),inset_0_4px_4px_rgba(163,163,163,0.25)] backdrop-blur-[10px] active:scale-95"
+        className="twitter-connect-btn flex h-9 items-center justify-center gap-1 rounded-full bg-[rgba(16,38,68,0.2)] px-5 shadow-[0_4px_0_rgba(0,0,0,0.25),inset_0_4px_4px_rgba(163,163,163,0.25)] backdrop-blur-[10px] active:scale-95"
       >
         <Text>{userInfo?.twitter_full_name}</Text>
         <img src={userInfo?.avatar} className="h-5 w-5 flex-shrink-0 rounded-full" alt="" />
@@ -102,7 +105,7 @@ export const Header: FC<HeaderProps> = () => {
                     Total Reward
                   </Text>
                   <Text variant="span" className="font-neueMachinaBold text-[10px] text-xs text-white">
-                    150 Points
+                    {userBalance?.points || 0} Points
                   </Text>
                 </div>
               </div>
@@ -116,9 +119,9 @@ export const Header: FC<HeaderProps> = () => {
           <div className="flex">
             {routes.map((route) => {
               if (route.isAuth && !token) return null
-              const currentPath = location.pathname.replace(/\/$/, "");
-              const routePath = route.to.replace(/\/$/, "");
-              const isActive = currentPath === routePath;
+              const currentPath = location.pathname.replace(/\/$/, "")
+              const routePath = route.to.replace(/\/$/, "")
+              const isActive = currentPath === routePath
               return (
                 <RefLink key={route.to} to={route.to}>
                   <div className="h-[56px] w-[228px]">

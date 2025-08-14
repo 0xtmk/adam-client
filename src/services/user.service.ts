@@ -16,4 +16,13 @@ export class UserService {
 
     return response.data
   }
+
+  async getInfo() {
+    const response = await axiosInstance.request<any>({
+      method: "GET",
+      url: "/user/info",
+    })
+
+    return response.data
+  }
 }

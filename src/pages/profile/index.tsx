@@ -1,6 +1,7 @@
 import { Container } from "@/components/layouts/container"
 import { HOST } from "@/configs/host.config"
 import { useUserStore } from "@/hooks/stores/use-user-store"
+import useUserInfo from "@/hooks/use-user-info"
 import { Button } from "@/libs/ui/button"
 import { Text } from "@/libs/ui/text"
 import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
@@ -14,6 +15,8 @@ interface ProfilePageProps {}
 export const ProfilePage: FC<ProfilePageProps> = () => {
   const { userInfo } = useUserStore()
   const { address } = useSolanaWallet()
+  const { userBalance } = useUserInfo()
+
   return (
     <Container className="space-y-6">
       <div
@@ -52,7 +55,7 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
           >
             <Text className="font-neueMachinaBold relative text-2xl ">Invite</Text>
             <div className="flex items-center gap-2">
-              <Text className="font-neueMachinaBold text-2xl">0</Text>
+              <Text className="font-neueMachinaBold text-2xl">{userBalance?.total_invite || 0}</Text>
               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
                 <path
                   d="M12.5996 12.1748C15.361 12.1748 17.5996 9.93623 17.5996 7.1748C17.5996 4.41338 15.361 2.1748 12.5996 2.1748C9.83819 2.1748 7.59961 4.41338 7.59961 7.1748C7.59961 9.93623 9.83819 12.1748 12.5996 12.1748Z"
@@ -97,9 +100,9 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
         </div>
         <div className="flex items-center gap-40">
           <div className="space-y-6">
-            <Text className="font-neueMachinaBold text-2xl">Total USDT</Text>
+            <Text className="font-neueMachinaBold text-2xl">Total USDC</Text>
             <div className="flex items-start gap-3">
-              <Text className="font-neueMachinaBold text-4xl">0</Text>
+              <Text className="font-neueMachinaBold text-4xl">{userBalance?.usd || 0}</Text>
               <Text className="font-neueMachinaBold">USDC</Text>
             </div>
           </div>
@@ -107,7 +110,7 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
           <div className="space-y-6">
             <Text className="font-neueMachinaBold text-2xl">Total Rewards</Text>
             <div className="flex items-start gap-3">
-              <Text className="font-neueMachinaBold text-4xl">0</Text>
+              <Text className="font-neueMachinaBold text-4xl">{userBalance?.point || 0}</Text>
               <Text className="font-neueMachinaBold">Points</Text>
             </div>
           </div>
