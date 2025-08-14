@@ -79,7 +79,7 @@ export const HomePage: FC<HomePageProps> = () => {
             <div className="flex items-center justify-center">
               <Loading />
             </div>
-          ) : token ? (
+          ) : !userInfo?.twitter_id ? (
             <div className="flex justify-center">
               <button
                 onClick={handleConnectX}

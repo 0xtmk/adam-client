@@ -14,7 +14,7 @@ interface HeaderProps {}
 
 export const Header: FC<HeaderProps> = () => {
   const { connecting, address, disconnectWallet, connectWallet } = useSolanaWallet()
-  const { userInfo } = useUserStore()
+  const { userInfo , token } = useUserStore()
 
   const handleConnectX = async () => {
     try {
@@ -112,21 +112,24 @@ export const Header: FC<HeaderProps> = () => {
           </div>
 
           <div className="flex">
-            {routes.map((route) => (
-              <NavLink key={route.to} to={route.to}>
-                {({ isActive }) => (
-                  <div className="h-[56px] w-[228px]">
-                    <div className="bg-border h-full overflow-hidden rounded-t-3xl p-[3px]">
-                      <div
-                        className={`${isActive ? "bg-link-header-active" : "bg-link-header"} header-navlink flex h-full w-full items-center justify-center rounded-t-3xl`}
-                      >
-                        <Text className="font-neueMachinaBold text-lg">{route.label}</Text>
+            {routes.map((route) => {
+              if (route.isAuth && !token) return null
+              return (
+                <NavLink key={route.to} to={route.to}>
+                  {({ isActive }) => (
+                    <div className="h-[56px] w-[228px]">
+                      <div className="bg-border h-full overflow-hidden rounded-t-3xl p-[3px]">
+                        <div
+                          className={`${isActive ? "bg-link-header-active" : "bg-link-header"} header-navlink flex h-full w-full items-center justify-center rounded-t-3xl`}
+                        >
+                          <Text className="font-neueMachinaBold text-lg">{route.label}</Text>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </NavLink>
-            ))}
+                  )}
+                </NavLink>
+              )
+            })}
           </div>
         </Container>
       </header>

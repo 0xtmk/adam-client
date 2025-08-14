@@ -9,6 +9,7 @@ export interface BaseRoute {
   isExternalLink?: boolean
   isLoginRequired?: boolean
   childrens?: BaseRoute[]
+  isAuth?: boolean
 }
 
 export type Theme = "dark" | "light"

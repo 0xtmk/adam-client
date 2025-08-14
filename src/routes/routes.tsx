@@ -6,6 +6,7 @@ export const routePath = {
   notFound: "*",
   test: "/test",
   leaderboard: "/leaderboard",
+  profile: "/profile",
 } as const
 
 export const routes: BaseRoute[] = [
@@ -22,5 +23,11 @@ export const routes: BaseRoute[] = [
   {
     label: "Leaderboard",
     to: routePath.leaderboard,
+  },
+
+  {
+    label: "Profile",
+    to: routePath.profile,
+    isAuth: true,
   },
 ]

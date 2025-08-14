@@ -8,6 +8,7 @@ import { LeaderboardPage } from "@/pages/leaderboard"
 import NotFoundPage from "@/pages/not-found"
 import TestPage from "@/pages/test"
 import { routePath } from "./routes"
+import { ProfilePage } from "@/pages/profile"
 
 interface AppRoutesProps {}
 
@@ -20,6 +21,11 @@ const routes: RouteObject[] = [
       {
         path: routePath.leaderboard,
         element: <LeaderboardPage />,
+      },
+
+      {
+        path: routePath.profile,
+        element: <ProfilePage />,
       },
     ],
   },
