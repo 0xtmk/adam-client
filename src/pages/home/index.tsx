@@ -12,7 +12,7 @@ import useSWR from "swr"
 interface HomePageProps {}
 
 export const HomePage: FC<HomePageProps> = () => {
-  const { token } = useUserStore()
+  const { token, userInfo } = useUserStore()
 
   const [missionCheckingList, setMissionCheckingList] = useState<number[]>([])
   const [missionCountdowns, setMissionCountdowns] = useState<{ [id: number]: number }>({})
@@ -22,8 +22,21 @@ export const HomePage: FC<HomePageProps> = () => {
     const res = await Service.mission.getListMissions()
     return res
   })
-
+  const handleConnectX = async () => {
+    try {
+      const res = await Service.common.getTwitterUrl()
+      if (res) {
+        window.open(res)
+      }
+    } catch (error) {
+      console.error("Error connecting:", error)
+    }
+  }
   const handleCheckMission = async (missionId: number) => {
+    if (!userInfo?.twitter_id) {
+      handleConnectX()
+      return
+    }
     const res = await Service.mission.checkMission(missionId)
     if (res?.url) {
       setMissionCheckingList((prev) => [...prev, missionId])
@@ -110,7 +123,52 @@ export const HomePage: FC<HomePageProps> = () => {
         </div>
       </div>
       {/* spinning */}
-      <div></div>
+      <div className="card-daily-quest mt-16 !rounded-b-none px-14 py-10">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-4">
+            <img src={userInfo?.avatar} className="h-14 w-14 flex-shrink-0 rounded-full" alt="" />
+            <Text className="font-neueMachinaBold">{userInfo?.twitter_full_name}</Text>
+          </div>
+          <Text className="text-4xl">SPIN THE WHEEL</Text>
+          <img src="/images/guide.png" className="cursor-pointer hover:scale-105" alt="" />
+        </div>
+
+        <div className="mt-20">
+          <div className="flex items-center justify-center">
+            <img src="/images/spin.png" alt="" />
+          </div>
+          <div className="mt-20 flex justify-center">
+            <button className="spin-btn h-[70px] w-[330px]">
+              <Text className="font-neueMachinaBold text-4xl text-black">Spin now</Text>
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-4 flex items-center gap-6">
+          {socials.map((item, index) => {
+            return (
+              <div className="cursor-pointer active:scale-95 hover:scale-105" key={index}>
+                <img src={item.image} className="h-14 w-14" alt="" />
+              </div>
+            )
+          })}
+        </div>
+      </div>
     </Container>
   )
 }
+
+const socials = [
+  {
+    image: "/icons/x.png",
+    href: "",
+  },
+  {
+    image: "/icons/tele.png",
+    href: "",
+  },
+  {
+    image: "/icons/discord.png",
+    href: "",
+  },
+]

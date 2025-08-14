@@ -29,3 +29,4 @@ export const getErrorMessage = (error: any): string => {
     return error?.shortMessage || error?.message
   }
 }
+

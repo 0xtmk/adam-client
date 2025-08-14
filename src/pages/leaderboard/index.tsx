@@ -16,7 +16,6 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
     const response = await Service.user.getLeaderboard()
     return response
   })
-  console.log("leaderboardData", leaderboardData)
   return (
     <div className="h-full">
       <Container className="pt-8">
@@ -65,7 +64,7 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
                   {idx === 2 && <img src="/images/top3.png" alt="3" className="inline-block w-20" />}
                   {idx > 2 && <span className="font-bold">{rank?.id}</span>}
                 </td>
-                <td className="px-4 py-3 text-left">{rank.twitter_username || rank.address || "-"}</td>
+                <td className="px-4 py-3 text-left">{rank?.twitter_username || rank?.address || "-"}</td>
                 <td className="px-4 py-3 text-center">{formatNumber(Number(rank?.balance || 0))}</td>
                 <td className="rounded-r-xl px-4 py-3 text-center">{formatNumber(Number(rank?.total_invite || 0))}</td>
               </tr>
