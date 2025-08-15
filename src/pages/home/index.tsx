@@ -9,6 +9,7 @@ import { openLinkInNewTab } from "@/utils/common"
 import { Button } from "antd"
 import { FC, useEffect, useState } from "react"
 import useSWR from "swr"
+import { Spin } from "./spin"
 
 interface HomePageProps {}
 
@@ -148,14 +149,7 @@ export const HomePage: FC<HomePageProps> = () => {
         </div>
 
         <div className="mt-20">
-          <div className="flex items-center justify-center">
-            <img src="/images/spin.png" alt="" />
-          </div>
-          <div className="mt-20 flex justify-center">
-            <button className="spin-btn h-[70px] w-[330px]">
-              <Text className="font-neueMachinaBold text-4xl text-black">Spin now</Text>
-            </button>
-          </div>
+          <Spin />
         </div>
 
         <div className="mt-4 flex items-center gap-6">
