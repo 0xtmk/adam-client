@@ -31,21 +31,21 @@ export const Spin: FC = () => {
   console.log("🚀 ~ Spin ~ data:", data)
 
   const handleSpin = async () => {
-    if (spinning || !rewardList) return;
-    setSpinning(true);
+    if (spinning || !rewardList) return
+    setSpinning(true)
     try {
-      const spinRes = await Service.spin.spinWheel();
+      const spinRes = await Service.spin.spinWheel()
       console.log("🚀 ~ handleSpin ~ spinRes:", spinRes)
       // Nếu API trả về reward_id thì dùng reward_id, nếu trả về id thì dùng id
-      const rewardId = spinRes.reward_id ?? spinRes.id;
-      const idx = rewardList.findIndex((r: SpinReward) => r.id === rewardId);
-      setPrizeNumber(idx >= 0 ? idx : 0);
-      setMustSpin(true);
-      setResult(null);
+      const rewardId = spinRes.reward_id ?? spinRes.id
+      const idx = rewardList.findIndex((r: SpinReward) => r.id === rewardId)
+      setPrizeNumber(idx >= 0 ? idx : 0)
+      setMustSpin(true)
+      setResult(null)
     } catch (e) {
-      setSpinning(false);
+      setSpinning(false)
     }
-  };
+  }
 
   const handleStopSpinning = () => {
     setMustSpin(false)
@@ -67,16 +67,12 @@ export const Spin: FC = () => {
           onStopSpinning={handleStopSpinning}
         />
       )}
-      <button
-        className="spin-btn mt-6 px-8 py-2"
-        onClick={handleSpin}
-        disabled={spinning || !rewardList}
-      >
+      <button className="spin-btn mt-6 px-8 py-2" onClick={handleSpin} disabled={spinning || !rewardList}>
         {spinning ? "Spinning..." : "Spin"}
       </button>
       {result && (
         <div className="mt-4 text-xl font-bold">
-          You won: {result.amount} {result.name}
+          You won: {formatNumber(Number(result.amount))} {result.name}
         </div>
       )}
     </div>
