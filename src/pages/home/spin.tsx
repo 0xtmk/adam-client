@@ -17,8 +17,6 @@ export const Spin: FC = () => {
     return response
   })
 
-  console.log("🚀 ~ Spin ~ rewardList:", rewardList)
-
   const [mustSpin, setMustSpin] = useState(false)
   const [prizeNumber, setPrizeNumber] = useState(0)
   const [result, setResult] = useState<SpinReward | null>(null)
@@ -28,15 +26,11 @@ export const Spin: FC = () => {
     option: `${formatNumber(Number(item.amount || 0))} ${item.name}`,
   }))
 
-  console.log("🚀 ~ Spin ~ data:", data)
-
   const handleSpin = async () => {
     if (spinning || !rewardList) return
     setSpinning(true)
     try {
       const spinRes = await Service.spin.spinWheel()
-      console.log("🚀 ~ handleSpin ~ spinRes:", spinRes)
-      // Nếu API trả về reward_id thì dùng reward_id, nếu trả về id thì dùng id
       const rewardId = spinRes.reward_id ?? spinRes.id
       const idx = rewardList.findIndex((r: SpinReward) => r.id === rewardId)
       setPrizeNumber(idx >= 0 ? idx : 0)

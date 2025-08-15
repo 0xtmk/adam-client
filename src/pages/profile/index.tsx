@@ -78,7 +78,7 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
           border border-[#0085FE] bg-[linear-gradient(180deg,#0000%,#000_100%,0.4)] px-6 py-6 shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)]"
           >
             <Text className="font-neueMachinaBold text-xl">
-              {truncateString(HOST)}?ref_code={userInfo?.referral_code}
+              {(HOST)}?ref_code={userInfo?.referral_code}
             </Text>
             <Button
               onClick={() => {
