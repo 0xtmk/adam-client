@@ -3,6 +3,7 @@ import { MISSION_STATUS } from "@/constants/app"
 import { useUserStore } from "@/hooks/stores/use-user-store"
 import { Loading } from "@/libs/ui/loading"
 import { Text } from "@/libs/ui/text"
+import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
 import { Service } from "@/services/app.service"
 import { cn } from "@/utils/classnames"
 import { openLinkInNewTab } from "@/utils/common"
@@ -14,17 +15,18 @@ import { Spin } from "./spin"
 interface HomePageProps {}
 
 export const HomePage: FC<HomePageProps> = () => {
-  const { token, userInfo } = useUserStore()
-
   const [missionCheckingList, setMissionCheckingList] = useState<number[]>([])
   const [missionCountdowns, setMissionCountdowns] = useState<{ [id: number]: number }>({})
   const [missionDone, setMissionDone] = useState<{ [id: number]: boolean }>({})
 
+  const { userInfo, token } = useUserStore()
+  const { address, connectWallet } = useSolanaWallet()
+
   const { data: missionList, isLoading: gettingMissionList } = useSWR(["get-mission-list", token], async () => {
-    if (!token) return
     const res = await Service.mission.getListMissions()
     return res
   })
+
   const handleConnectX = async () => {
     try {
       const res = await Service.common.getTwitterUrl()
@@ -36,6 +38,10 @@ export const HomePage: FC<HomePageProps> = () => {
     }
   }
   const handleCheckMission = async (missionId: number) => {
+    if (!address) {
+      connectWallet()
+      return
+    }
     if (!userInfo?.twitter_id) {
       handleConnectX()
       return
@@ -79,18 +85,6 @@ export const HomePage: FC<HomePageProps> = () => {
           {gettingMissionList ? (
             <div className="flex items-center justify-center">
               <Loading />
-            </div>
-          ) : !userInfo?.twitter_id ? (
-            <div className="flex justify-center">
-              <button
-                onClick={handleConnectX}
-                className="spin-btn flex h-10 w-32 items-center justify-center gap-1 rounded-full bg-[rgba(16,38,68,0.2)] shadow-[0_4px_0_rgba(0,0,0,0.25),inset_0_4px_4px_rgba(163,163,163,0.25)] backdrop-blur-[10px] active:scale-95"
-              >
-                <Text variant="span" className="font-neueMachinaBold text-base text-black">
-                  Connect
-                </Text>
-                <img src="/images/twitter.png" className="h-3 w-3" alt="" />
-              </button>
             </div>
           ) : Number(missionList?.length) ? (
             <div className="space-y-6">

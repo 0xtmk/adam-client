@@ -12,7 +12,6 @@ interface LeaderboardPageProps {}
 export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
   const { token } = useUserStore()
   const { data: leaderboardData } = useSWR(["get-leaderboard", token], async () => {
-    if (!token) return
     const response = await Service.user.getLeaderboard()
     return response
   })
@@ -41,7 +40,7 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
           </thead>
 
           <tbody>
-            <tr className="user-rank sticky top-0 z-10 h-24 text-xl">
+            <tr className={cn("user-rank sticky top-0 z-10 h-24 text-xl", !token && "hidden")}>
               <td className="rounded-l-xl border border-r-0 border-[#5aa5ff] px-4 py-2 text-center">
                 {leaderboardData?.user_rank?.rank}
               </td>

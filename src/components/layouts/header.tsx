@@ -18,7 +18,7 @@ export const Header: FC<HeaderProps> = () => {
   const { connecting, address, disconnectWallet, connectWallet } = useSolanaWallet()
   const { userInfo, token } = useUserStore()
   const { userBalance } = useUserInfo()
-  console.log("address", address)
+  
   const location = useLocation()
 
   const handleConnectX = async () => {

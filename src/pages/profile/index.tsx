@@ -7,7 +7,7 @@ import { Button } from "@/libs/ui/button"
 import { Text } from "@/libs/ui/text"
 import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
 import { cn } from "@/utils/classnames"
-import { truncateAddress, truncateString } from "@/utils/string"
+import { truncateAddress } from "@/utils/string"
 import { toastContent } from "@/utils/toast"
 import copy from "copy-to-clipboard"
 import { FC } from "react"
@@ -21,15 +21,17 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
 
   return (
     <Container className="space-y-6">
-      <div
-        className={cn("card-profile flex items-center justify-between px-14 py-16", !userInfo?.twitter_id && "hidden")}
-      >
+      <div className={cn("card-profile flex items-center justify-between px-14 py-16")}>
         <div className="flex items-center gap-4">
-          <img src={userInfo?.avatar} className="h-32 w-32 rounded-full" alt="" />
+          <img
+            src={userInfo?.avatar}
+            className={cn("h-32 w-32 rounded-full", !userInfo?.twitter_id && "hidden")}
+            alt=""
+          />
           <div>
-            <Text className="font-neueMachinaBold text-2xl">{userInfo?.twitter_full_name}</Text>
+            <Text className="font-neueMachinaBold text-2xl">{userInfo?.twitter_full_name || ""}</Text>
             <div className="flex items-center gap-4">
-              <Text>@{userInfo?.twitter_username}</Text>
+              <Text>@{userInfo?.twitter_username || ""}</Text>
               <Button
                 onClick={() => {
                   copy(address || "")
@@ -78,7 +80,7 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
           border border-[#0085FE] bg-[linear-gradient(180deg,#0000%,#000_100%,0.4)] px-6 py-6 shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)]"
           >
             <Text className="font-neueMachinaBold text-xl">
-              {(HOST)}?ref_code={userInfo?.referral_code}
+              {HOST}?ref_code={userInfo?.referral_code}
             </Text>
             <Button
               onClick={() => {
