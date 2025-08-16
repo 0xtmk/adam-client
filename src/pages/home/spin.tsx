@@ -64,11 +64,7 @@ export const Spin: FC = () => {
       <button className="spin-btn mt-6 px-8 py-2" onClick={handleSpin} disabled={spinning || !rewardList}>
         {spinning ? "Spinning..." : "Spin"}
       </button>
-      {result && (
-        <div className="mt-4 text-xl font-bold">
-          You won: {formatNumber(Number(result.amount))} {result.name}
-        </div>
-      )}
+ 
     </div>
   )
 }

@@ -82,8 +82,8 @@ export const HomePage: FC<HomePageProps> = () => {
       {/* daily quest */}
       <div
         className="
-      rounded-[38px] bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] p-10 pb-20
-      shadow-[0_4px_4px_0_rgba(163,163,163,0.25)_inset,0_4px_6.5px_0_rgba(0,0,0,0.25)] backdrop-blur-sm"
+      rounded-[38px] bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] bg-fixed p-10
+      pb-4 shadow-[0_4px_4px_0_rgba(163,163,163,0.25)_inset,0_4px_6.5px_0_rgba(0,0,0,0.25)] backdrop-blur-sm"
       >
         <div className="flex items-center justify-between">
           <div className="space-y-5">
@@ -169,9 +169,19 @@ export const HomePage: FC<HomePageProps> = () => {
             </div>
           ) : null}
         </div>
+
+        <div className="mt-4 flex flex-col gap-2 items-center">
+          <Text className="text-2xl">Complete all quests</Text>
+          <Text>The quest will be reset at 0am UTC</Text>
+        </div>
       </div>
       {/* spinning */}
-      <div className="card-daily-quest mt-16 !rounded-b-none px-14 py-10">
+      <div
+        className={cn(
+          "mt-16 !rounded-b-none px-14 py-10",
+          "rounded-[38px] bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] bg-fixed shadow-[0_4px_4px_0_rgba(163,163,163,0.25)_inset,0_4px_6.5px_0_rgba(0,0,0,0.25)] backdrop-blur-sm",
+        )}
+      >
         <div className={cn("flex items-start justify-between")}>
           <div className={cn("flex items-start justify-between", !userInfo?.twitter_id && "hidden")}>
             <img src={userInfo?.avatar} className="h-14 w-14 flex-shrink-0 rounded-full" alt="" />
@@ -184,32 +194,22 @@ export const HomePage: FC<HomePageProps> = () => {
         <div className="mt-20">
           <Spin />
         </div>
-
-        <div className="mt-4 flex items-center gap-6">
-          {socials.map((item, index) => {
-            return (
-              <div className="cursor-pointer hover:scale-105 active:scale-95" key={index}>
-                <img src={item.image} className="h-14 w-14" alt="" />
-              </div>
-            )
-          })}
-        </div>
       </div>
     </Container>
   )
 }
 
-const socials = [
-  {
-    image: "/icons/x.png",
-    href: "",
-  },
-  {
-    image: "/icons/tele.png",
-    href: "",
-  },
-  {
-    image: "/icons/discord.png",
-    href: "",
-  },
-]
+// const socials = [
+//   {
+//     image: "/icons/x.png",
+//     href: "",
+//   },
+//   {
+//     image: "/icons/tele.png",
+//     href: "",
+//   },
+//   {
+//     image: "/icons/discord.png",
+//     href: "",
+//   },
+// ]

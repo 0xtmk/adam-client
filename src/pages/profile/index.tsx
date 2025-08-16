@@ -13,6 +13,7 @@ import { toastContent } from "@/utils/toast"
 import copy from "copy-to-clipboard"
 import { FC, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+
 interface ProfilePageProps {}
 
 export const ProfilePage: FC<ProfilePageProps> = () => {
