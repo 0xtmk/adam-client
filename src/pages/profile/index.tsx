@@ -70,16 +70,7 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
             <Text className="font-neueMachinaBold relative text-2xl ">Invite</Text>
             <div className="flex items-center gap-2">
               <Text className="font-neueMachinaBold text-2xl">{userBalance?.total_invite || 0}</Text>
-              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
-                <path
-                  d="M12.5996 12.1748C15.361 12.1748 17.5996 9.93623 17.5996 7.1748C17.5996 4.41338 15.361 2.1748 12.5996 2.1748C9.83819 2.1748 7.59961 4.41338 7.59961 7.1748C7.59961 9.93623 9.83819 12.1748 12.5996 12.1748Z"
-                  fill="white"
-                />
-                <path
-                  d="M12.5998 14.6748C7.58977 14.6748 3.50977 18.0348 3.50977 22.1748C3.50977 22.4548 3.72977 22.6748 4.00977 22.6748H21.1898C21.4698 22.6748 21.6898 22.4548 21.6898 22.1748C21.6898 18.0348 17.6098 14.6748 12.5998 14.6748Z"
-                  fill="white"
-                />
-              </svg>
+              <UserIcon />
             </div>
           </div>
 
@@ -145,5 +136,43 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
         </Button>
       </div>
     </Container>
+  )
+}
+
+const LineCard = () => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="223" height="6" viewBox="0 0 223 6" fill="none">
+      <g>
+        <ellipse cx="111.759" cy="2.66655" rx="110.86" ry="2.48661" fill="url(#paint0_radial_9436_942)" />
+      </g>
+      <defs>
+        <radialGradient
+          id="paint0_radial_9436_942"
+          cx="0"
+          cy="0"
+          r="1"
+          gradientUnits="userSpaceOnUse"
+          gradientTransform="translate(111.759 2.66655) scale(110.86 2.48661)"
+        >
+          <stop stopColor="#0077FF" />
+          <stop offset="1" stopColor="#15467D" stopOpacity="0.1" />
+        </radialGradient>
+      </defs>
+    </svg>
+  )
+}
+
+const UserIcon = () => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+      <path
+        d="M12.5996 12.1748C15.361 12.1748 17.5996 9.93623 17.5996 7.1748C17.5996 4.41338 15.361 2.1748 12.5996 2.1748C9.83819 2.1748 7.59961 4.41338 7.59961 7.1748C7.59961 9.93623 9.83819 12.1748 12.5996 12.1748Z"
+        fill="white"
+      />
+      <path
+        d="M12.5998 14.6748C7.58977 14.6748 3.50977 18.0348 3.50977 22.1748C3.50977 22.4548 3.72977 22.6748 4.00977 22.6748H21.1898C21.4698 22.6748 21.6898 22.4548 21.6898 22.1748C21.6898 18.0348 17.6098 14.6748 12.5998 14.6748Z"
+        fill="white"
+      />
+    </svg>
   )
 }
