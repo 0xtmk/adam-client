@@ -1,13 +1,16 @@
 import { Container } from "@/components/layouts/container"
 import { MISSION_STATUS } from "@/constants/app"
 import { useUserStore } from "@/hooks/stores/use-user-store"
+import useUserInfo from "@/hooks/use-user-info"
 import { Loading } from "@/libs/ui/loading"
 import { Text } from "@/libs/ui/text"
 import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
 import { Service } from "@/services/app.service"
 import { cn } from "@/utils/classnames"
 import { openLinkInNewTab } from "@/utils/common"
-import { Button } from "antd"
+import { formatNumber } from "@/utils/number"
+import { Button, Modal } from "antd"
+import moment from "moment"
 import { FC, useEffect, useState } from "react"
 import useSWR from "swr"
 import SpinWheel from "./spin"
@@ -18,9 +21,10 @@ export const HomePage: FC<HomePageProps> = () => {
   const [missionCheckingList, setMissionCheckingList] = useState<number[]>([])
   const [missionCountdowns, setMissionCountdowns] = useState<{ [id: number]: number }>({})
   const [missionDone, setMissionDone] = useState<{ [id: number]: boolean }>({})
-
+  const [openSpinHistoryModal, setOpenSpinHistoryModal] = useState(false)
   const { userInfo, token } = useUserStore()
   const { address, connectWallet } = useSolanaWallet()
+  const { userBalance } = useUserInfo()
 
   useEffect(() => {
     if (!token) {
@@ -38,6 +42,11 @@ export const HomePage: FC<HomePageProps> = () => {
   const { data: missionStreak } = useSWR(["get-mission-streak", token], async () => {
     const res = await Service.mission.getMissionStreak()
     return res
+  })
+
+  const { data: spinHistory, mutate: refreshSpinHistory } = useSWR(["get-spin-history", token], async () => {
+    const response = await Service.spin.getHistory()
+    return response.data
   })
 
   const handleConnectX = async () => {
@@ -204,22 +213,85 @@ export const HomePage: FC<HomePageProps> = () => {
         <div className="mt-20">
           <SpinWheel />
         </div>
+
+        <div className="font-neueMachinaBold mt-16 flex items-center justify-center gap-2 text-2xl">
+          <Text>Spin count: {userBalance?.spin || 0}</Text>
+          <Text>|</Text>
+          <Text onClick={() => setOpenSpinHistoryModal(true)} className="hover:text-info-500 cursor-pointer underline">
+            Spin history
+          </Text>
+        </div>
+        <div className="mt-28 flex items-center gap-9">
+          {socials.map((item, index) => {
+            return (
+              <div key={index}>
+                <img className="h-20 w-20 cursor-pointer hover:scale-105 active:scale-95" src={item.image} alt="" />
+              </div>
+            )
+          })}
+        </div>
       </div>
+
+      <Modal
+        className="custom-modal relative"
+        width={500}
+        open={openSpinHistoryModal}
+        onClose={() => setOpenSpinHistoryModal(false)}
+        footer={null}
+        closeIcon={null}
+      >
+        <img onClick={() => setOpenSpinHistoryModal(false)} src="/images/close.png" className="absolute hover:scale-105 cursor-pointer active:scale-95 h-12 w-12 -right-4 -top-4 z-30" alt="" />
+        <div className="gradient-card">
+          <div className="gradient-card-content relative p-4">
+            <img src="/images/reward-his-grid.png" className="absolute inset-0 h-full w-full translate-y-3" alt="" />
+            <div className="">
+              <Text className="font-neueMachinaBold text-center text-2xl">Spin history</Text>
+              <div className="max-h-80 w-full overflow-y-auto px-2">
+                <table
+                  className="font-neueMachinaBold relative mx-auto w-full max-w-[500px] border-separate text-xl text-white"
+                  style={{ borderSpacing: 0 }}
+                >
+                  <thead>
+                    <tr>
+                      <th className="w-3/4 py-2 text-left text-base">Date</th>
+                      <th className="w-0 py-2 text-center text-base" style={{ width: 40 }}>
+                        |
+                      </th>
+                      <th className="w-1/4 py-2 text-right text-base">Reward</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {spinHistory?.map((row: any, idx: number) => (
+                      <tr key={idx} className="border-b border-white/60 last:border-0">
+                        <td className="py-3 text-left text-base">
+                          {moment(row?.created_time).format("YYYY-MM-DD HH:mm:ss")}
+                        </td>
+                        <td className="py-3 text-center text-base font-bold">|</td>
+                        <td className="py-3 text-right text-base">{formatNumber(+row?.reward)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </Container>
   )
 }
 
-// const socials = [
-//   {
-//     image: "/icons/x.png",
-//     href: "",
-//   },
-//   {
-//     image: "/icons/tele.png",
-//     href: "",
-//   },
-//   {
-//     image: "/icons/discord.png",
-//     href: "",
-//   },
-// ]
+const socials = [
+  {
+    image: "/icons/x.png",
+    href: "",
+  },
+  {
+    image: "/icons/tele.png",
+    href: "",
+  },
+  {
+    image: "/icons/discord.png",
+    href: "",
+  },
+]

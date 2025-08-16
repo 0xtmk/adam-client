@@ -120,3 +120,43 @@
     0 5.035px 5.035px 0 rgba(255, 255, 255, 0.25) inset,
     0 5.035px 5.035px 0 rgba(0, 0, 0, 0.25);
 }
+
+.gradient-card {
+  position: relative;
+  padding: 3px;
+  border-radius: 40px;
+  background: linear-gradient(90deg, #0969d7, #6b9fff, #a2c3ff, #6bb5ff, #0932d7, #6b9fff, #0969d7);
+  background-size: 300% 300%;
+  animation: borderAnim 6s linear infinite;
+}
+
+.gradient-card-content {
+  border-radius: 40px;
+  background:
+    radial-gradient(97.05% 97.05% at 50% 2.95%, rgba(60, 109, 255, 0.5) 0%, rgba(0, 13, 29, 0.21) 100%),
+    linear-gradient(141deg, rgba(18, 101, 255, 0.3) 13.73%, rgba(1, 27, 34, 0.24) 94.46%);
+  box-shadow:
+    0 -39.859px 55.272px 0 rgba(0, 0, 0, 0.6) inset,
+    0 0 74.404px 10.629px rgba(62, 129, 255, 0.35) inset,
+    0 31.888px 84.236px -29.23px rgba(34, 84, 192, 0.25) inset;
+  backdrop-filter: blur(21.65692710876465px);
+  
+}
+
+@keyframes borderAnim {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.custom-modal {
+  .ant-modal-content {
+    @apply p-0 rounded-[40px];
+  }
+}
