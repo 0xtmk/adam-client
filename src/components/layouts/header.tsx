@@ -1,5 +1,5 @@
 import { RefLink } from "@/libs/ui/ref-link"
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { Link, useLocation } from "react-router-dom"
 
 import { useUserStore } from "@/hooks/stores/use-user-store"
@@ -10,7 +10,10 @@ import { routePath, routes } from "@/routes/routes"
 import { Service } from "@/services/app.service"
 import { cn } from "@/utils/classnames"
 import { truncateString } from "@/utils/string"
+import { toastContent } from "@/utils/toast"
 import { Tooltip } from "antd"
+import copy from "copy-to-clipboard"
+import { useRef, useState } from "react"
 import { Container } from "./container"
 
 interface HeaderProps {}
@@ -66,6 +69,20 @@ export const Header: FC<HeaderProps> = () => {
     )
   }
 
+  const [open, setOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // Đóng dropdown khi click ngoài
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpen(false)
+      }
+    }
+    if (open) document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [open])
+
   const renderButtonSolWallet = () => {
     if (!address) {
       return (
@@ -81,11 +98,42 @@ export const Header: FC<HeaderProps> = () => {
       )
     }
     return (
-      <ButtonConnect onClick={disconnectWallet}>
-        <Text variant="span" className="text-xs text-white">
-          {truncateString(address)}
-        </Text>
-      </ButtonConnect>
+      <div className="relative" ref={dropdownRef}>
+        <ButtonConnect onClick={() => setOpen((v) => !v)}>
+          <Text variant="span" className="text-xs text-white">
+            {truncateString(address)}
+          </Text>
+        </ButtonConnect>
+        {open && (
+          <div className="absolute right-0 z-50 mt-2 w-56 rounded-xl border border-[#0085FE] bg-[#1A2742] shadow-lg">
+            <button
+              className="flex w-full items-center gap-2 rounded-t-xl px-4 py-3 transition hover:bg-[#22345a]"
+              onClick={() => {
+                copy(address || "")
+                toastContent({
+                  type: "success",
+                  message: "Copied to clipboard",
+                })
+                setOpen(false)
+              }}
+            >
+              <img src="/icons/copy.png" className="h-5 w-5" alt="copy" />
+              <span className="flex-1 text-left text-sm text-white">{truncateString(address)}</span>
+              <span className="text-xs text-[#00FF88]">Copy</span>
+            </button>
+            <button
+              className="flex w-full items-center gap-2 rounded-b-xl border-t border-[#15467D] px-4 py-3 transition hover:bg-[#22345a]"
+              onClick={() => {
+                setOpen(false)
+                disconnectWallet()
+              }}
+            >
+              <img src="/icons/logout.png" className="h-5 w-5" alt="disconnect" />
+              <span className="flex-1 text-left text-sm text-white">Disconnect</span>
+            </button>
+          </div>
+        )}
+      </div>
     )
   }
 
