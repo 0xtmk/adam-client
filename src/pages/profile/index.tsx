@@ -13,6 +13,7 @@ import { cn } from "@/utils/classnames"
 import { formatNumber } from "@/utils/number"
 import { truncateAddress } from "@/utils/string"
 import { toastContent } from "@/utils/toast"
+import { Empty } from "antd"
 import copy from "copy-to-clipboard"
 import moment from "moment"
 import { FC, useEffect } from "react"
@@ -40,8 +41,6 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
     },
     { refreshInterval: 10000 },
   )
-
-  console.log("withdrawalList", withdrawalList)
 
   return (
     <Container className="mb-6 space-y-6">
@@ -161,42 +160,46 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
         )}
       >
         <Text className="font-neueMachinaBold text-4xl">Claim USDC</Text>
-        <div className="mt-5 w-full overflow-auto max-h-60">
-          <table className="w-full min-w-[600px] text-left">
-            <thead>
-              <tr className="text-lg text-white">
-                <th className="font-neueMachinaBold w-1/3 pb-2 text-left text-2xl">Date</th>
-                <th className="font-neueMachinaBold w-1/3 pb-2 text-center text-2xl">Amount</th>
-                <th className="font-neueMachinaBold w-1/3 pb-2 text-right text-2xl">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {withdrawalList?.map((row: any, idx: number) => (
-                <tr key={idx} className="border-b border-[#15467D] last:border-0">
-                  <td className="w-1/3 py-2 text-left text-base">
-                    {moment(row?.created_time).format("YYYY-MM-DD HH:mm:ss")}
-                  </td>
-                  <td className="w-1/3 py-2 text-center text-base">{formatNumber(+row?.quantity)}</td>
-                  <td className="w-1/3 py-2 text-right text-base">
-                    <span
-                      className={cn(
-                        row?.status === WithdrawalStatus.DONE && "text-success-500",
-                        row?.status === WithdrawalStatus.FAILED && "text-error-500",
-                        row?.status === WithdrawalStatus.REQUESTED && "text-warning-500",
-                      )}
-                    >
-                      {row?.status === WithdrawalStatus.DONE
-                        ? "Done"
-                        : row?.status === WithdrawalStatus.FAILED
-                          ? "Failed"
-                          : "Pending"}
-                    </span>
-                  </td>
+        {!Number(withdrawalList?.length) ? (
+          <Empty />
+        ) : (
+          <div className="mt-5 max-h-60 w-full overflow-auto">
+            <table className="w-full min-w-[600px] text-left">
+              <thead>
+                <tr className="text-lg text-white">
+                  <th className="font-neueMachinaBold w-1/3 pb-2 text-left text-2xl">Date</th>
+                  <th className="font-neueMachinaBold w-1/3 pb-2 text-center text-2xl">Amount</th>
+                  <th className="font-neueMachinaBold w-1/3 pb-2 text-right text-2xl">Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {withdrawalList?.map((row: any, idx: number) => (
+                  <tr key={idx} className="border-b border-[#15467D] last:border-0">
+                    <td className="w-1/3 py-2 text-left text-base">
+                      {moment(row?.created_time).format("YYYY-MM-DD HH:mm:ss")}
+                    </td>
+                    <td className="w-1/3 py-2 text-center text-base">{formatNumber(+row?.quantity)}</td>
+                    <td className="w-1/3 py-2 text-right text-base">
+                      <span
+                        className={cn(
+                          row?.status === WithdrawalStatus.DONE && "text-success-500",
+                          row?.status === WithdrawalStatus.FAILED && "text-error-500",
+                          row?.status === WithdrawalStatus.REQUESTED && "text-warning-500",
+                        )}
+                      >
+                        {row?.status === WithdrawalStatus.DONE
+                          ? "Done"
+                          : row?.status === WithdrawalStatus.FAILED
+                            ? "Failed"
+                            : "Pending"}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </Container>
   )
