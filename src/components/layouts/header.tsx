@@ -119,7 +119,7 @@ export const Header: FC<HeaderProps> = () => {
 
           <div className="flex">
             {routes.map((route) => {
-              if (route.isAuth && !token) return null
+              if (route.isAuth && !token && !userInfo?.twitter_id) return null
               const currentPath = location.pathname.replace(/\/$/, "")
               const routePath = route.to.replace(/\/$/, "")
               const isActive = currentPath === routePath

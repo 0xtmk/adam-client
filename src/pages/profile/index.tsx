@@ -6,22 +6,33 @@ import useUserInfo from "@/hooks/use-user-info"
 import { Button } from "@/libs/ui/button"
 import { Text } from "@/libs/ui/text"
 import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
+import { routePath } from "@/routes/routes"
 import { cn } from "@/utils/classnames"
 import { truncateAddress } from "@/utils/string"
 import { toastContent } from "@/utils/toast"
 import copy from "copy-to-clipboard"
-import { FC } from "react"
+import { FC, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 interface ProfilePageProps {}
 
 export const ProfilePage: FC<ProfilePageProps> = () => {
-  const { userInfo } = useUserStore()
+  const { userInfo, token } = useUserStore()
   const { address } = useSolanaWallet()
   const { userBalance } = useUserInfo()
   const { handleClaim, isClaiming } = useProfile()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!token || !userInfo?.twitter_id) navigate(routePath.home)
+  }, [token, userInfo?.twitter_id, navigate])
 
   return (
     <Container className="space-y-6">
-      <div className={cn("card-profile flex items-center justify-between px-14 py-16")}>
+      <div
+        className={cn(
+          "flex items-center justify-between rounded-[38px] border border-black bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] bg-fixed px-14 py-16 shadow-[0_4px_4px_0_rgba(163,163,163,0.25)_inset,0_4px_6.5px_0_rgba(0,0,0,0.25)] backdrop-blur-[5px]",
+        )}
+      >
         <div className="flex items-center gap-4">
           <img
             src={userInfo?.avatar}
@@ -40,9 +51,8 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
                     message: "Copied to clipboard",
                   })
                 }}
-                className="card-info relative flex h-8 items-center gap-4 overflow-hidden px-3"
+                className="card-info flex h-8 items-center gap-4 overflow-hidden px-3"
               >
-                <span className="absolute inset-0 bg-[linear-gradient(180deg,#000_0%,#000_100%)] opacity-40"></span>
                 <Text className="relative z-10 !text-white">{truncateAddress(address)}</Text>
                 <img src="/icons/copy.png" className="h-5 w-5" alt="" />
               </Button>
@@ -98,7 +108,13 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
           </div>
         </div>
       </div>
-      <div className="card-profile relative px-14 py-20">
+
+      <div
+        className={cn(
+          "relative bg-fixed px-14 py-20",
+          "rounded-[38px] border border-black bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] shadow-[0_4px_4px_0_rgba(163,163,163,0.25)_inset,0_4px_6.5px_0_rgba(0,0,0,0.25)] backdrop-blur-[5px]",
+        )}
+      >
         <div className="absolute bottom-0 right-28">
           <img src="/images/adam.png" alt="" />
         </div>
@@ -122,8 +138,8 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
         <Button
           loading={isClaiming}
           onClick={handleClaim}
-          disabled={userBalance?.usd === 0 || isClaiming}
-          className="mt-16 h-12 w-44 rounded-xl border border-[#0085FE] !bg-[linear-gradient(180deg,#000_0%,#000_100%)] !text-white shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)]"
+          disabled={isClaiming}
+          className="mt-16 h-12 w-44 rounded-xl border border-[#0085FE] bg-[linear-gradient(180deg,#000_0%,#000_100%)] text-2xl !text-white shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)]"
         >
           Claim USDC
         </Button>
