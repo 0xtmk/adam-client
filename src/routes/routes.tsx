@@ -7,6 +7,7 @@ export const routePath = {
   test: "/test",
   leaderboard: "/leaderboard",
   profile: "/profile",
+  spinCheck: "/spin-check",
 } as const
 
 export const routes: BaseRoute[] = [

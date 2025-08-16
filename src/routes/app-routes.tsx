@@ -6,9 +6,10 @@ import { EmptyLayout } from "@/layouts/empty-layout"
 import { HomePage } from "@/pages/home"
 import { LeaderboardPage } from "@/pages/leaderboard"
 import NotFoundPage from "@/pages/not-found"
+import { ProfilePage } from "@/pages/profile"
+import { SpinCheck } from "@/pages/spin-check"
 import TestPage from "@/pages/test"
 import { routePath } from "./routes"
-import { ProfilePage } from "@/pages/profile"
 
 interface AppRoutesProps {}
 
@@ -34,6 +35,8 @@ const routes: RouteObject[] = [
     element: <EmptyLayout />,
     children: [
       { path: routePath.test, element: <TestPage /> },
+      { path: routePath.spinCheck, element: <SpinCheck /> },
+
       { path: routePath.notFound, element: <NotFoundPage /> },
     ],
   },

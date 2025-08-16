@@ -18,6 +18,16 @@ class SpinService {
 
     return response.data
   }
+
+  async getHistory(params?: { offset?: number; limit?: number }) {
+    const response = await axiosInstance.request({
+      method: "GET",
+      url: "/spin/history",
+      params
+    })
+
+    return response.data
+  }
 }
 
 export default SpinService
