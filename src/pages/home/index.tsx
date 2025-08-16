@@ -19,18 +19,16 @@ export const HomePage: FC<HomePageProps> = () => {
   const [missionCountdowns, setMissionCountdowns] = useState<{ [id: number]: number }>({})
   const [missionDone, setMissionDone] = useState<{ [id: number]: boolean }>({})
 
-
   const { userInfo, token } = useUserStore()
   const { address, connectWallet } = useSolanaWallet()
 
   useEffect(() => {
-    if(!token){
+    if (!token) {
       setMissionCheckingList([])
       setMissionCountdowns({})
       setMissionDone({})
     }
-  } , [token])
-
+  }, [token])
 
   const { data: missionList, isLoading: gettingMissionList } = useSWR(["get-mission-list", token], async () => {
     const res = await Service.mission.getListMissions()
@@ -93,20 +91,20 @@ export const HomePage: FC<HomePageProps> = () => {
       <div
         className="
       rounded-[38px] bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] bg-fixed p-10
-      pb-4 shadow-[0_4px_4px_0_rgba(163,163,163,0.25)_inset,0_4px_6.5px_0_rgba(0,0,0,0.25)] backdrop-blur-sm"
+      pb-4 shadow-[0_4px_4px_0_rgba(163,163,163,0.25)_inset,0_4px_6.5px_0_rgba(0,0,0,0.25)] backdrop-blur-sm max-md:p-6 max-sm:px-4"
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between max-lg:flex-col max-lg:items-start max-lg:gap-4">
           <div className="space-y-5">
-            <Text className="text-4xl">DAILY QUEST</Text>
+            <Text className="text-4xl max-md:text-xl">DAILY QUEST</Text>
 
-            <Text className="mt-5 max-w-[615px] text-xl">
+            <Text className="mt-5 max-w-[615px] text-xl max-md:text-sm">
               Welcome to ADAM! Spin to win, earn exciting rewards, and join a mission to make the world a better place!
             </Text>
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-[10px]">
-            <Text className="text-xl">Streaks</Text>
-            <div className="relative h-7 w-[350px] rounded-3xl bg-white p-[2px]">
+          <div className="flex flex-col items-center justify-center gap-[10px] max-md:items-start">
+            <Text className="text-xl max-md:text-base">Streaks</Text>
+            <div className="relative h-7 w-[350px] rounded-3xl bg-white p-[2px] max-md:h-5 max-md:w-[280px]">
               <div
                 className="absolute left-0 top-0 -z-10 h-full w-full rounded-3xl"
                 style={{
@@ -121,22 +119,26 @@ export const HomePage: FC<HomePageProps> = () => {
                 }}
                 className="h-full rounded-3xl bg-[linear-gradient(60deg,#DABB22_5.72%,#E97A3A_67.19%)]"
               ></div>
-              <Text className="font-neueMachinaUltrabold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl text-[#BD5A1E]">
+              <Text className="font-neueMachinaUltrabold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl text-[#BD5A1E] max-md:text-sm">
                 {missionStreak?.streak}/{missionStreak?.total_streak}
               </Text>
 
-              <img src="/images/chest.png" className="absolute -right-1 -top-5 h-16 w-16 animate-bounce" alt="" />
+              <img
+                src="/images/chest.png"
+                className="absolute -right-1 -top-5 h-16 w-16 animate-bounce max-md:-top-3 max-md:h-10 max-md:w-10"
+                alt=""
+              />
             </div>
           </div>
         </div>
 
-        <div className="mt-[70px]">
+        <div className="mt-[70px] max-md:mt-10">
           {gettingMissionList ? (
             <div className="flex items-center justify-center">
               <Loading />
             </div>
           ) : Number(missionList?.length) ? (
-            <div className="space-y-6">
+            <div className="space-y-6 max-md:space-y-3">
               {missionList?.map((item, index) => {
                 const isChecking = missionCheckingList.includes(item?.id)
                 const countdown = missionCountdowns[item?.id] || 0
@@ -145,32 +147,35 @@ export const HomePage: FC<HomePageProps> = () => {
                 return (
                   <div
                     key={index}
-                    className="flex items-center justify-between rounded-xl bg-[#111B27] px-9 py-6 hover:bg-[#1E2835] "
+                    className="flex items-center justify-between rounded-xl bg-[#111B27] px-9 py-6 hover:bg-[#1E2835] max-md:p-4"
                   >
-                    <div className="flex items-center gap-9">
-                      <img src="/icons/twitter.png" className="h-10 w-10" alt="" />
-                      <Text className="text-2xl">{item?.name}</Text>
+                    <div className="flex items-center gap-9 max-md:gap-4 max-sm:gap-2">
+                      <img src="/icons/twitter.png" className="h-10 w-10 max-md:h-8 max-md:w-8" alt="" />
+                      <Text className="text-2xl max-md:text-base max-sm:text-sm">{item?.name}</Text>
                     </div>
                     {isDone ? (
-                      <div className="flex h-9 min-w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#68FD7F]">
-                        <Text className="font-neueMachinaBold text-xl text-black">Done</Text>
+                      <div className="flex h-9 w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#68FD7F] max-md:h-8 max-md:w-20">
+                        <Text className="font-neueMachinaBold text-xl text-black max-md:text-sm">Done</Text>
                       </div>
                     ) : isChecking ? (
                       countdown > 0 ? (
-                        <div className="flex h-9 min-w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#FF4444]">
-                          <Text className="font-neueMachinaBold text-xl text-black">{countdown}s</Text>
+                        <div className="flex h-9 w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#FF4444] max-md:h-8 max-md:w-20">
+                          <Text className="font-neueMachinaBold text-xl text-black max-md:text-sm">{countdown}s</Text>
                         </div>
                       ) : (
                         <Button
                           onClick={() => handleCheckMission(item?.id)}
-                          className="h-9 min-w-40 !border-[#D9D9D9] !bg-[#FFCB3D]"
+                          className="h-9 w-40 !border-[#D9D9D9] !bg-[#FFCB3D] max-md:h-8 max-md:w-20"
                         >
-                          <Text className="font-neueMachinaBold text-xl text-black">Retry</Text>
+                          <Text className="font-neueMachinaBold text-xl text-black max-md:text-sm">Retry</Text>
                         </Button>
                       )
                     ) : (
-                      <Button onClick={() => handleCheckMission(item?.id)} className="bg-start h-9 min-w-40">
-                        <Text className="font-neueMachinaBold text-xl text-black">Start</Text>
+                      <Button
+                        onClick={() => handleCheckMission(item?.id)}
+                        className="bg-start h-9 w-40 max-md:h-8  max-md:w-20"
+                      >
+                        <Text className="font-neueMachinaBold text-xl text-black max-md:text-sm">Start</Text>
                       </Button>
                     )}
                   </div>
@@ -181,8 +186,8 @@ export const HomePage: FC<HomePageProps> = () => {
         </div>
 
         <div className="mt-4 flex flex-col items-center gap-2">
-          <Text className="text-2xl">Complete all quests</Text>
-          <Text>The quest will be reset at 0am UTC</Text>
+          <Text className="text-2xl max-md:text-base">Complete all quests</Text>
+          <Text className="max-md:text-sm">The quest will be reset at 0am UTC</Text>
         </div>
       </div>
       {/* spinning */}
