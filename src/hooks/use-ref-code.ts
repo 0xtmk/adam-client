@@ -11,9 +11,8 @@ export function useRefCode() {
       setRefCode(code);
       localStorage.setItem("ref_code", code);
     } else {
-      // fallback: get from localStorage if available
-      const stored = localStorage.getItem("ref_code");
-      if (stored) setRefCode(stored);
+      // const stored = localStorage.getItem("ref_code");
+      // if (stored) setRefCode(stored);
     }
   }, []);
 
