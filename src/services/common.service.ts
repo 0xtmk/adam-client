@@ -38,4 +38,13 @@ export class CommonService {
     })
     return data
   }
+
+  async withdrawalList(params?: { offset?: number; limit?: number }) {
+    const { data } = await axiosInstance.request({
+      method: "GET",
+      url: "/withdrawal/list",
+      params,
+    })
+    return data
+  }
 }

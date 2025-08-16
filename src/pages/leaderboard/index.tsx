@@ -21,7 +21,6 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
     <div className="h-full">
       <Container className="pt-4">
         <div className="flex items-center justify-center gap-20">
-          {/* <img src="/icons/trophy.png" className="h-16 w-16 flex-shrink-0" alt="" /> */}
           <div className="space-y-4 text-center">
             <Text
               className="font-neueMachinaBold animate-gradient-text bg-gradient-to-r from-white via-[#68A7FF] to-white bg-[length:200%_100%] bg-clip-text text-5xl text-transparent"
@@ -50,7 +49,6 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
               Leaderboard updates every 24h! Check your rank daily and steal the crown!
             </Text>
           </div>
-          {/* <img src="/icons/trophy.png" className="h-16 w-16 flex-shrink-0" alt="" /> */}
         </div>
       </Container>
 
@@ -66,7 +64,7 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
           </thead>
 
           <tbody>
-            <tr className={cn("user-rank sticky top-0 z-10 h-24 text-xl", !token && "hidden")}>
+            <tr className={cn("user-rank sticky top-44 z-10 h-24 text-xl", !token && "hidden")}>
               <td className="rounded-l-xl border border-r-0 border-[#5aa5ff] px-4 py-2 text-center">
                 {leaderboardData?.user_rank?.rank}
               </td>
@@ -91,7 +89,9 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
                   {idx === 2 && <img src="/images/top3.png" alt="3" className="inline-block w-20" />}
                   {idx > 2 && <span className="font-bold">{idx + 1}</span>}
                 </td>
-                <td className="px-4 py-3 text-left">{rank?.twitter_username ? rank?.twitter_username : truncateAddress(rank?.address, 8) || "-"}</td>
+                <td className="px-4 py-3 text-left">
+                  {rank?.twitter_username ? rank?.twitter_username : truncateAddress(rank?.address, 8) || "-"}
+                </td>
                 <td className="px-4 py-3 text-center">{formatNumber(Number(rank?.balance || 0))}</td>
                 <td className="rounded-r-xl px-4 py-3 text-center">{formatNumber(Number(rank?.total_invite || 0))}</td>
               </tr>

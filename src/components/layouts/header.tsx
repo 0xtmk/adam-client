@@ -3,7 +3,6 @@ import { FC } from "react"
 import { Link, useLocation } from "react-router-dom"
 
 import { useUserStore } from "@/hooks/stores/use-user-store"
-import useUserInfo from "@/hooks/use-user-info"
 import { ButtonConnect } from "@/libs/ui/button-connect"
 import { Text } from "@/libs/ui/text"
 import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
@@ -11,18 +10,24 @@ import { routePath, routes } from "@/routes/routes"
 import { Service } from "@/services/app.service"
 import { cn } from "@/utils/classnames"
 import { truncateString } from "@/utils/string"
+import { Tooltip } from "antd"
 import { Container } from "./container"
 
 interface HeaderProps {}
 
 export const Header: FC<HeaderProps> = () => {
   const { connecting, address, disconnectWallet, connectWallet } = useSolanaWallet()
-  const { userInfo, token } = useUserStore()
-  const { userBalance } = useUserInfo()
+  const { userInfo, token, refreshUserInfo } = useUserStore()
+  // const { userBalance } = useUserInfo()
 
   const location = useLocation()
 
   const handleConnectX = async () => {
+    if (userInfo?.twitter_id) {
+      const response = await Service.common.logoutTwitter()
+      response && refreshUserInfo()
+      return
+    }
     try {
       const res = await Service.common.getTwitterUrl()
       if (res) {
@@ -49,13 +54,15 @@ export const Header: FC<HeaderProps> = () => {
     }
 
     return (
-      <button
-        onClick={handleConnectX}
-        className="twitter-connect-btn flex h-9 items-center justify-center gap-1 rounded-full bg-[rgba(16,38,68,0.2)] px-5 shadow-[0_4px_0_rgba(0,0,0,0.25),inset_0_4px_4px_rgba(163,163,163,0.25)] backdrop-blur-[10px] active:scale-95"
-      >
-        <Text>{userInfo?.twitter_full_name}</Text>
-        <img src={userInfo?.avatar} className="h-5 w-5 flex-shrink-0 rounded-full" alt="" />
-      </button>
+      <Tooltip title="Logout" placement="bottom">
+        <button
+          onClick={handleConnectX}
+          className="twitter-connect-btn flex h-9 items-center justify-center gap-1 rounded-full bg-[rgba(16,38,68,0.2)] px-5 shadow-[0_4px_0_rgba(0,0,0,0.25),inset_0_4px_4px_rgba(163,163,163,0.25)] backdrop-blur-[10px] active:scale-95"
+        >
+          <Text>{userInfo?.twitter_full_name}</Text>
+          <img src={userInfo?.avatar} className="h-5 w-5 flex-shrink-0 rounded-full" alt="" />
+        </button>
+      </Tooltip>
     )
   }
 
@@ -94,12 +101,12 @@ export const Header: FC<HeaderProps> = () => {
 
             <div className="flex items-center gap-3">
               <img src="/icons/prayer.png" alt="" className="h-11 w-11" />
-              <Text className="">BLESS YOU CHILDREN</Text>
+              <Text className="">GOD BLESS YOU</Text>
               <img src="/icons/prayer.png" alt="" className="h-11 w-11" />
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1">
+              {/* <div className="flex items-center gap-1">
                 <img src="/images/adam-point.png" className="h-6 w-6" alt="" />
                 <div className="flex flex-col">
                   <Text variant="span" className="text-[10px] text-xs text-white">
@@ -109,7 +116,7 @@ export const Header: FC<HeaderProps> = () => {
                     {userBalance?.point || 0} Points
                   </Text>
                 </div>
-              </div>
+              </div> */}
 
               {renderTwitterBtn()}
 
@@ -119,7 +126,7 @@ export const Header: FC<HeaderProps> = () => {
 
           <div className="flex">
             {routes.map((route) => {
-              if (route.isAuth && !token && !userInfo?.twitter_id) return null
+              if (route.isAuth && (!token || !userInfo?.twitter_id)) return null
               const currentPath = location.pathname.replace(/\/$/, "")
               const routePath = route.to.replace(/\/$/, "")
               const isActive = currentPath === routePath
@@ -134,7 +141,6 @@ export const Header: FC<HeaderProps> = () => {
                           "h-full rounded-t-3xl",
                           "hover:bg-[linear-gradient(172deg,#567FB3_-27.86%,#000D1F_82.05%)]",
                           isActive && "bg-[linear-gradient(172deg,#567FB3_-27.86%,#000D1F_82.05%)]",
-                          
                         )}
                       >
                         <Text className="font-neueMachinaBold text-lg">{route.label}</Text>

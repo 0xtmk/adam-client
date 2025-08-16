@@ -11,3 +11,9 @@ export enum CURRENCY_TYPE {
   POINT = 1,
   USD1 = 2,
 }
+
+export enum WithdrawalStatus {
+    REQUESTED = 1,
+    DONE = 2,
+    FAILED,
+}

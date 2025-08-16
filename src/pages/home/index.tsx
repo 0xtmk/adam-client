@@ -10,7 +10,7 @@ import { openLinkInNewTab } from "@/utils/common"
 import { Button } from "antd"
 import { FC, useEffect, useState } from "react"
 import useSWR from "swr"
-import { Spin } from "./spin"
+import SpinWheel from "./spin"
 
 interface HomePageProps {}
 
@@ -192,7 +192,7 @@ export const HomePage: FC<HomePageProps> = () => {
         </div>
 
         <div className="mt-20">
-          <Spin />
+          <SpinWheel />
         </div>
       </div>
     </Container>
