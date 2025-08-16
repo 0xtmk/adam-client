@@ -1,4 +1,5 @@
 import { Container } from "@/components/layouts/container"
+import { CURRENCY_TYPE } from "@/constants/app"
 import { useUserStore } from "@/hooks/stores/use-user-store"
 import { Button } from "@/libs/ui/button"
 import { Service } from "@/services/app.service"
@@ -43,9 +44,20 @@ export const SpinCheck: FC<SpinCheckProps> = () => {
                 key: "reward",
                 render: (value) => formatNumber(+value),
               },
+
+              {
+                title: "Currency",
+                width: "25%",
+                dataIndex: "currency_type",
+                key: "currency_type",
+                render: (value) => {
+                  return <div>{value === CURRENCY_TYPE.USD1 ? "USD" : "Points"}</div>
+                },
+              },
               {
                 title: "Date",
                 dataIndex: "created_time",
+                width: "25%",
                 key: "date",
                 render: (value) => moment(value).format("YYYY-MM-DD HH:mm:ss"),
               },
