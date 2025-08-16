@@ -9,6 +9,7 @@ import { Text } from "@/libs/ui/text"
 import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
 import { routePath, routes } from "@/routes/routes"
 import { Service } from "@/services/app.service"
+import { cn } from "@/utils/classnames"
 import { truncateString } from "@/utils/string"
 import { Container } from "./container"
 
@@ -18,7 +19,7 @@ export const Header: FC<HeaderProps> = () => {
   const { connecting, address, disconnectWallet, connectWallet } = useSolanaWallet()
   const { userInfo, token } = useUserStore()
   const { userBalance } = useUserInfo()
-  
+
   const location = useLocation()
 
   const handleConnectX = async () => {
@@ -83,7 +84,7 @@ export const Header: FC<HeaderProps> = () => {
 
   return (
     <>
-      <header className="header-bg-linear h-44 backdrop-blur-[10px]">
+      <header className="header-bg-linear fixed top-0 z-20 h-44 w-full backdrop-blur-[10px]">
         <Container className="flex h-full flex-col justify-between">
           <div className="flex items-center justify-between pt-6">
             <Link to={routePath.home} className="flex items-center gap-1">
@@ -125,13 +126,16 @@ export const Header: FC<HeaderProps> = () => {
               return (
                 <RefLink key={route.to} to={route.to}>
                   <div className="h-[56px] w-[228px]">
-                    <div className="bg-border h-full overflow-hidden rounded-t-3xl p-[3px]">
+                    <div className="relative h-full overflow-hidden rounded-t-3xl bg-[linear-gradient(180deg,#007AFF_0%,#060E18_100%)] p-[2px]">
                       <div
-                        className={
-                          isActive
-                            ? "bg-link-header-active header-navlink flex h-full w-full items-center justify-center rounded-t-3xl"
-                            : "bg-link-header header-navlink flex h-full w-full items-center justify-center rounded-t-3xl"
-                        }
+                        className={cn(
+                          "bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] shadow-[0_0.842px_1.368px_0_rgba(0,0,0,0.25),0_0.842px_0.842px_0_rgba(163,163,163,0.25)_inset] backdrop-blur-[1px]",
+                          "flex items-center justify-center",
+                          "h-full rounded-t-3xl",
+                          "hover:bg-[linear-gradient(172deg,#567FB3_-27.86%,#000D1F_82.05%)]",
+                          isActive && "bg-[linear-gradient(172deg,#567FB3_-27.86%,#000D1F_82.05%)]",
+                          
+                        )}
                       >
                         <Text className="font-neueMachinaBold text-lg">{route.label}</Text>
                       </div>

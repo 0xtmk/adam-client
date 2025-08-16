@@ -4,6 +4,7 @@ import { Text } from "@/libs/ui/text"
 import { Service } from "@/services/app.service"
 import { cn } from "@/utils/classnames"
 import { formatNumber } from "@/utils/number"
+import { truncateAddress } from "@/utils/string"
 import { FC } from "react"
 import useSWR from "swr"
 
@@ -15,20 +16,45 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
     const response = await Service.user.getLeaderboard()
     return response
   })
+  console.log("leaderboardData", leaderboardData)
   return (
     <div className="h-full">
-      <Container className="pt-8">
+      <Container className="pt-4">
         <div className="flex items-center justify-center gap-20">
-          <img src="/icons/trophy.png" className="h-16 w-16 flex-shrink-0" alt="" />
-          <div className="space-y-5 text-center">
-            <Text className="font-neueMachinaBold text-5xl">LEADERBOARD</Text>
-            <Text className="text-2xl">Discover the Best Accounts and Content on</Text>
+          {/* <img src="/icons/trophy.png" className="h-16 w-16 flex-shrink-0" alt="" /> */}
+          <div className="space-y-4 text-center">
+            <Text
+              className="font-neueMachinaBold animate-gradient-text bg-gradient-to-r from-white via-[#68A7FF] to-white bg-[length:200%_100%] bg-clip-text text-5xl text-transparent"
+              style={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                color: "transparent",
+                backgroundImage: "linear-gradient(90deg, #FFF 0%, #68A7FF 50%, #FFF 100%)",
+                backgroundSize: "200% 100%",
+                animation: "gradient-slide 2.5s linear infinite",
+              }}
+            >
+              LEADERBOARD
+            </Text>
+
+            <style>
+              {`
+                @keyframes gradient-slide {
+                  0% { background-position: 0% 50%; }
+                  100% { background-position: 100% 50%; }
+                }
+              `}
+            </style>
+            <Text className="max-w-[550px] text-2xl">
+              Leaderboard updates every 24h! Check your rank daily and steal the crown!
+            </Text>
           </div>
-          <img src="/icons/trophy.png" className="h-16 w-16 flex-shrink-0" alt="" />
+          {/* <img src="/icons/trophy.png" className="h-16 w-16 flex-shrink-0" alt="" /> */}
         </div>
       </Container>
 
-      <div className="card-leaderboard mx-auto mt-10 h-fit max-w-[1440px] rounded-t-3xl bg-[rgba(21,81,158,0.2)] p-10">
+      <div className="card-leaderboard mx-auto mt-10 h-fit max-w-[1440px] rounded-t-3xl bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] bg-fixed p-10">
         <table className="font-neueMachinaBold w-full border-spacing-0 text-lg text-white">
           <thead>
             <tr className="z-20 text-xl">
@@ -45,7 +71,9 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
                 {leaderboardData?.user_rank?.rank}
               </td>
               <td className="border border-x-0 border-[#5aa5ff] px-4 py-2 text-left">
-                {leaderboardData?.user_rank?.twitter_username || leaderboardData?.user_rank?.address || "-"}
+                {leaderboardData?.user_rank?.twitter_username
+                  ? leaderboardData?.user_rank?.twitter_username
+                  : truncateAddress(leaderboardData?.user_rank?.address || "") || "-"}
               </td>
               <td className="border border-x-0 border-[#5aa5ff] px-4 py-2 text-center">
                 {formatNumber(Number(leaderboardData?.user_rank?.balance || 0))}
@@ -63,7 +91,7 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
                   {idx === 2 && <img src="/images/top3.png" alt="3" className="inline-block w-20" />}
                   {idx > 2 && <span className="font-bold">{idx + 1}</span>}
                 </td>
-                <td className="px-4 py-3 text-left">{rank?.twitter_username || rank?.address || "-"}</td>
+                <td className="px-4 py-3 text-left">{rank?.twitter_username ? rank?.twitter_username : truncateAddress(rank?.address, 8) || "-"}</td>
                 <td className="px-4 py-3 text-center">{formatNumber(Number(rank?.balance || 0))}</td>
                 <td className="rounded-r-xl px-4 py-3 text-center">{formatNumber(Number(rank?.total_invite || 0))}</td>
               </tr>

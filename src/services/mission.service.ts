@@ -19,6 +19,14 @@ class MissionService {
     })
     return reponse.data
   }
+
+  async getMissionStreak() {
+    const response = await axiosInstance.request({
+      method: "GET",
+      url: "/mission/streak",
+    })
+    return response.data
+  }
 }
 
 export default MissionService

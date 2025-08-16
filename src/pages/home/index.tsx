@@ -27,6 +27,11 @@ export const HomePage: FC<HomePageProps> = () => {
     return res
   })
 
+  const { data: missionStreak } = useSWR(["get-mission-streak", token], async () => {
+    const res = await Service.mission.getMissionStreak()
+    return res
+  })
+
   const handleConnectX = async () => {
     try {
       const res = await Service.common.getTwitterUrl()
@@ -75,12 +80,46 @@ export const HomePage: FC<HomePageProps> = () => {
   return (
     <Container>
       {/* daily quest */}
-      <div className="card-daily-quest p-10 pb-20">
+      <div
+        className="
+      rounded-[38px] bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] p-10 pb-20
+      shadow-[0_4px_4px_0_rgba(163,163,163,0.25)_inset,0_4px_6.5px_0_rgba(0,0,0,0.25)] backdrop-blur-sm"
+      >
         <div className="flex items-center justify-between">
-          <Text className="text-4xl">DAILY QUEST</Text>
-          <Text className="text-2xl">Resets at 0:00 UTC</Text>
+          <div className="space-y-5">
+            <Text className="text-4xl">DAILY QUEST</Text>
+
+            <Text className="mt-5 max-w-[615px] text-xl">
+              Welcome to ADAM! Spin to win, earn exciting rewards, and join a mission to make the world a better place!
+            </Text>
+          </div>
+
+          <div className="flex flex-col items-center justify-center gap-[10px]">
+            <Text className="text-xl">Streaks</Text>
+            <div className="relative h-7 w-[350px] rounded-3xl bg-white p-[2px]">
+              <div
+                className="absolute left-0 top-0 -z-10 h-full w-full rounded-3xl"
+                style={{
+                  background:
+                    "radial-gradient(116.35% 236.22% at -5.14% 100%, #FFBB01 0%, #FFD45D 29.69%, #FFBB01 54.17%, #FFBB01 77.08%, #FFBB01 100%)",
+                  filter: "blur(25px)",
+                }}
+              />
+              <div
+                style={{
+                  width: `${(missionStreak?.streak / missionStreak?.total_streak) * 100}%`,
+                }}
+                className="h-full rounded-3xl bg-[linear-gradient(60deg,#DABB22_5.72%,#E97A3A_67.19%)]"
+              ></div>
+              <Text className="font-neueMachinaUltrabold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl text-[#BD5A1E]">
+                {missionStreak?.streak}/{missionStreak?.total_streak}
+              </Text>
+
+              <img src="/images/chest.png" className="absolute -right-1 -top-5 h-16 w-16 animate-bounce" alt="" />
+            </div>
+          </div>
         </div>
-        <Text className="mt-5 text-xl">Do all quests to activate....</Text>
+
         <div className="mt-[70px]">
           {gettingMissionList ? (
             <div className="flex items-center justify-center">
