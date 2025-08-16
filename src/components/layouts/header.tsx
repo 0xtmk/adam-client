@@ -143,13 +143,13 @@ export const Header: FC<HeaderProps> = () => {
         <Container className="flex h-full flex-col justify-between">
           <div className="flex items-center justify-between pt-6">
             <Link to={routePath.home} className="flex items-center gap-1">
-              <img src="/logo/logo.png" alt="" className="h-11 w-11" />
-              <Text className="font-neueMachinaBold text-2xl">$ADAM</Text>
+              <img src="/logo/logo.png" alt="" className="h-11 w-11 max-sm:h-6 max-sm:w-6" />
+              <Text className="font-neueMachinaBold text-2xl max-sm:text-sm">$ADAM</Text>
             </Link>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 max-md:hidden">
               <img src="/icons/prayer.png" alt="" className="h-11 w-11" />
-              <Text className="">GOD BLESS YOU</Text>
+              <Text className="">The Wheel of Fortune</Text>
               <img src="/icons/prayer.png" alt="" className="h-11 w-11" />
             </div>
 
@@ -172,7 +172,15 @@ export const Header: FC<HeaderProps> = () => {
             </div>
           </div>
 
-          <div className="flex">
+          <div className="md:hidden flex justify-center">
+            <div className="flex items-center gap-3">
+              <img src="/icons/prayer.png" alt="" className="h-11 w-11 max-sm:h-6 max-sm:w-6" />
+              <Text className="max-sm:text-sm">The Wheel of Fortune</Text>
+              <img src="/icons/prayer.png" alt="" className="h-11 w-11 max-sm:h-6 max-sm:w-6" />
+            </div>
+          </div>
+
+          <div className="flex max-md:grid max-md:grid-cols-3 max-sm:-mx-4">
             {routes.map((route) => {
               if (route.isAuth && (!token || !userInfo?.twitter_id)) return null
               const currentPath = location.pathname.replace(/\/$/, "")
@@ -180,7 +188,7 @@ export const Header: FC<HeaderProps> = () => {
               const isActive = currentPath === routePath
               return (
                 <RefLink key={route.to} to={route.to}>
-                  <div className="h-[56px] w-[228px]">
+                  <div className="h-[56px] w-[228px] max-md:h-10 max-md:w-auto">
                     <div className="relative h-full overflow-hidden rounded-t-3xl bg-[linear-gradient(180deg,#007AFF_0%,#060E18_100%)] p-[2px]">
                       <div
                         className={cn(
@@ -191,7 +199,7 @@ export const Header: FC<HeaderProps> = () => {
                           isActive && "bg-[linear-gradient(172deg,#567FB3_-27.86%,#000D1F_82.05%)]",
                         )}
                       >
-                        <Text className="font-neueMachinaBold text-lg">{route.label}</Text>
+                        <Text className="font-neueMachinaBold text-lg max-sm:text-xs">{route.label}</Text>
                       </div>
                     </div>
                   </div>

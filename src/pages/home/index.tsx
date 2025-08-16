@@ -19,8 +19,18 @@ export const HomePage: FC<HomePageProps> = () => {
   const [missionCountdowns, setMissionCountdowns] = useState<{ [id: number]: number }>({})
   const [missionDone, setMissionDone] = useState<{ [id: number]: boolean }>({})
 
+
   const { userInfo, token } = useUserStore()
   const { address, connectWallet } = useSolanaWallet()
+
+  useEffect(() => {
+    if(!token){
+      setMissionCheckingList([])
+      setMissionCountdowns({})
+      setMissionDone({})
+    }
+  } , [token])
+
 
   const { data: missionList, isLoading: gettingMissionList } = useSWR(["get-mission-list", token], async () => {
     const res = await Service.mission.getListMissions()
@@ -170,7 +180,7 @@ export const HomePage: FC<HomePageProps> = () => {
           ) : null}
         </div>
 
-        <div className="mt-4 flex flex-col gap-2 items-center">
+        <div className="mt-4 flex flex-col items-center gap-2">
           <Text className="text-2xl">Complete all quests</Text>
           <Text>The quest will be reset at 0am UTC</Text>
         </div>
@@ -182,13 +192,8 @@ export const HomePage: FC<HomePageProps> = () => {
           "rounded-[38px] bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] bg-fixed shadow-[0_4px_4px_0_rgba(163,163,163,0.25)_inset,0_4px_6.5px_0_rgba(0,0,0,0.25)] backdrop-blur-sm",
         )}
       >
-        <div className={cn("flex items-start justify-between")}>
-          <div className={cn("flex items-start justify-between", !userInfo?.twitter_id && "hidden")}>
-            <img src={userInfo?.avatar} className="h-14 w-14 flex-shrink-0 rounded-full" alt="" />
-            <Text className="font-neueMachinaBold">{userInfo?.twitter_full_name}</Text>
-          </div>
-          <Text className="text-4xl">SPIN THE WHEEL</Text>
-          <img src="/images/guide.png" className="cursor-pointer hover:scale-105" alt="" />
+        <div className={cn("flex justify-center")}>
+          <Text className="text-4xl">SPIN TO WIN</Text>
         </div>
 
         <div className="mt-20">

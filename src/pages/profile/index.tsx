@@ -47,18 +47,23 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
       <div
         className={cn(
           "flex items-center justify-between rounded-[38px] border border-black bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] bg-fixed px-14 py-16 shadow-[0_4px_4px_0_rgba(163,163,163,0.25)_inset,0_4px_6.5px_0_rgba(0,0,0,0.25)] backdrop-blur-[5px]",
+          "max-retina:flex-col max-retina:gap-6",
+          "max-sm:p-6",
         )}
       >
         <div className="flex items-center gap-4">
           <img
             src={userInfo?.avatar}
-            className={cn("h-32 w-32 rounded-full", !userInfo?.twitter_id && "hidden")}
+            className={cn(
+              "h-32 w-32 rounded-full max-md:h-20 max-md:w-20 max-sm:h-12 max-sm:w-12",
+              !userInfo?.twitter_id && "hidden",
+            )}
             alt=""
           />
           <div>
-            <Text className="font-neueMachinaBold text-2xl">{userInfo?.twitter_full_name || ""}</Text>
+            <Text className="font-neueMachinaBold text-2xl max-sm:text-sm">{userInfo?.twitter_full_name || ""}</Text>
             <div className="flex items-center gap-4">
-              <Text>@{userInfo?.twitter_username || ""}</Text>
+              <Text className="max-sm:text-xs">@{userInfo?.twitter_username || ""}</Text>
               <Button
                 onClick={() => {
                   copy(address || "")
@@ -67,37 +72,39 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
                     message: "Copied to clipboard",
                   })
                 }}
-                className="card-info flex h-8 items-center gap-4 overflow-hidden px-3"
+                className="card-info flex h-8 items-center gap-4 overflow-hidden px-3 max-sm:gap-1 max-sm:px-1"
               >
-                <Text className="relative z-10 !text-white">{truncateAddress(address)}</Text>
-                <img src="/icons/copy.png" className="h-5 w-5" alt="" />
+                <Text className="relative z-10 !text-white max-sm:!text-[10px] max-sm:text-xs">
+                  {truncateAddress(address)}
+                </Text>
+                <img src="/icons/copy.png" className="h-5 w-5 max-sm:h-4 max-sm:w-4" alt="" />
               </Button>
             </div>
           </div>
         </div>
         <div className="space-y-6">
           <div
-            className="flex min-w-[700px] items-center justify-between
-          gap-2
-          rounded-xl
-          border border-[#0085FE] bg-[linear-gradient(180deg,#0000%,#000_100%,0.4)] px-6 py-6 shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)]
+            className="flex min-w-[700px] items-center justify-between gap-2 rounded-xl
+          border
+          border-[#0085FE]
+          bg-[linear-gradient(180deg,#0000%,#000_100%,0.4)] px-6 py-6 shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)] max-lg:w-auto max-lg:min-w-max max-md:p-3
           "
           >
-            <Text className="font-neueMachinaBold relative text-2xl ">Invite</Text>
+            <Text className="font-neueMachinaBold relative text-2xl max-md:text-base">Invite</Text>
             <div className="flex items-center gap-2">
-              <Text className="font-neueMachinaBold text-2xl">{userBalance?.total_invite || 0}</Text>
-              <UserIcon />
+              <Text className="font-neueMachinaBold text-2xl max-md:text-base">{userBalance?.total_invite || 0}</Text>
+              <UserIcon className="max-md:h-4 max-md:w-4" />
             </div>
           </div>
 
           <div
-            className="flex min-w-[700px] items-center justify-between
-          gap-2
-          rounded-xl
-          border border-[#0085FE] bg-[linear-gradient(180deg,#0000%,#000_100%,0.4)] px-6 py-6 shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)]"
+            className="flex min-w-[700px] items-center justify-between gap-4 rounded-xl
+          border
+          border-[#0085FE]
+          bg-[linear-gradient(180deg,#0000%,#000_100%,0.4)] px-6 py-6 shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)] max-lg:w-auto max-lg:min-w-max max-md:p-3 max-sm:flex-col"
           >
-            <Text className="font-neueMachinaBold text-xl">
-              {HOST}?ref_code={userInfo?.referral_code}
+            <Text className="font-neueMachinaBold text-xl max-md:text-sm">
+              {truncateAddress(HOST, 4)}?ref_code={userInfo?.referral_code}
             </Text>
             <Button
               onClick={() => {
@@ -107,10 +114,10 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
                   message: "Copied to clipboard",
                 })
               }}
-              className="relative h-7 w-32 rounded border border-[#0085FE] shadow-[0_1.561px_1.561px_0_rgba(255,255,255,0.25)_inset,0_1.561px_1.561px_0_rgba(0,0,0,0.25)] active:scale-95"
+              className="relative h-7 w-32 rounded border border-[#0085FE] shadow-[0_1.561px_1.561px_0_rgba(255,255,255,0.25)_inset,0_1.561px_1.561px_0_rgba(0,0,0,0.25)] active:scale-95 max-md:w-20"
             >
               <span className="absolute inset-0 rounded bg-[linear-gradient(180deg,#047CD3_0%,#73C4FF_100%)] opacity-40"></span>
-              <span className="relative z-10 !text-white">Copy Link</span>
+              <span className="relative z-10 !text-white max-md:text-xs">Copy Link</span>
             </Button>
           </div>
         </div>
@@ -120,25 +127,26 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
         className={cn(
           "relative bg-fixed px-14 py-20",
           "rounded-[38px] border border-black bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] shadow-[0_4px_4px_0_rgba(163,163,163,0.25)_inset,0_4px_6.5px_0_rgba(0,0,0,0.25)] backdrop-blur-[5px]",
+          "max-md:p-10 max-sm:p-4",
         )}
       >
-        <div className="absolute bottom-0 right-28">
+        <div className="absolute bottom-0 right-28 max-lg:right-0 max-md:w-[40%]">
           <img src="/images/adam.png" alt="" />
         </div>
-        <div className="flex items-center gap-40">
-          <div className="space-y-6">
-            <Text className="font-neueMachinaBold text-2xl">Your USDC</Text>
-            <div className="flex items-center gap-3">
-              <Text className="font-neueMachinaBold text-4xl">{userBalance?.usd || 0}</Text>
-              <img src="/images/tokens/usdc.png" className="h-8 w-8" alt="" />
+        <div className="flex items-center gap-40 max-lg:gap-16 max-sm:gap-6">
+          <div className="space-y-6 max-sm:space-y-3">
+            <Text className="font-neueMachinaBold text-2xl max-md:text-base">Your USDC</Text>
+            <div className="flex items-center gap-3 max-md:gap-1">
+              <Text className="font-neueMachinaBold text-4xl max-md:text-base">{userBalance?.usd || 0}</Text>
+              <img src="/images/tokens/usdc.png" className="h-8 w-8 max-md:h-4 max-md:w-4" alt="" />
             </div>
           </div>
 
-          <div className="space-y-6">
-            <Text className="font-neueMachinaBold text-2xl">Your Points</Text>
+          <div className="space-y-6 max-sm:space-y-3">
+            <Text className="font-neueMachinaBold text-2xl max-md:text-base">Your Points</Text>
             <div className="flex items-center gap-3">
-              <Text className="font-neueMachinaBold text-4xl">{userBalance?.point || 0}</Text>
-              <img src="/images/tokens/points.png" className="h-8 w-8" alt="" />
+              <Text className="font-neueMachinaBold text-4xl max-md:text-base">{userBalance?.point || 0}</Text>
+              <img src="/images/tokens/points.png" className="h-8 w-8 max-md:h-4 max-md:w-4" alt="" />
             </div>
           </div>
         </div>
@@ -146,10 +154,10 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
           loading={isClaiming}
           onClick={handleClaim}
           disabled={isClaiming}
-          className="mt-16 h-12 w-44 rounded-xl border border-[#0085FE] bg-[linear-gradient(180deg,#000_0%,#000_100%)] text-2xl !text-white shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)]"
+          className="mt-16 h-12 max-sm:h-8 max-sm:w-28 max-sm:mt-10 w-44 rounded-xl border border-[#0085FE] bg-[linear-gradient(180deg,#000_0%,#000_100%)] text-2xl !text-white shadow-[0_7.519px_7.519px_0_rgba(255,255,255,0.25)_inset,0_7.519px_7.519px_0_rgba(0,0,0,0.25)]"
         >
-          <Text>Claim</Text>
-          <img src="/images/tokens/usdc.png" className="h-6 w-6" alt="" />
+          <Text className="max-sm:text-xs">Claim</Text>
+          <img src="/images/tokens/usdc.png" className="h-6 w-6 max-sm:w-4 max-sm:h-4" alt="" />
         </Button>
       </div>
 
@@ -157,29 +165,30 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
         className={cn(
           "relative bg-fixed px-14 py-10",
           "rounded-[38px] border border-black bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] shadow-[0_4px_4px_0_rgba(163,163,163,0.25)_inset,0_4px_6.5px_0_rgba(0,0,0,0.25)] backdrop-blur-[5px]",
+          "max-md:p-10 max-sm:p-4",
         )}
       >
-        <Text className="font-neueMachinaBold text-4xl">Claim USDC</Text>
+        <Text className="font-neueMachinaBold text-4xl max-md:text-xl">Claim USDC</Text>
         {!Number(withdrawalList?.length) ? (
           <Empty />
         ) : (
           <div className="mt-5 max-h-60 w-full overflow-auto">
-            <table className="w-full min-w-[600px] text-left">
+            <table className="w-full min-w-[500px] text-left">
               <thead>
                 <tr className="text-lg text-white">
-                  <th className="font-neueMachinaBold w-1/3 pb-2 text-left text-2xl">Date</th>
-                  <th className="font-neueMachinaBold w-1/3 pb-2 text-center text-2xl">Amount</th>
-                  <th className="font-neueMachinaBold w-1/3 pb-2 text-right text-2xl">Status</th>
+                  <th className="font-neueMachinaBold w-1/3 pb-2 text-left text-2xl max-md:text-base">Date</th>
+                  <th className="font-neueMachinaBold w-1/3 pb-2 text-center text-2xl max-md:text-base">Amount</th>
+                  <th className="font-neueMachinaBold w-1/3 pb-2 text-right text-2xl max-md:text-base">Status</th>
                 </tr>
               </thead>
               <tbody>
                 {withdrawalList?.map((row: any, idx: number) => (
                   <tr key={idx} className="border-b border-[#15467D] last:border-0">
-                    <td className="w-1/3 py-2 text-left text-base">
+                    <td className="w-1/3 py-2 text-left text-base max-md:text-xs">
                       {moment(row?.created_time).format("YYYY-MM-DD HH:mm:ss")}
                     </td>
-                    <td className="w-1/3 py-2 text-center text-base">{formatNumber(+row?.quantity)}</td>
-                    <td className="w-1/3 py-2 text-right text-base">
+                    <td className="w-1/3 py-2 text-center text-base max-md:text-xs">{formatNumber(+row?.quantity)}</td>
+                    <td className="w-1/3 py-2 text-right text-base max-md:text-xs">
                       <span
                         className={cn(
                           row?.status === WithdrawalStatus.DONE && "text-success-500",
@@ -228,9 +237,16 @@ const LineCard = () => {
   )
 }
 
-const UserIcon = () => {
+const UserIcon = ({ className }: { className?: string }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="25"
+      height="25"
+      viewBox="0 0 25 25"
+      fill="none"
+      className={className}
+    >
       <path
         d="M12.5996 12.1748C15.361 12.1748 17.5996 9.93623 17.5996 7.1748C17.5996 4.41338 15.361 2.1748 12.5996 2.1748C9.83819 2.1748 7.59961 4.41338 7.59961 7.1748C7.59961 9.93623 9.83819 12.1748 12.5996 12.1748Z"
         fill="white"

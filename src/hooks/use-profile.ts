@@ -140,11 +140,11 @@ const useProfile = () => {
           hash,
         })
       }
-    } catch (error : any) {
-      console.log("error", error?.message)
+    } catch (error: any) {
+      console.log("error", error)
       toastContent({
         type: "error",
-        message: error?.message || getErrorMessage(error),
+        message: getErrorMessage(error),
       })
     } finally {
       setIsClaiming(false)
