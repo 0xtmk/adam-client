@@ -158,7 +158,6 @@ const SpinWheel: React.FC<{ refreshSpinHistory: any }> = ({ refreshSpinHistory }
         onClose={() => setResultIdx(null)}
         footer={null}
         closeIcon={false}
-        centered
       >
         {/* <img
           src="/images/light-1.png"
@@ -189,7 +188,7 @@ const SpinWheel: React.FC<{ refreshSpinHistory: any }> = ({ refreshSpinHistory }
                     <img
                       src={`/images/tokens/${rewards[resultIdx]?.name.toLowerCase()}.png`}
                       alt={rewards[resultIdx]?.name}
-                      className="w-1h-14 h-14"
+                      className="w-10 h-10"
                     />
                   </div>
                 )}

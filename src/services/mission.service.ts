@@ -1,4 +1,5 @@
 import { axiosInstance } from "@/libs/axios/axios-instance"
+import { RMission } from "@/types/mission.type"
 
 class MissionService {
   async getListMissions() {

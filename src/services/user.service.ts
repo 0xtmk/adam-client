@@ -25,4 +25,12 @@ export class UserService {
 
     return response.data
   }
+  async listReferrals() {
+    const response = await axiosInstance.request<any>({
+      method: "GET",
+      url: "/user/list-ref",
+    })
+
+    return response.data
+  }
 }
