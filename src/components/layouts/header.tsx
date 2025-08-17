@@ -11,7 +11,6 @@ import { Service } from "@/services/app.service"
 import { cn } from "@/utils/classnames"
 import { truncateString } from "@/utils/string"
 import { toastContent } from "@/utils/toast"
-import { Tooltip } from "antd"
 import copy from "copy-to-clipboard"
 import { useRef, useState } from "react"
 import { Container } from "./container"
@@ -41,6 +40,19 @@ export const Header: FC<HeaderProps> = () => {
     }
   }
 
+  const [openTwitterDropdown, setOpenTwitterDropdown] = useState(false)
+  const twitterDropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (twitterDropdownRef.current && !twitterDropdownRef.current.contains(event.target as Node)) {
+        setOpenTwitterDropdown(false)
+      }
+    }
+    if (openTwitterDropdown) document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [openTwitterDropdown])
+
   const renderTwitterBtn = () => {
     if (!userInfo?.twitter_id) {
       return (
@@ -57,22 +69,35 @@ export const Header: FC<HeaderProps> = () => {
     }
 
     return (
-      <Tooltip title="Logout" placement="bottom">
+      <div className="relative" ref={twitterDropdownRef}>
         <button
-          onClick={handleConnectX}
+          onClick={() => setOpenTwitterDropdown((v) => !v)}
           className="twitter-connect-btn flex h-9 items-center justify-center gap-1 rounded-full bg-[rgba(16,38,68,0.2)] px-5 shadow-[0_4px_0_rgba(0,0,0,0.25),inset_0_4px_4px_rgba(163,163,163,0.25)] backdrop-blur-[10px] active:scale-95"
         >
           <Text>{userInfo?.twitter_full_name}</Text>
           <img src={userInfo?.avatar} className="h-5 w-5 flex-shrink-0 rounded-full" alt="" />
         </button>
-      </Tooltip>
+        {openTwitterDropdown && (
+          <div className="absolute right-0 z-50 mt-2 w-40 rounded-xl border border-[#1DA1F2] bg-[#1A2742] shadow-lg">
+            <button
+              className="flex w-full items-center gap-2 rounded-xl px-4 py-3 transition hover:bg-[#22345a]"
+              onClick={() => {
+                setOpenTwitterDropdown(false)
+                handleConnectX()
+              }}
+            >
+              <img src="/icons/logout.png" className="h-5 w-5" alt="logout" />
+              <span className="flex-1 text-left text-sm text-white">Logout</span>
+            </button>
+          </div>
+        )}
+      </div>
     )
   }
 
   const [open, setOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // Đóng dropdown khi click ngoài
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -172,7 +197,7 @@ export const Header: FC<HeaderProps> = () => {
             </div>
           </div>
 
-          <div className="md:hidden flex justify-center">
+          <div className="flex justify-center md:hidden">
             <div className="flex items-center gap-3">
               <img src="/icons/prayer.png" alt="" className="h-11 w-11 max-sm:h-6 max-sm:w-6" />
               <Text className="max-sm:text-sm">The Wheel of Fortune</Text>

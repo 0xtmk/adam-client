@@ -82,22 +82,26 @@ export const HomePage: FC<HomePageProps> = () => {
   }
 
   useEffect(() => {
-    if (missionCheckingList.length === 0) return
+    if (!Object.values(missionCountdowns).some((v) => v > 0)) return
     const interval = setInterval(() => {
       setMissionCountdowns((prev) => {
         const updated = { ...prev }
-        missionCheckingList.forEach((id) => {
-          if (updated[id] > 0) updated[id] = updated[id] - 1
+        let changed = false
+        Object.keys(updated).forEach((id) => {
+          const numId = Number(id)
+          if (updated[numId] > 0) {
+            updated[numId] = updated[numId] - 1
+            changed = true
+          }
         })
-        return updated
+        return changed ? updated : prev
       })
     }, 1000)
     return () => clearInterval(interval)
-  }, [missionCheckingList])
+  }, [missionCountdowns])
 
   return (
     <Container>
-      {/* daily quest */}
       <div
         className="
       rounded-[38px] bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] bg-fixed p-10
