@@ -59,12 +59,13 @@ export const HomePage: FC<HomePageProps> = () => {
       console.error("Error connecting:", error)
     }
   }
-  const handleCheckMission = async (missionId: number) => {
+  const handleCheckMission = async (missionId: number, missionType?: number) => {
+
     if (!address) {
       connectWallet()
       return
     }
-    if (!userInfo?.twitter_id) {
+    if (!userInfo?.twitter_id && missionType === MissionConfigType.X) {
       handleConnectX()
       return
     }
@@ -193,14 +194,17 @@ export const HomePage: FC<HomePageProps> = () => {
                         </div>
                       ) : (
                         <Button
-                          onClick={() => handleCheckMission(item?.id)}
+                          onClick={() => handleCheckMission(item?.id, item?.type)}
                           className="h-8 w-40 !border-[#D9D9D9] !bg-[#FFCB3D] max-md:w-20"
                         >
                           <Text className="font-neueMachinaBold text-xl text-black max-md:text-sm">Retry</Text>
                         </Button>
                       )
                     ) : (
-                      <Button onClick={() => handleCheckMission(item?.id)} className="bg-start h-8 w-40  max-md:w-20">
+                      <Button
+                        onClick={() => handleCheckMission(item?.id, item?.type)}
+                        className="bg-start h-8 w-40  max-md:w-20"
+                      >
                         <Text className="font-neueMachinaBold text-xl text-black max-md:text-sm">Start</Text>
                       </Button>
                     )}
