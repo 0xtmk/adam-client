@@ -7,12 +7,12 @@ interface DefaultLayoutProps {}
 
 export const DefaultLayout: FC<DefaultLayoutProps> = () => {
   return (
-    <div>
+    <div >
       <Header />
-      <main className="pt-36 max-md:pt-48">
+      <main className="pt-36 pb-11 max-md:pt-48">
         <Outlet />
       </main>
-      <footer className="bg-[#0B1F3A] p-2 text-center text-white flex items-center justify-between">
+      <footer className="bg-[#0B1F3A] p-2 text-center text-white flex items-center z-30 w-full justify-between fixed bottom-0">
         <p className="text-xs">©2025 Adamgives. All rights reserved.</p>
         <div className="flex items-center gap-3">
           {socials?.map((social, index) => (
