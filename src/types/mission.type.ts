@@ -1,4 +1,4 @@
-interface RMission {
+export interface RMission {
   id: number
   timestamp: number
   mission_type: number
@@ -7,6 +7,7 @@ interface RMission {
   name: string
   updated_time: string
   user_status: number
+  type?: number
 }
 
 interface MissionData {

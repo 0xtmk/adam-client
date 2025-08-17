@@ -16,7 +16,6 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
     const response = await Service.user.getLeaderboard()
     return response
   })
-  console.log("leaderboardData", leaderboardData)
   return (
     <div className="h-full">
       <Container className="">
@@ -55,7 +54,7 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
       <div className="card-leaderboard mx-auto mt-6 h-fit max-w-[1440px] rounded-t-3xl bg-[linear-gradient(182deg,rgba(17,55,103,0.20)_-16.39%,rgba(0,102,255,0.20)_71.93%)] bg-fixed py-4 px-6 max-lg:px-0 max-md:mt-6 max-md:pt-4">
         <table className="font-neueMachinaBold w-full border-spacing-0 text-lg text-white">
           <thead>
-            <tr className="z-20 text-xl">
+            <tr className=" z-20 text-xl bg-transparent">
               <th className="p-2 text-center text-base max-sm:p-2 max-sm:text-xs">Rank</th>
               <th className="p-2 text-left text-base max-sm:p-2 max-sm:text-xs">Name</th>
               <th className="p-2 text-center text-base max-sm:p-2 max-sm:text-xs">Points</th>

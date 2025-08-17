@@ -1,5 +1,5 @@
 import { Container } from "@/components/layouts/container"
-import { MISSION_STATUS } from "@/constants/app"
+import { MISSION_STATUS, MissionConfigType } from "@/constants/app"
 import { useUserStore } from "@/hooks/stores/use-user-store"
 import useUserInfo from "@/hooks/use-user-info"
 import { Loading } from "@/libs/ui/loading"
@@ -39,7 +39,7 @@ export const HomePage: FC<HomePageProps> = () => {
     return res
   })
 
-  const { data: missionStreak , mutate: refreshMissionStreak } = useSWR(["get-mission-streak", token], async () => {
+  const { data: missionStreak, mutate: refreshMissionStreak } = useSWR(["get-mission-streak", token], async () => {
     const res = await Service.mission.getMissionStreak()
     return res
   })
@@ -160,7 +160,22 @@ export const HomePage: FC<HomePageProps> = () => {
                     className="flex items-center justify-between rounded-xl bg-[#111B27] p-4 hover:bg-[#1E2835] max-md:p-4"
                   >
                     <div className="flex items-center gap-4 max-md:gap-4 max-sm:gap-2">
-                      <img src="/icons/twitter.png" className="h-10 w-10 max-md:h-8 max-md:w-8" alt="" />
+                      {item?.type === MissionConfigType.X && (
+                        <img src="/icons/twitter-mission.png" className="h-10 w-10 max-md:h-8 max-md:w-8" alt="" />
+                      )}
+
+                      {item?.type === MissionConfigType.TELEGRAM && (
+                        <img src="/icons/telegram-mission.png" className="h-10 w-10 max-md:h-8 max-md:w-8" alt="" />
+                      )}
+
+                      {item?.type === MissionConfigType.WEBSITE && (
+                        <img src="/icons/website-mission.png" className="h-10 w-10 max-md:h-8 max-md:w-8" alt="" />
+                      )}
+
+                      {item?.type === MissionConfigType.DISCORD && (
+                        <img src="/icons/discord-mission.png" className="h-10 w-10 max-md:h-8 max-md:w-8" alt="" />
+                      )}
+
                       <Text className="text-lg max-md:text-base max-sm:text-sm">{item?.name}</Text>
                     </div>
                     {isDone ? (
@@ -181,10 +196,7 @@ export const HomePage: FC<HomePageProps> = () => {
                         </Button>
                       )
                     ) : (
-                      <Button
-                        onClick={() => handleCheckMission(item?.id)}
-                        className="bg-start h-8 w-40  max-md:w-20"
-                      >
+                      <Button onClick={() => handleCheckMission(item?.id)} className="bg-start h-8 w-40  max-md:w-20">
                         <Text className="font-neueMachinaBold text-xl text-black max-md:text-sm">Start</Text>
                       </Button>
                     )}
@@ -277,4 +289,3 @@ export const HomePage: FC<HomePageProps> = () => {
     </Container>
   )
 }
-

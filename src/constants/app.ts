@@ -33,3 +33,10 @@ export const socials = [
     href: "",
   },
 ]
+
+export enum MissionConfigType {
+  X = 1,
+  TELEGRAM = 2,
+  WEBSITE,
+  DISCORD,
+}
