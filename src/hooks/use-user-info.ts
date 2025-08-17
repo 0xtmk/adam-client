@@ -4,7 +4,7 @@ import { useUserStore } from "./stores/use-user-store"
 
 const useUserInfo = () => {
   const { token } = useUserStore()
-  const { data: userBalance } = useSWR(
+  const { data: userBalance , mutate  } = useSWR(
     ["get-user-info", token],
     async () => {
       if (!token) return null
@@ -18,6 +18,7 @@ const useUserInfo = () => {
 
   return {
     userBalance,
+    mutateUserBalance: mutate,
   }
 }
 

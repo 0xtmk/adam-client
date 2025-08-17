@@ -139,9 +139,9 @@ export const Header: FC<HeaderProps> = () => {
 
   return (
     <>
-      <header className="header-bg-linear fixed top-0 z-20 h-44 w-full backdrop-blur-[10px]">
+      <header className="header-bg-linear fixed top-0 z-20 h-32 w-full backdrop-blur-[10px]">
         <Container className="flex h-full flex-col justify-between">
-          <div className="flex items-center justify-between pt-6">
+          <div className="flex items-center justify-between pt-4">
             <Link to={routePath.home} className="flex items-center gap-1">
               <img src="/logo/logo.png" alt="" className="h-11 w-11 max-sm:h-6 max-sm:w-6" />
               <Text className="font-neueMachinaBold text-2xl max-sm:text-sm">$ADAM</Text>
@@ -188,7 +188,7 @@ export const Header: FC<HeaderProps> = () => {
               const isActive = currentPath === routePath
               return (
                 <RefLink key={route.to} to={route.to}>
-                  <div className="h-[56px] w-[228px] max-md:h-10 max-md:w-auto">
+                  <div className="h-12 w-[200px] max-md:h-10 max-md:w-auto">
                     <div className="relative h-full overflow-hidden rounded-t-3xl bg-[linear-gradient(180deg,#007AFF_0%,#060E18_100%)] p-[2px]">
                       <div
                         className={cn(

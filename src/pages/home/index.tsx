@@ -196,7 +196,7 @@ export const HomePage: FC<HomePageProps> = () => {
 
         <div className="mt-4 flex flex-col items-center gap-2">
           <Text className="text-2xl max-md:text-base">Complete all quests</Text>
-          <Text className="max-md:text-sm">The quest will be reset at 0am UTC</Text>
+          <Text className="max-md:text-sm">Quests will reset at 0:00 UTC</Text>
         </div>
       </div>
       {/* spinning */}

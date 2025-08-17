@@ -1,6 +1,7 @@
 import { Container } from "@/components/layouts/container"
 import { CURRENCY_TYPE } from "@/constants/app"
 import { useUserStore } from "@/hooks/stores/use-user-store"
+import useUserInfo from "@/hooks/use-user-info"
 import { Button } from "@/libs/ui/button"
 import { Service } from "@/services/app.service"
 import { formatNumber } from "@/utils/number"
@@ -18,7 +19,9 @@ export const SpinCheck: FC<SpinCheckProps> = () => {
     const response = await Service.spin.getHistory({ limit: 10, offset: 0 })
     return response
   })
-  console.log("data", data)
+
+  const { userBalance, mutateUserBalance } = useUserInfo()
+
   return (
     <div>
       <Container>
@@ -27,11 +30,12 @@ export const SpinCheck: FC<SpinCheckProps> = () => {
             const spinRes = await Service.spin.spinWheel()
             if (spinRes) {
               mutate()
+              mutateUserBalance()
               return
             }
           }}
         >
-          Spin
+          Spin({userBalance?.spin})
         </Button>
 
         <div className="mt-4">
