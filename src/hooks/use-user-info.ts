@@ -12,7 +12,7 @@ const useUserInfo = () => {
       return response
     },
     {
-      refreshInterval: 15000,
+      refreshInterval: 5000,
     },
   )
 
