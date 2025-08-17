@@ -39,7 +39,7 @@ export const HomePage: FC<HomePageProps> = () => {
     return res
   })
 
-  const { data: missionStreak } = useSWR(["get-mission-streak", token], async () => {
+  const { data: missionStreak , mutate: refreshMissionStreak } = useSWR(["get-mission-streak", token], async () => {
     const res = await Service.mission.getMissionStreak()
     return res
   })
@@ -77,6 +77,7 @@ export const HomePage: FC<HomePageProps> = () => {
 
     if (res === true) {
       setMissionDone((prev) => ({ ...prev, [missionId]: true }))
+      refreshMissionStreak()
     }
   }
 
