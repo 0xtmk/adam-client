@@ -172,8 +172,8 @@ export const ProfilePage: FC<ProfilePageProps> = () => {
         {!Number(withdrawalList?.length) ? (
           <Empty />
         ) : (
-          <div className="mt-5 max-h-60 w-full overflow-auto">
-            <table className="w-full min-w-[500px] text-left">
+          <div className="mt-5 max-h-[600px] w-full overflow-auto">
+            <table className="w-full min-w-[500px] text-left pr-2">
               <thead>
                 <tr className="text-lg text-white">
                   <th className="font-neueMachinaBold w-1/3 pb-2 text-left text-2xl max-md:text-base">Date</th>

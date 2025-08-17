@@ -18,3 +18,18 @@ export enum WithdrawalStatus {
   DONE = 2,
   FAILED,
 }
+
+export const socials = [
+  {
+    image: "/icons/x.png",
+    href: "",
+  },
+  {
+    image: "/icons/tele.png",
+    href: "",
+  },
+  {
+    image: "/icons/discord.png",
+    href: "",
+  },
+]

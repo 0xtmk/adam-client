@@ -4,7 +4,7 @@ import { useUserStore } from "./stores/use-user-store"
 
 const useUserInfo = () => {
   const { token } = useUserStore()
-  const { data: userBalance , mutate  } = useSWR(
+  const { data: userBalance, mutate } = useSWR(
     ["get-user-info", token],
     async () => {
       if (!token) return null
@@ -12,7 +12,7 @@ const useUserInfo = () => {
       return response
     },
     {
-      refreshInterval: 10000,
+      refreshInterval: 15000,
     },
   )
 

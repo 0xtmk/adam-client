@@ -104,16 +104,16 @@ export const HomePage: FC<HomePageProps> = () => {
       >
         <div className="flex items-center justify-between max-lg:flex-col max-lg:items-start max-lg:gap-4">
           <div className="space-y-5">
-            <Text className="text-4xl max-md:text-xl">DAILY QUEST</Text>
+            <Text className="text-2xl max-md:text-xl">DAILY QUEST</Text>
 
-            <Text className="mt-5 max-w-[615px] text-xl max-md:text-sm">
+            <Text className="mt-5 max-w-[615px] text-base max-md:text-sm">
               Welcome to ADAM! Spin to win, earn exciting rewards, and join a mission to make the world a better place!
             </Text>
           </div>
 
           <div className="flex flex-col items-center justify-center gap-[10px] max-md:items-start">
-            <Text className="text-xl max-md:text-base">Streaks</Text>
-            <div className="relative h-7 w-[350px] rounded-3xl bg-white p-[2px] max-md:h-5 max-md:w-[280px]">
+            <Text className="text-base max-md:text-base">Streaks</Text>
+            <div className="relative h-5 w-[350px] rounded-3xl bg-white p-[2px] max-md:h-5 max-md:w-[280px]">
               <div
                 className="absolute left-0 top-0 -z-10 h-full w-full rounded-3xl"
                 style={{
@@ -126,28 +126,28 @@ export const HomePage: FC<HomePageProps> = () => {
                 style={{
                   width: `${(missionStreak?.streak / missionStreak?.total_streak) * 100}%`,
                 }}
-                className="h-full rounded-3xl bg-[linear-gradient(60deg,#DABB22_5.72%,#E97A3A_67.19%)]"
+                className="h-full rounded-3xl bg-[linear-gradient(60deg,#DABB22_5.72%,#E97A3A_67.19%)] text-sm"
               ></div>
-              <Text className="font-neueMachinaUltrabold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl text-[#BD5A1E] max-md:text-sm">
+              <Text className="font-neueMachinaUltrabold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-base text-[#BD5A1E] max-md:text-sm">
                 {missionStreak?.streak}/{missionStreak?.total_streak}
               </Text>
 
               <img
                 src="/images/chest.png"
-                className="absolute -right-1 -top-5 h-16 w-16 animate-bounce max-md:-top-3 max-md:h-10 max-md:w-10"
+                className="absolute -right-1 -top-7 h-14 w-14 animate-bounce max-md:-top-3 max-md:h-10 max-md:w-10"
                 alt=""
               />
             </div>
           </div>
         </div>
 
-        <div className="mt-[70px] max-md:mt-10">
+        <div className="mt-6">
           {gettingMissionList ? (
             <div className="flex items-center justify-center">
               <Loading />
             </div>
           ) : Number(missionList?.length) ? (
-            <div className="space-y-6 max-md:space-y-3">
+            <div className="space-y-3">
               {missionList?.map((item, index) => {
                 const isChecking = missionCheckingList.includes(item?.id)
                 const countdown = missionCountdowns[item?.id] || 0
@@ -156,25 +156,25 @@ export const HomePage: FC<HomePageProps> = () => {
                 return (
                   <div
                     key={index}
-                    className="flex items-center justify-between rounded-xl bg-[#111B27] px-9 py-6 hover:bg-[#1E2835] max-md:p-4"
+                    className="flex items-center justify-between rounded-xl bg-[#111B27] p-4 hover:bg-[#1E2835] max-md:p-4"
                   >
-                    <div className="flex items-center gap-9 max-md:gap-4 max-sm:gap-2">
+                    <div className="flex items-center gap-4 max-md:gap-4 max-sm:gap-2">
                       <img src="/icons/twitter.png" className="h-10 w-10 max-md:h-8 max-md:w-8" alt="" />
-                      <Text className="text-2xl max-md:text-base max-sm:text-sm">{item?.name}</Text>
+                      <Text className="text-lg max-md:text-base max-sm:text-sm">{item?.name}</Text>
                     </div>
                     {isDone ? (
-                      <div className="flex h-9 w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#68FD7F] max-md:h-8 max-md:w-20">
+                      <div className="flex h-8 w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#68FD7F] max-md:w-20">
                         <Text className="font-neueMachinaBold text-xl text-black max-md:text-sm">Done</Text>
                       </div>
                     ) : isChecking ? (
                       countdown > 0 ? (
-                        <div className="flex h-9 w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#FF4444] max-md:h-8 max-md:w-20">
+                        <div className="flex h-8 w-40 items-center justify-center rounded border border-[#D9D9D9] bg-[#FF4444] max-md:w-20">
                           <Text className="font-neueMachinaBold text-xl text-black max-md:text-sm">{countdown}s</Text>
                         </div>
                       ) : (
                         <Button
                           onClick={() => handleCheckMission(item?.id)}
-                          className="h-9 w-40 !border-[#D9D9D9] !bg-[#FFCB3D] max-md:h-8 max-md:w-20"
+                          className="h-8 w-40 !border-[#D9D9D9] !bg-[#FFCB3D] max-md:w-20"
                         >
                           <Text className="font-neueMachinaBold text-xl text-black max-md:text-sm">Retry</Text>
                         </Button>
@@ -182,7 +182,7 @@ export const HomePage: FC<HomePageProps> = () => {
                     ) : (
                       <Button
                         onClick={() => handleCheckMission(item?.id)}
-                        className="bg-start h-9 w-40 max-md:h-8  max-md:w-20"
+                        className="bg-start h-8 w-40  max-md:w-20"
                       >
                         <Text className="font-neueMachinaBold text-xl text-black max-md:text-sm">Start</Text>
                       </Button>
@@ -207,28 +207,19 @@ export const HomePage: FC<HomePageProps> = () => {
         )}
       >
         <div className={cn("flex justify-center")}>
-          <Text className="text-4xl">SPIN TO WIN</Text>
+          <Text className="text-3xl">SPIN TO WIN</Text>
         </div>
 
-        <div className="mt-20">
-          <SpinWheel />
+        <div className="mt-10">
+          <SpinWheel refreshSpinHistory={refreshSpinHistory} />
         </div>
 
-        <div className="font-neueMachinaBold mt-16 flex items-center justify-center gap-2 text-2xl">
+        <div className="font-neueMachinaBold mt-10 flex items-center justify-center gap-2 text-xl">
           <Text>Spin count: {userBalance?.spin || 0}</Text>
           <Text>|</Text>
           <Text onClick={() => setOpenSpinHistoryModal(true)} className="hover:text-info-500 cursor-pointer underline">
             Spin history
           </Text>
-        </div>
-        <div className="mt-28 flex items-center gap-9">
-          {socials.map((item, index) => {
-            return (
-              <div key={index}>
-                <img className="h-20 w-20 cursor-pointer hover:scale-105 active:scale-95" src={item.image} alt="" />
-              </div>
-            )
-          })}
         </div>
       </div>
 
@@ -240,11 +231,16 @@ export const HomePage: FC<HomePageProps> = () => {
         footer={null}
         closeIcon={null}
       >
-        <img onClick={() => setOpenSpinHistoryModal(false)} src="/images/close.png" className="absolute hover:scale-105 cursor-pointer active:scale-95 h-12 w-12 -right-4 -top-4 z-30" alt="" />
+        <img
+          onClick={() => setOpenSpinHistoryModal(false)}
+          src="/images/close.png"
+          className="absolute -right-4 -top-4 z-30 h-12 w-12 cursor-pointer hover:scale-105 active:scale-95"
+          alt=""
+        />
         <div className="gradient-card">
           <div className="gradient-card-content relative p-4">
             <img src="/images/reward-his-grid.png" className="absolute inset-0 h-full w-full translate-y-3" alt="" />
-            <div className="">
+            <div className="relative">
               <Text className="font-neueMachinaBold text-center text-2xl">Spin history</Text>
               <div className="max-h-80 w-full overflow-y-auto px-2">
                 <table
@@ -281,17 +277,3 @@ export const HomePage: FC<HomePageProps> = () => {
   )
 }
 
-const socials = [
-  {
-    image: "/icons/x.png",
-    href: "",
-  },
-  {
-    image: "/icons/tele.png",
-    href: "",
-  },
-  {
-    image: "/icons/discord.png",
-    href: "",
-  },
-]

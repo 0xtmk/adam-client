@@ -1,4 +1,10 @@
-import { toastContent } from "@/utils/toast"
+import { HOST } from "@/configs/host.config"
+import { useUserStore } from "@/hooks/stores/use-user-store"
+import useUserInfo from "@/hooks/use-user-info"
+import { Text } from "@/libs/ui/text"
+import { Service } from "@/services/app.service"
+import { openLinkInNewTab } from "@/utils/common"
+import { Modal } from "antd"
 import React, { useRef, useState } from "react"
 
 interface SpinReward {
@@ -9,17 +15,12 @@ interface SpinReward {
 }
 
 const rewards: (SpinReward & { icon?: string })[] = [
-  { id: 1, name: "POINT", type: 1, amount: "10" },
-  { id: 2, name: "USDT", type: 2, amount: "5" },
-
-  { id: 3, name: "POINT", type: 1, amount: "5" },
-  { id: 4, name: "USDT", type: 2, amount: "50" },
-
-  { id: 5, name: "POINT", type: 1, amount: "15" },
-  { id: 6, name: "USDT", type: 2, amount: "10" },
-
-  { id: 7, name: "POINT", type: 1, amount: "10" },
-  { id: 8, name: "USDT", type: 2, amount: "5" },
+  { id: 4, name: "USDC", type: 2, amount: "5" },
+  { id: 1, name: "POINTS", type: 1, amount: "5" },
+  { id: 6, name: "USDC", type: 2, amount: "50" },
+  { id: 2, name: "POINTS", type: 1, amount: "10" },
+  { id: 5, name: "USDC", type: 2, amount: "10" },
+  { id: 3, name: "POINTS", type: 1, amount: "15" },
 ]
 
 const WHEEL_SIZE = 600
@@ -27,45 +28,41 @@ const CENTER = WHEEL_SIZE / 2
 const SEGMENTS = rewards.length
 
 function getRandomOffsetPerSegment() {
-  // Offset nhỏ quanh giữa segment (±10% chiều rộng segment)
   return (Math.random() - 0.5) * (360 / SEGMENTS) * 0.1
 }
 
-const SpinWheel: React.FC = () => {
+const SpinWheel: React.FC<{ refreshSpinHistory: any }> = ({ refreshSpinHistory }) => {
   const [spinning, setSpinning] = useState(false)
   const [angle, setAngle] = useState(0)
   const [resultIdx, setResultIdx] = useState<number | null>(null)
-  const [currentIdx, setCurrentIdx] = useState(0)
-  const [highlightIdx, setHighlightIdx] = useState<number | null>(null)
   const animRef = useRef<number | null>(null)
+  const { userInfo } = useUserStore()
+
+  const { mutateUserBalance } = useUserInfo()
 
   const handleSpin = async () => {
     if (spinning) return
     setSpinning(true)
+    const response = await Service.spin.spinWheel()
+    if (!response) return
+    mutateUserBalance()
+    const rewardIdx = rewards.findIndex((reward) => reward.id === response?.id)
 
-    const rewardIdx = Math.floor(Math.random() * SEGMENTS)
     const minRounds = 3
-    const maxRounds = 6
-    const rounds = Math.floor(Math.random() * (maxRounds - minRounds + 1)) + minRounds
-
-    // Đảm bảo luôn quay ít nhất minRounds vòng từ góc hiện tại
+    // const maxRounds = 6
+    // const rounds = Math.floor(Math.random() * (maxRounds - minRounds + 1)) + minRounds
     const segmentAngle = 360 / SEGMENTS
-    // Lấy segmentOffsetAngle từ UI nếu có, hoặc mặc định 0
-    let segmentOffsetAngle = 10.5
+    let segmentOffsetAngle = 15
     if (typeof window !== "undefined" && (window as any).segmentOffsetAngle !== undefined) {
       segmentOffsetAngle = (window as any).segmentOffsetAngle
     }
-    // Tính targetAngle để pointer trỏ đúng giữa vùng rewardIdx
     const offset = getRandomOffsetPerSegment()
-    // Tính góc đích cho đúng giữa vùng rewardIdx
     const baseTargetAngle = 360 - (rewardIdx % SEGMENTS) * segmentAngle + offset - segmentOffsetAngle
-    // Tìm số vòng cần thiết để đảm bảo quay đủ minRounds từ góc hiện tại
     const minTargetAngle = angle + 360 * minRounds
     let targetAngle = baseTargetAngle
     while (targetAngle < minTargetAngle) {
       targetAngle += 360
     }
-    setHighlightIdx(rewardIdx)
 
     const duration = 3500 // ms
     const start = performance.now()
@@ -86,12 +83,12 @@ const SpinWheel: React.FC = () => {
       } else {
         setSpinning(false)
         setResultIdx(rewardIdx)
-        toastContent({
-          type: "success",
-          message: `You won ${rewards[rewardIdx].amount} ${rewards[rewardIdx].name}!`,
-        })
-        setCurrentIdx(rewardIdx)
-        setHighlightIdx(null)
+        refreshSpinHistory()
+        // toastContent({
+        //   type: "success",
+        //   message: `You won ${rewards[rewardIdx].amount} ${rewards[rewardIdx].name}!`,
+        // })
+        // setCurrentIdx(rewardIdx)
       }
     }
     animRef.current = requestAnimationFrame(animate)
@@ -103,10 +100,10 @@ const SpinWheel: React.FC = () => {
       alt="pointer"
       style={{
         position: "absolute",
-        left: CENTER - 32,
+        left: CENTER - 48,
         top: -8,
-        width: 64,
-        height: 64,
+        width: 96,
+        height: 96,
         zIndex: 2,
         pointerEvents: "none",
         userSelect: "none",
@@ -118,72 +115,17 @@ const SpinWheel: React.FC = () => {
     <image href="/images/spin-wheel.png" x={0} y={0} width={WHEEL_SIZE} height={WHEEL_SIZE} />
   )
 
-  const renderIconsAndTexts = () => {
-    const r = CENTER - 70
-    const anglePer = 360 / SEGMENTS
-    const arcR = CENTER - 30
-    const arcW = 44
-    // Góc offset để căn chỉnh segment SVG trùng với ảnh spin-wheel
-    const segmentOffsetAngle = 10.5 // thử với 22.5 độ cho 8 segment, chỉnh lại nếu cần
-    const pastelColors = [
-      "#ffd6e0", // hồng nhạt
-      "#ffe5b4", // cam nhạt
-      "#fff9b1", // vàng nhạt
-      "#d4f8e8", // xanh mint
-      "#b5ead7", // xanh lá nhạt
-      "#c7ceea", // tím nhạt
-      "#f3c6ff", // tím hồng nhạt
-      "#bde0fe", // xanh dương nhạt
-    ]
-    return rewards.map((reward, i) => {
-      // Vẽ arc highlight cho tất cả các segment, mỗi cái 1 màu
-      const startAngle = i * anglePer + segmentOffsetAngle
-      const endAngle = (i + 1) * anglePer + segmentOffsetAngle
-      const x1 = CENTER + arcR * Math.cos((Math.PI * startAngle) / 180)
-      const y1 = CENTER + arcR * Math.sin((Math.PI * startAngle) / 180)
-      const x2 = CENTER + arcR * Math.cos((Math.PI * endAngle) / 180)
-      const y2 = CENTER + arcR * Math.sin((Math.PI * endAngle) / 180)
-      const largeArc = anglePer > 180 ? 1 : 0
-      const d = `M${CENTER},${CENTER} L${x1},${y1} A${arcR},${arcR} 0 ${largeArc} 1 ${x2},${y2} Z`
-      const fillColor = pastelColors[i % pastelColors.length]
-      const highlight = <path d={d} fill={fillColor} stroke="#fff" strokeWidth={2} />
-      return (
-        <g key={i} transform={`rotate(${i * anglePer + segmentOffsetAngle} ${CENTER} ${CENTER})`}>
-          {/* {highlight} */}
-          {reward.icon && (
-            <g transform={`rotate(${-i * anglePer - segmentOffsetAngle} ${CENTER} ${CENTER - r})`}>
-              <image href={reward.icon} x={CENTER - 22} y={CENTER - r - 22} width={44} height={44} />
-            </g>
-          )}
-          <g transform={`rotate(${-i * anglePer - segmentOffsetAngle} ${CENTER} ${CENTER - r})`}>
-            <text
-              x={CENTER}
-              y={CENTER - r + 38}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              fontSize={22}
-              fontWeight="bold"
-              fill="#333"
-            >
-              {reward.amount + " " + reward.name}
-            </text>
-          </g>
-        </g>
-      )
-    })
-  }
-
   const renderSpinButton = () => (
     <img
       src="/images/spin-button.png"
       alt="spin-button"
-      width={108}
-      height={108}
+      width={150}
+      height={150}
       onClick={handleSpin}
       style={{
         position: "absolute",
-        left: CENTER - 54,
-        top: CENTER - 54,
+        left: CENTER - 75,
+        top: CENTER - 75,
         zIndex: 3,
         cursor: "pointer",
         userSelect: "none",
@@ -208,6 +150,71 @@ const SpinWheel: React.FC = () => {
           {renderSpinButton()}
         </div>
       </div>
+
+      <Modal
+        className="custom-modal relative"
+        width={500}
+        open={Boolean(resultIdx !== null)}
+        onClose={() => setResultIdx(null)}
+        footer={null}
+        closeIcon={false}
+        centered
+      >
+        {/* <img
+          src="/images/light-1.png"
+          className="absolute z-30 left-1/2 -translate-x-1/2 translate-y-[-420px] h-[50svh]"
+          alt=""
+        />
+        <img
+          src="/images/light-2.png"
+          className="absolute z-30 left-1/2 -translate-x-1/2 -bottom-full h-[50svh]"
+          alt=""
+        /> */}
+        <img
+          onClick={() => setResultIdx(null)}
+          src="/images/close.png"
+          className="absolute -right-4 -top-4 z-30 h-12 w-12 cursor-pointer hover:scale-105 active:scale-95"
+          alt=""
+        />
+        <div className="gradient-card">
+          <div className="gradient-card-content relative overflow-hidden p-4">
+            <img src="/images/reward-his-grid.png" className="absolute inset-0 h-full w-full translate-y-3" alt="" />
+            <div className="relative">
+              <Text className="font-neueMachinaBold text-center text-2xl">Congratulations!</Text>
+              <Text className="mt-4 text-center text-lg">You Won</Text>
+              <div className="mt-2">
+                {resultIdx !== null && (
+                  <div className="flex items-center justify-center gap-2">
+                    <Text className="text-5xl font-bold">{rewards[resultIdx]?.amount}</Text>
+                    <img
+                      src={`/images/tokens/${rewards[resultIdx]?.name.toLowerCase()}.png`}
+                      alt={rewards[resultIdx]?.name}
+                      className="w-1h-14 h-14"
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="mt-2 flex justify-center">
+                <img src="/images/adam-circle.png" className="h-20 w-20" alt="" />
+              </div>
+
+              <Text
+                onClick={() => {
+                  if (!resultIdx) return
+                  const context = `Wait... I just won ${rewards[resultIdx]?.amount} ${rewards[resultIdx]?.name} on @AdamGives_com 😱
+Your turn: ${HOST}?ref_code=${userInfo?.referral_code}`
+                  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(context)}`
+
+                  openLinkInNewTab(tweetUrl)
+                }}
+                className="mt-4 cursor-pointer text-center hover:underline"
+              >
+                Share to earn 10 points
+              </Text>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </>
   )
 }
