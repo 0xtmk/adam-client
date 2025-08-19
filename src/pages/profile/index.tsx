@@ -21,6 +21,7 @@ import { FC, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import useSWR from "swr"
 import { ModalClaimUsdc } from "../components/modal-claim-usdc"
+import { ModalInviteList } from "../components/modal-invite-list"
 import PrimaryButton from "../components/primary-btn"
 
 interface ProfilePageProps {}
@@ -30,6 +31,8 @@ const ProfilePage: FC<ProfilePageProps> = () => {
   const { address } = useSolanaWallet()
   const { userBalance } = useUserBalances()
   const [openClaim, setOpenClaim] = useState<number | undefined>(undefined)
+  const [openInviteList, setOpenInviteList] = useState<boolean>(false)
+
   const navigate = useNavigate()
   useEffect(() => {
     if (!token) {
@@ -47,6 +50,10 @@ const ProfilePage: FC<ProfilePageProps> = () => {
     },
     { refreshInterval: 10000 },
   )
+  const { data: referralList , isLoading: isLoadingReferralList } = useSWR(["get-ref-list", token], async () => {
+    const response = await Service.user.listReferrals()
+    return response
+  })
 
   const handleConnectX = async () => {
     try {
@@ -201,7 +208,7 @@ const ProfilePage: FC<ProfilePageProps> = () => {
                     <UserIcon />
                     <Text className="font-neueMachinaBold text-xl">Invited</Text>
                   </div>
-                  <Text className="cursor-pointer text-[#40BFE5] hover:underline">View detail</Text>
+                  <Text onClick={() => setOpenInviteList(true)} className="cursor-pointer text-[#40BFE5] hover:underline">View detail</Text>
                 </div>
                 <Text className="font-neueMachinaBold text-2xl">{userBalance?.total_invite || 0}</Text>
               </div>
@@ -273,6 +280,7 @@ const ProfilePage: FC<ProfilePageProps> = () => {
         </div>
       </Container>
       <ModalClaimUsdc open={Boolean(openClaim)} data={openClaim} onCancel={() => setOpenClaim(undefined)} />
+      <ModalInviteList width={928} open={openInviteList} data={referralList?.data} isLoading={isLoadingReferralList} onCancel={() => setOpenInviteList(false)} />
     </div>
   )
 }
