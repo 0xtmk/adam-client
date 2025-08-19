@@ -58,7 +58,7 @@ export const HomeNewPage: FC<any> = () => {
     try {
       const res = await Service.common.getTwitterUrl()
       if (res) {
-        window.open(res)
+        window.open(res, "_self")
       }
     } catch (error) {
       console.error("Error connecting:", error)
@@ -70,6 +70,7 @@ export const HomeNewPage: FC<any> = () => {
       connectWallet()
       return
     }
+
     if (!userInfo?.twitter_id && missionType === MissionConfigType.X) {
       handleConnectX()
       return
@@ -141,7 +142,10 @@ export const HomeNewPage: FC<any> = () => {
                       <Text className="font-neueMachinaBold text-base">{countdown}s</Text>
                     </PrimaryButton>
                   ) : (
-                    <PrimaryButton childClassName="w-[106px]" onClick={() => handleCheckMission(item.id)}>
+                    <PrimaryButton
+                      childClassName="w-[106px]"
+                      onClick={() => handleCheckMission(item.id, item?.type)}
+                    >
                       <div className="flex items-center gap-2">
                         <img src="/icons/retry.png" className="h-4 w-4" alt="" />
                         <Text className="font-neueMachinaBold text-base">Retry</Text>
@@ -151,10 +155,10 @@ export const HomeNewPage: FC<any> = () => {
                 ) : (
                   <PrimaryButton
                     childClassName={cn("", (!token || !userInfo?.twitter_id) && "w-[101px]")}
-                    onClick={() => handleCheckMission(item.id)}
+                    onClick={() => handleCheckMission(item.id, item?.type)}
                   >
                     <Text className="font-neueMachinaBold text-base">
-                      {!token || !userInfo?.twitter_id ? "Start" : "Connect"}
+                      {!token || !userInfo?.twitter_id ? "Connect" : "Start"}
                     </Text>
                   </PrimaryButton>
                 )}
@@ -319,7 +323,6 @@ export const HomeNewPage: FC<any> = () => {
               Congrats, you have completed all daily quests! Enjoy your Free Spin!
             </Text>
           </div>
- 
         </div>
       </ModalCongrats>
     </div>

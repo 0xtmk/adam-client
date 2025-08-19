@@ -24,5 +24,6 @@ export const routes: BaseRoute[] = [
   {
     label: "Profile",
     to: routePath.profile,
+    isAuth: true,
   },
 ]

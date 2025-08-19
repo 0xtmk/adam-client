@@ -7,6 +7,7 @@ import useUserBalances from "@/hooks/use-user-balance"
 import { Loading } from "@/libs/ui/loading"
 import { Text } from "@/libs/ui/text"
 import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
+import { routePath } from "@/routes/routes"
 import { Service } from "@/services/app.service"
 import { cn } from "@/utils/classnames"
 import { formatNumber } from "@/utils/number"
@@ -16,7 +17,8 @@ import { LoadingOutlined } from "@ant-design/icons"
 import { Spin } from "antd"
 import copy from "copy-to-clipboard"
 import moment from "moment"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import useSWR from "swr"
 import { ModalClaimUsdc } from "../components/modal-claim-usdc"
 import PrimaryButton from "../components/primary-btn"
@@ -28,6 +30,12 @@ const ProfilePage: FC<ProfilePageProps> = () => {
   const { address } = useSolanaWallet()
   const { userBalance } = useUserBalances()
   const [openClaim, setOpenClaim] = useState<number | undefined>(undefined)
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (!token) {
+      navigate(routePath.home)
+    }
+  }, [token])
 
   const { handleClaim, isClaiming } = useProfile()
 

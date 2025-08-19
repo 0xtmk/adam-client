@@ -60,7 +60,7 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
               </thead>
 
               <tbody>
-                {leaderboardData?.user_rank && (
+                {leaderboardData?.user_rank?.rank && (
                   <tr>
                     <td colSpan={4} className="p-0">
                       <div className="h-14 bg-[linear-gradient(90deg,#26DDFF_0%,transparent_100%)] py-[1px]">
@@ -107,7 +107,19 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
                       <table className="w-full border-spacing-0">
                         <tbody>
                           {leaderboardData?.list_top?.map((item, index) => (
-                            <tr key={item.id} className={cn("h-14", index % 2 === 0 ? "bg-[#111932]" : "bg-[#1B2547]")}>
+                            <tr
+                              key={item.id}
+                              className={cn(
+                                "h-14",
+                                leaderboardData?.user_rank?.rank
+                                  ? index % 2 === 0
+                                    ? "bg-[#111932]"
+                                    : "bg-[#1B2547]"
+                                  : index % 2 === 0
+                                    ? "bg-[#1B2547]"
+                                    : "bg-[#111932]",
+                              )}
+                            >
                               <td className="w-[15%] pl-8">
                                 {index === 0 && <img src="/images/top1.png" alt="1" className="w-11" />}
                                 {index === 1 && <img src="/images/top2.png" alt="1" className="w-11" />}

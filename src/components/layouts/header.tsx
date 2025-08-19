@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react"
 import { Link, useLocation } from "react-router-dom"
 
+import { useUserStore } from "@/hooks/stores/use-user-store"
 import useUserInfo from "@/hooks/use-user-balance"
 import { Button } from "@/libs/ui/button"
 import { ButtonConnect } from "@/libs/ui/button-connect"
@@ -20,7 +21,7 @@ interface HeaderProps {}
 export const Header: FC<HeaderProps> = () => {
   const { connecting, address, disconnectWallet, connectWallet } = useSolanaWallet()
   const { userBalance } = useUserInfo()
-
+  const { token } = useUserStore()
   const location = useLocation()
 
   const [openTwitterDropdown, setOpenTwitterDropdown] = useState(false)
@@ -115,9 +116,11 @@ export const Header: FC<HeaderProps> = () => {
           </Link>
 
           {routes?.map((route) => {
+            if (route.isAuth && !token) return null
             const currentPath = location.pathname.replace(/\/$/, "")
             const routePathCurrent = route.to.replace(/\/$/, "")
             const isActive = currentPath === routePathCurrent
+
             return (
               <RefLink
                 key={route.to}
