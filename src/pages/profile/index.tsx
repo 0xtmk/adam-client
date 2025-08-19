@@ -1,16 +1,21 @@
 import { Container } from "@/components/layouts/container"
 import { HOST } from "@/configs/host.config"
+import { WithdrawalStatus } from "@/constants/app"
 import { useUserStore } from "@/hooks/stores/use-user-store"
 import useProfile from "@/hooks/use-profile"
 import useUserBalances from "@/hooks/use-user-balance"
+import { Loading } from "@/libs/ui/loading"
 import { Text } from "@/libs/ui/text"
 import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
 import { Service } from "@/services/app.service"
+import { cn } from "@/utils/classnames"
+import { formatNumber } from "@/utils/number"
 import { truncateAddress } from "@/utils/string"
 import { toastContent } from "@/utils/toast"
 import { LoadingOutlined } from "@ant-design/icons"
 import { Spin } from "antd"
 import copy from "copy-to-clipboard"
+import moment from "moment"
 import { FC, useState } from "react"
 import useSWR from "swr"
 import { ModalClaimUsdc } from "../components/modal-claim-usdc"
@@ -26,7 +31,7 @@ const ProfilePage: FC<ProfilePageProps> = () => {
 
   const { handleClaim, isClaiming } = useProfile()
 
-  const { data: withdrawalList } = useSWR(
+  const { data: withdrawalList, isLoading: isLoadingWithdrawalList } = useSWR(
     ["get-withdrawal-list", token],
     async () => {
       const response = await Service.common.withdrawalList()
@@ -197,12 +202,66 @@ const ProfilePage: FC<ProfilePageProps> = () => {
         </div>
         <div className="mt-20">
           <Text className="font-neueMachinaBold text-2xl">Claim history</Text>
-          <div className="mx-auto mt-[105px] max-w-[350px] space-y-3">
-            <Text className="font-neueMachinaBold text-center text-xl">No claim history</Text>
-            <Text className="font-neueMachinaBold text-[rgba(255,255,255,0.80)]">
-              Complete the task to receive a reward.
-            </Text>
-          </div>
+          {isLoadingWithdrawalList ? (
+            <div className="mt-[105px] flex justify-center">
+              <Loading className="h-10 w-10" />
+            </div>
+          ) : withdrawalList?.length > 0 ? (
+            <div className="mt-6 rounded-[32px] bg-[linear-gradient(172deg,#456396_-27.86%,#000D1F_82.05%)] p-[2px]">
+              <div className="modal-scroll-bar h-[536px]  w-full overflow-y-auto rounded-[32px]">
+                <div className="grid h-14 grid-cols-3 items-center rounded-t-[32px] bg-[#1B2547]">
+                  <Text className="font-neueMachinaBold text-center">Date</Text>
+                  <Text className="font-neueMachinaBold text-center">Amount</Text>
+                  <Text className="font-neueMachinaBold text-center">Status</Text>
+                </div>
+
+                <div className="">
+                  {withdrawalList?.map((item: any, index: number) => {
+                    return (
+                      <div
+                        key={index}
+                        className={cn(
+                          "grid h-[60px] grid-cols-3 items-center",
+                          index % 2 === 0 ? "bg-[#111932]" : "bg-[#1B2547]",
+                        )}
+                      >
+                        <Text className="font-neueMachinaBold text-center">
+                          {moment(item?.created_time).format("DD/MM/YYYY")}
+                        </Text>
+                        <div className="flex items-center justify-center gap-3">
+                          <img src="/images/tokens/usdc.png" className="h-5 w-5" alt="" />
+                          <div className="flex items-center gap-1">
+                            <Text>{formatNumber(+item?.quantity)}</Text>
+                            <Text>USDC</Text>
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          {item?.status === WithdrawalStatus.DONE && (
+                            <Text className="text-success-500 font-neueMachinaBold">Done</Text>
+                          )}
+
+                          {item?.status === WithdrawalStatus.FAILED && (
+                            <Text className="text-error-500 font-neueMachinaBold">Failed</Text>
+                          )}
+
+                          {item?.status === WithdrawalStatus.REQUESTED && (
+                            <Text className="text-warning-500 font-neueMachinaBold">Pending</Text>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="mx-auto mt-[105px] max-w-[350px] space-y-3">
+              <Text className="font-neueMachinaBold text-center text-xl">No claim history</Text>
+              <Text className="font-neueMachinaBold text-[rgba(255,255,255,0.80)]">
+                Complete the task to receive a reward.
+              </Text>
+            </div>
+          )}
         </div>
       </Container>
       <ModalClaimUsdc open={Boolean(openClaim)} data={openClaim} onCancel={() => setOpenClaim(undefined)} />
