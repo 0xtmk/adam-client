@@ -11,6 +11,7 @@ import { openLinkInNewTab } from "@/utils/common"
 import { FC, useEffect, useState } from "react"
 import useSWR from "swr"
 import { ModalCongrats } from "../components/modal-congras"
+import { ModalSpinHistory } from "../components/modal-spin-history"
 import PrimaryButton from "../components/primary-btn"
 import SpinWheel from "./spin"
 import SquareRain from "./square-rain"
@@ -23,6 +24,7 @@ export const HomeNewPage: FC<any> = () => {
   const [missionCheckingList, setMissionCheckingList] = useState<number[]>([])
   const [missionCountdowns, setMissionCountdowns] = useState<{ [id: number]: number }>({})
   const [missionDone, setMissionDone] = useState<{ [id: number]: boolean }>({})
+  const [openSpinHistory, setOpenSpinHistory] = useState(false)
 
   const { data: missionList, isLoading: gettingMissionList } = useSWR(["get-mission-list", token], async () => {
     const res = await Service.mission.getListMissions()
@@ -32,6 +34,15 @@ export const HomeNewPage: FC<any> = () => {
   const { data: missionStreak, mutate: refreshMissionStreak } = useSWR(["get-mission-streak", token], async () => {
     const res = await Service.mission.getMissionStreak()
     return res
+  })
+
+  const {
+    data: spinHistory,
+    isLoading: gettingSpinHistory,
+    mutate: refreshSpinHistory,
+  } = useSWR(["get-spin-history", token], async () => {
+    const response = await Service.spin.getHistory()
+    return response.data
   })
 
   const handleConnectX = async () => {
@@ -216,7 +227,9 @@ export const HomeNewPage: FC<any> = () => {
               alt=""
             />
           </div>
-          <Text className="mt-8 cursor-pointer text-[#40BFE5] underline">View spin history</Text>
+          <Text onClick={() => setOpenSpinHistory(true)} className="mt-8 cursor-pointer text-[#40BFE5] underline">
+            View spin history
+          </Text>
         </div>
         <div className="bg-fill relative mt-10 h-fit flex-1 bg-[url('/images/border-mission.png')] px-8 pb-8 pt-20">
           <img src="/images/title-mission.png" className="absolute -top-10 left-1/2 -translate-x-1/2" alt="" />
@@ -242,6 +255,14 @@ export const HomeNewPage: FC<any> = () => {
           <Text className="mt-6 text-center">Quests will reset at 0:00 UTC</Text>
         </div>
       </Container>
+
+      <ModalSpinHistory
+        data={spinHistory}
+        isLoading={gettingSpinHistory}
+        open={openSpinHistory}
+        onCancel={() => setOpenSpinHistory(false)}
+        width={928}
+      />
 
       <ModalCongrats width={580}>
         <div className="flex flex-col items-center space-y-[60px]">

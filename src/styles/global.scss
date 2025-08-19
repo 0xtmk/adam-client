@@ -15,8 +15,41 @@
     @apply bg-transparent shadow-none;
   }
 }
-.modal-congrats-root {
-  .ant-modal-mask {
-    background-color: rgba(0, 0, 0, 0.75);
+// .modal-congrats-root {
+.ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+// }
+
+.primary-modal {
+  .ant-modal-content {
+    @apply bg-transparent shadow-none;
   }
+  .ant-modal-close {
+    top: 50px;
+    right: 50px;
+    .ant-modal-close-x {
+      @apply text-3xl;
+    }
+  }
+}
+
+.modal-scroll-bar {
+  overflow-y: auto;
+  box-sizing: border-box; /* quan trọng */
+  /* bỏ padding-right đi */
+}
+
+.modal-scroll-bar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modal-scroll-bar::-webkit-scrollbar-track {
+  margin: 16px 0;
+  background: #111932;
+}
+
+.modal-scroll-bar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
 }
