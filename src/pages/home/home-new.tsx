@@ -187,6 +187,7 @@ export const HomeNewPage: FC<any> = () => {
 
   return (
     <div className="">
+      <img src="/images/bg-blessing.png" className="absolute left-0 right-0 top-0" alt="" />
       <SquareRain />
 
       <Container size="blessing" className="relative z-30 flex gap-[90px] pt-16">
@@ -285,7 +286,7 @@ export const HomeNewPage: FC<any> = () => {
       <ModalAboutPoints width={569} open={openAboutPoints} onCancel={() => setOpenAboutPoints(false)} />
       <ModalIntroAdam width={569} open={openIntroAdam} onCancel={() => setOpenIntroAdam(false)} />
       <ModalIntroPoints width={569} open={openIntroPoints} onCancel={() => setOpenIntroPoints(false)} />
-        
+
       <ModalCongrats open={openModalCongrats} onCancel={() => setOpenModalCongrats(false)} width={580}>
         <img
           onClick={() => setOpenModalCongrats(false)}

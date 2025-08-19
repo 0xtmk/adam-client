@@ -7,7 +7,7 @@ interface PrimaryButtonProps extends React.HTMLAttributes<HTMLDivElement> {
 const PrimaryButton = ({ className, children, ...props }: PrimaryButtonProps) => {
   return (
     <div
-      className="relative z-10 cursor-pointer rounded-full bg-red-500 bg-[linear-gradient(92deg,#A1D5FF_5.57%,#3499FF_111.38%)] p-[1px] hover:opacity-80 active:scale-95"
+      className="relative z-10 cursor-pointer rounded-full bg-[linear-gradient(92deg,#A1D5FF_5.57%,#3499FF_111.38%)] p-[1px] hover:opacity-80 active:scale-95"
       {...props}
     >
       <div

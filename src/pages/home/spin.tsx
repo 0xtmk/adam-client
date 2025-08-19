@@ -3,11 +3,12 @@ import { useUserStore } from "@/hooks/stores/use-user-store"
 import useUserInfo from "@/hooks/use-user-balance"
 import { Text } from "@/libs/ui/text"
 import { Service } from "@/services/app.service"
+import { cn } from "@/utils/classnames"
 import { openLinkInNewTab } from "@/utils/common"
+import { toastContent } from "@/utils/toast"
 import React, { useMemo, useRef, useState } from "react"
 import { ModalCongrats } from "../components/modal-congras"
 import PrimaryButton from "../components/primary-btn"
-import { cn } from "@/utils/classnames"
 
 interface SpinReward {
   id: number
@@ -40,7 +41,7 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
 
   const animRef = useRef<number | null>(null)
   const { userInfo } = useUserStore()
-  const { mutateUserBalance , userBalance } = useUserInfo()
+  const { mutateUserBalance, userBalance } = useUserInfo()
 
   const itemResult = useMemo(() => {
     if (resultIdx === null) return null
@@ -48,6 +49,13 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
   }, [resultIdx])
 
   const handleSpin = async () => {
+    if (+userBalance?.spin < 1) {
+      toastContent({
+        type: "error",
+        message: "You don't have enough spins left.",
+      })
+      return
+    }
     if (spinning) return
     setSpinning(true)
     const response = await Service.spin.spinWheel()
@@ -69,7 +77,7 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
       targetAngle += 360
     }
 
-    const duration = 3500 
+    const duration = 3500
     const start = performance.now()
 
     const from = angle
