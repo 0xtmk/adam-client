@@ -12,6 +12,7 @@ import { ComputeBudgetProgram, PublicKey } from "@solana/web3.js"
 import BN from "bn.js"
 import { ethers } from "ethers"
 import { useState } from "react"
+import useUserBalances from "./use-user-balance"
 
 const useProfile = () => {
   const [isClaiming, setIsClaiming] = useState(false)
@@ -23,6 +24,7 @@ const useProfile = () => {
   const { solana } = useSolana()
 
   const { WALLET_SIGNATURE, USDC } = useSolanaContracts()
+  const { userBalance, mutateUserBalance } = useUserBalances()
 
   const handleClaim = async () => {
     try {
@@ -130,15 +132,12 @@ const useProfile = () => {
       if (receipt?.value?.err) {
         toastContent({
           type: "error",
-          message: "Claim token failed",
+          message: "Claim USDC failed",
           hash,
         })
+        return false
       } else {
-        toastContent({
-          type: "success",
-          message: "Claim token successfully",
-          hash,
-        })
+        return true
       }
     } catch (error: any) {
       console.log("error", error)
@@ -146,8 +145,10 @@ const useProfile = () => {
         type: "error",
         message: getErrorMessage(error),
       })
+      return false
     } finally {
       setIsClaiming(false)
+      mutateUserBalance()
     }
   }
 

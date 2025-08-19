@@ -141,7 +141,7 @@ export const HomeNewPage: FC<any> = () => {
                       <Text className="font-neueMachinaBold text-base">{countdown}s</Text>
                     </PrimaryButton>
                   ) : (
-                    <PrimaryButton className="w-[106px]" onClick={() => handleCheckMission(item.id)}>
+                    <PrimaryButton childClassName="w-[106px]" onClick={() => handleCheckMission(item.id)}>
                       <div className="flex items-center gap-2">
                         <img src="/icons/retry.png" className="h-4 w-4" alt="" />
                         <Text className="font-neueMachinaBold text-base">Retry</Text>
@@ -150,7 +150,7 @@ export const HomeNewPage: FC<any> = () => {
                   )
                 ) : (
                   <PrimaryButton
-                    className={cn("", (!token || !userInfo?.twitter_id) && "w-[101px]")}
+                    childClassName={cn("", (!token || !userInfo?.twitter_id) && "w-[101px]")}
                     onClick={() => handleCheckMission(item.id)}
                   >
                     <Text className="font-neueMachinaBold text-base">
@@ -319,11 +319,7 @@ export const HomeNewPage: FC<any> = () => {
               Congrats, you have completed all daily quests! Enjoy your Free Spin!
             </Text>
           </div>
-          {/* <PrimaryButton
-            className="w-[229px]"
-          >
-            <Text>Share to earn 10 points</Text>
-          </PrimaryButton> */}
+ 
         </div>
       </ModalCongrats>
     </div>

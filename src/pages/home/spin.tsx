@@ -205,7 +205,7 @@ Your turn: ${HOST}?ref_code=${userInfo?.referral_code}`
 
               openLinkInNewTab(tweetUrl)
             }}
-            className="w-[229px]"
+            childClassName="w-[229px]"
           >
             <Text>Share to earn 10 points</Text>
           </PrimaryButton>
