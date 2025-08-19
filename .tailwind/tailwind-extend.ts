@@ -16,6 +16,7 @@ export const tailwindExtend: Partial<ThemeConfig> = {
     fhd: "1920px",
     qhd: "2560px",
     uhd: "3840px",
+    header: "1808px",
   },
   borderRadius: {
     DEFAULT: "0.375rem",

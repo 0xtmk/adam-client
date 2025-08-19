@@ -13,7 +13,9 @@ const buttonVariants = cva(cn(""), {
     },
     type: {
       primary: cn("enabled:hover:bg-primary-600"),
-      secondary: cn(""),
+      secondary: cn(
+        "rounded-full border border-[rgba(255,255,255,0.20)] hover:!border-[rgba(255,255,255,0.40)] bg-[rgba(255,255,255,0.10)] shadow-[0_4px_2px_0_rgba(255,255,255,0.10)_inset]",
+      ),
       tertiary: cn(""),
       danger: cn(
         "enabled:bg-red-500 enabled:hover:!bg-red-600 enabled:border-red-500 enabled:hover:!border-red-500 enabled:hover:!text-white",

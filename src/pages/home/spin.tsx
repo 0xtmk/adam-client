@@ -1,6 +1,6 @@
 import { HOST } from "@/configs/host.config"
 import { useUserStore } from "@/hooks/stores/use-user-store"
-import useUserInfo from "@/hooks/use-user-info"
+import useUserInfo from "@/hooks/use-user-balance"
 import { Text } from "@/libs/ui/text"
 import { Service } from "@/services/app.service"
 import { openLinkInNewTab } from "@/utils/common"
@@ -23,7 +23,7 @@ const rewards: (SpinReward & { icon?: string })[] = [
   { id: 3, name: "POINTS", type: 1, amount: "15" },
 ]
 
-const WHEEL_SIZE = 600
+const WHEEL_SIZE = 530
 const CENTER = WHEEL_SIZE / 2
 const SEGMENTS = rewards.length
 
@@ -31,7 +31,7 @@ function getRandomOffsetPerSegment() {
   return (Math.random() - 0.5) * (360 / SEGMENTS) * 0.1
 }
 
-const SpinWheel: React.FC<{ refreshSpinHistory: any }> = ({ refreshSpinHistory }) => {
+const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory }) => {
   const [spinning, setSpinning] = useState(false)
   const [angle, setAngle] = useState(0)
   const [resultIdx, setResultIdx] = useState<number | null>(null)
@@ -102,8 +102,8 @@ const SpinWheel: React.FC<{ refreshSpinHistory: any }> = ({ refreshSpinHistory }
         position: "absolute",
         left: CENTER - 48,
         top: -8,
-        width: 96,
-        height: 96,
+        width: 106,
+        height: 94,
         zIndex: 2,
         pointerEvents: "none",
         userSelect: "none",
@@ -188,7 +188,7 @@ const SpinWheel: React.FC<{ refreshSpinHistory: any }> = ({ refreshSpinHistory }
                     <img
                       src={`/images/tokens/${rewards[resultIdx]?.name.toLowerCase()}.png`}
                       alt={rewards[resultIdx]?.name}
-                      className="w-10 h-10"
+                      className="h-10 w-10"
                     />
                   </div>
                 )}

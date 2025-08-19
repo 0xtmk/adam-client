@@ -3,13 +3,13 @@ import { RouteObject, useRoutes } from "react-router-dom"
 
 import { DefaultLayout } from "@/layouts/default-layout"
 import { EmptyLayout } from "@/layouts/empty-layout"
-import { HomePage } from "@/pages/home"
 import { LeaderboardPage } from "@/pages/leaderboard"
 import NotFoundPage from "@/pages/not-found"
 import { ProfilePage } from "@/pages/profile"
 import { SpinCheck } from "@/pages/spin-check"
 import TestPage from "@/pages/test"
 import { routePath } from "./routes"
+import { HomeNewPage } from "@/pages/home/home-new"
 
 interface AppRoutesProps {}
 
@@ -18,7 +18,7 @@ const routes: RouteObject[] = [
   {
     element: <DefaultLayout />,
     children: [
-      { path: routePath.home, element: <HomePage /> },
+      { path: routePath.home, element: <HomeNewPage /> },
       {
         path: routePath.leaderboard,
         element: <LeaderboardPage />,

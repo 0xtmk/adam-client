@@ -22,14 +22,17 @@ export enum WithdrawalStatus {
 export const socials = [
   {
     image: "/icons/x.png",
+    label: "Twitter",
     href: "",
   },
   {
     image: "/icons/tele.png",
+    label: "Telegram",
     href: "",
   },
   {
     image: "/icons/discord.png",
+    label: "Discord",
     href: "",
   },
 ]

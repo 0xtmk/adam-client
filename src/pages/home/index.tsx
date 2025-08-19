@@ -1,7 +1,7 @@
 import { Container } from "@/components/layouts/container"
 import { MISSION_STATUS, MissionConfigType } from "@/constants/app"
 import { useUserStore } from "@/hooks/stores/use-user-store"
-import useUserInfo from "@/hooks/use-user-info"
+import useUserInfo from "@/hooks/use-user-balance"
 import { Loading } from "@/libs/ui/loading"
 import { Text } from "@/libs/ui/text"
 import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
@@ -21,6 +21,7 @@ export const HomePage: FC<HomePageProps> = () => {
   const [missionCheckingList, setMissionCheckingList] = useState<number[]>([])
   const [missionCountdowns, setMissionCountdowns] = useState<{ [id: number]: number }>({})
   const [missionDone, setMissionDone] = useState<{ [id: number]: boolean }>({})
+
   const [openSpinHistoryModal, setOpenSpinHistoryModal] = useState(false)
   const { userInfo, token } = useUserStore()
   const { address, connectWallet } = useSolanaWallet()

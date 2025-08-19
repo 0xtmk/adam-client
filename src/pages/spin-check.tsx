@@ -1,7 +1,7 @@
 import { Container } from "@/components/layouts/container"
 import { CURRENCY_TYPE } from "@/constants/app"
 import { useUserStore } from "@/hooks/stores/use-user-store"
-import useUserInfo from "@/hooks/use-user-info"
+import useUserInfo from "@/hooks/use-user-balance"
 import { Button } from "@/libs/ui/button"
 import { Service } from "@/services/app.service"
 import { formatNumber } from "@/utils/number"

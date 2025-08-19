@@ -12,7 +12,7 @@ export const routePath = {
 
 export const routes: BaseRoute[] = [
   {
-    label: "Bless",
+    label: "Blessing",
     to: routePath.home,
   },
 
@@ -24,6 +24,5 @@ export const routes: BaseRoute[] = [
   {
     label: "Profile",
     to: routePath.profile,
-    isAuth: true,
   },
 ]

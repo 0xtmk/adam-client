@@ -1,27 +1,27 @@
+import Footer from "@/components/layouts/footer"
 import { Header } from "@/components/layouts/header"
-import { socials } from "@/constants/app"
+import { routePath } from "@/routes/routes"
+import { cn } from "@/utils/classnames"
 import { FC } from "react"
-import { Outlet } from "react-router-dom"
+import { Outlet, useLocation } from "react-router-dom"
 
 interface DefaultLayoutProps {}
 
 export const DefaultLayout: FC<DefaultLayoutProps> = () => {
+  const location = useLocation()
   return (
-    <div >
+    <div
+      className={cn(
+        "",
+        location.pathname === routePath.home &&
+          "min-h-svh bg-[linear-gradient(172deg,#456396_-27.86%,#000D1F_82.05%)] bg-fixed",
+      )}
+    >
       <Header />
-      <main className="pt-36 pb-11 max-md:pt-48">
+      <main className="pb-16 pt-[76px]">
         <Outlet />
       </main>
-      <footer className="bg-[#0B1F3A] p-2 text-center text-white flex items-center z-30 w-full justify-between fixed bottom-0">
-        <p className="text-xs">©2025 Adamgives. All rights reserved.</p>
-        <div className="flex items-center gap-3">
-          {socials?.map((social, index) => (
-            <a className="hover:scale-105 active:scale-95" key={index} href={social.href} target="_blank" rel="noopener noreferrer">
-              <img src={social.image} alt="" className="inline-block h-6 w-6" />
-            </a>
-          ))}
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
