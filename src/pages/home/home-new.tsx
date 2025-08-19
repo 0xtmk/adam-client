@@ -142,10 +142,7 @@ export const HomeNewPage: FC<any> = () => {
                       <Text className="font-neueMachinaBold text-base">{countdown}s</Text>
                     </PrimaryButton>
                   ) : (
-                    <PrimaryButton
-                      childClassName="w-[106px]"
-                      onClick={() => handleCheckMission(item.id, item?.type)}
-                    >
+                    <PrimaryButton childClassName="w-[106px]" onClick={() => handleCheckMission(item.id, item?.type)}>
                       <div className="flex items-center gap-2">
                         <img src="/icons/retry.png" className="h-4 w-4" alt="" />
                         <Text className="font-neueMachinaBold text-base">Retry</Text>
@@ -158,7 +155,7 @@ export const HomeNewPage: FC<any> = () => {
                     onClick={() => handleCheckMission(item.id, item?.type)}
                   >
                     <Text className="font-neueMachinaBold text-base">
-                      {!token || !userInfo?.twitter_id ? "Connect" : "Start"}
+                      {(!token || !userInfo?.twitter_id) && item?.type === MissionConfigType.X ? "Connect" : "Start"}
                     </Text>
                   </PrimaryButton>
                 )}
