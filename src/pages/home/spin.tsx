@@ -4,8 +4,10 @@ import useUserInfo from "@/hooks/use-user-balance"
 import { Text } from "@/libs/ui/text"
 import { Service } from "@/services/app.service"
 import { openLinkInNewTab } from "@/utils/common"
-import { Modal } from "antd"
-import React, { useRef, useState } from "react"
+import React, { useMemo, useRef, useState } from "react"
+import { ModalCongrats } from "../components/modal-congras"
+import PrimaryButton from "../components/primary-btn"
+import { cn } from "@/utils/classnames"
 
 interface SpinReward {
   id: number
@@ -35,10 +37,15 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
   const [spinning, setSpinning] = useState(false)
   const [angle, setAngle] = useState(0)
   const [resultIdx, setResultIdx] = useState<number | null>(null)
+
   const animRef = useRef<number | null>(null)
   const { userInfo } = useUserStore()
+  const { mutateUserBalance , userBalance } = useUserInfo()
 
-  const { mutateUserBalance } = useUserInfo()
+  const itemResult = useMemo(() => {
+    if (resultIdx === null) return null
+    return rewards[resultIdx]
+  }, [resultIdx])
 
   const handleSpin = async () => {
     if (spinning) return
@@ -49,8 +56,6 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
     const rewardIdx = rewards.findIndex((reward) => reward.id === response?.id)
 
     const minRounds = 3
-    // const maxRounds = 6
-    // const rounds = Math.floor(Math.random() * (maxRounds - minRounds + 1)) + minRounds
     const segmentAngle = 360 / SEGMENTS
     let segmentOffsetAngle = 15
     if (typeof window !== "undefined" && (window as any).segmentOffsetAngle !== undefined) {
@@ -64,7 +69,7 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
       targetAngle += 360
     }
 
-    const duration = 3500 // ms
+    const duration = 3500 
     const start = performance.now()
 
     const from = angle
@@ -84,11 +89,6 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
         setSpinning(false)
         setResultIdx(rewardIdx)
         refreshSpinHistory()
-        // toastContent({
-        //   type: "success",
-        //   message: `You won ${rewards[rewardIdx].amount} ${rewards[rewardIdx].name}!`,
-        // })
-        // setCurrentIdx(rewardIdx)
       }
     }
     animRef.current = requestAnimationFrame(animate)
@@ -117,6 +117,7 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
 
   const renderSpinButton = () => (
     <img
+      className={cn("active:scale-95", userBalance?.spin === 0 && "grayscale")}
       src="/images/spin-button.png"
       alt="spin-button"
       width={150}
@@ -145,75 +146,63 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
             style={{ transform: `rotate(${angle}deg)`, transition: spinning ? undefined : "transform 0.2s" }}
           >
             {renderOuterBorder()}
-            {/* {renderIconsAndTexts()} */}
           </svg>
           {renderSpinButton()}
         </div>
       </div>
 
-      <Modal
-        className="custom-modal relative"
-        width={500}
-        open={Boolean(resultIdx !== null)}
-        onClose={() => setResultIdx(null)}
-        footer={null}
-        closeIcon={false}
-      >
-        {/* <img
-          src="/images/light-1.png"
-          className="absolute z-30 left-1/2 -translate-x-1/2 translate-y-[-420px] h-[50svh]"
-          alt=""
-        />
-        <img
-          src="/images/light-2.png"
-          className="absolute z-30 left-1/2 -translate-x-1/2 -bottom-full h-[50svh]"
-          alt=""
-        /> */}
+      <ModalCongrats open={Boolean(resultIdx !== null)} onCancel={() => setResultIdx(null)} width={580}>
         <img
           onClick={() => setResultIdx(null)}
-          src="/images/close.png"
-          className="absolute -right-4 -top-4 z-30 h-12 w-12 cursor-pointer hover:scale-105 active:scale-95"
+          src="/icons/close.png"
+          className="absolute -right-10 top-0 z-20 h-8 w-8 cursor-pointer hover:scale-105 active:scale-95"
           alt=""
         />
-        <div className="gradient-card">
-          <div className="gradient-card-content relative overflow-hidden p-4">
-            <img src="/images/reward-his-grid.png" className="absolute inset-0 h-full w-full translate-y-3" alt="" />
-            <div className="relative">
-              <Text className="font-neueMachinaBold text-center text-2xl">Congratulations!</Text>
-              <Text className="mt-4 text-center text-lg">You Won</Text>
-              <div className="mt-2">
-                {resultIdx !== null && (
-                  <div className="flex items-center justify-center gap-2">
-                    <Text className="text-5xl font-bold">{rewards[resultIdx]?.amount}</Text>
-                    <img
-                      src={`/images/tokens/${rewards[resultIdx]?.name.toLowerCase()}.png`}
-                      alt={rewards[resultIdx]?.name}
-                      className="h-10 w-10"
-                    />
-                  </div>
-                )}
+        <div className="flex flex-col items-center space-y-[60px]">
+          <div className="relative">
+            <img
+              src={`/images/tokens/${itemResult?.name.toLowerCase()}.png`}
+              className="relative z-10 h-[200px] w-[200px]"
+              alt=""
+            />
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div className="animate-spin" style={{ animationDuration: "10s" }}>
+                <img src="/images/congras-light.png" className="scale-[7]" alt="" />
               </div>
-              <div className="mt-2 flex justify-center">
-                <img src="/images/adam-circle.png" className="h-20 w-20" alt="" />
-              </div>
-
-              <Text
-                onClick={() => {
-                  if (!resultIdx) return
-                  const context = `Wait... I just won ${rewards[resultIdx]?.amount} ${rewards[resultIdx]?.name} on @AdamGives_com 😱
-Your turn: ${HOST}?ref_code=${userInfo?.referral_code}`
-                  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(context)}`
-
-                  openLinkInNewTab(tweetUrl)
-                }}
-                className="mt-4 cursor-pointer text-center hover:underline"
-              >
-                Share to earn 10 points
-              </Text>
             </div>
           </div>
+          <div className="space-y-3">
+            <Text
+              style={{
+                background: "var(--Brand, linear-gradient(92deg, #A1D5FF 5.57%, #3499FF 111.38%))",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+              className="font-neueMachinaBold text-center text-[40px] leading-[48px]"
+            >
+              Congratulations!
+            </Text>
+            <Text className="text-center text-2xl">You won</Text>
+            <Text className="font-neueMachinaBold text-center text-[40px] leading-[48px]">
+              {itemResult?.amount} {itemResult?.name}
+            </Text>
+          </div>
+          <PrimaryButton
+            onClick={() => {
+              if (!resultIdx) return
+              const context = `Wait... I just won ${rewards[resultIdx]?.amount} ${rewards[resultIdx]?.name} on @AdamGives_com 😱
+Your turn: ${HOST}?ref_code=${userInfo?.referral_code}`
+              const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(context)}`
+
+              openLinkInNewTab(tweetUrl)
+            }}
+            className="w-[229px]"
+          >
+            <Text>Share to earn 10 points</Text>
+          </PrimaryButton>
         </div>
-      </Modal>
+      </ModalCongrats>
     </>
   )
 }

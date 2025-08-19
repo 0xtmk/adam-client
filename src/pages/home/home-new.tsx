@@ -10,7 +10,11 @@ import { cn } from "@/utils/classnames"
 import { openLinkInNewTab } from "@/utils/common"
 import { FC, useEffect, useState } from "react"
 import useSWR from "swr"
+import { ModalAboutPoints } from "../components/modal-about-points"
 import { ModalCongrats } from "../components/modal-congras"
+import { ModalHowToPlay } from "../components/modal-how-to-play"
+import { ModalIntroAdam } from "../components/modal-intro-adam"
+import { ModalIntroPoints } from "../components/modal-intro-points"
 import { ModalSpinHistory } from "../components/modal-spin-history"
 import PrimaryButton from "../components/primary-btn"
 import SpinWheel from "./spin"
@@ -25,6 +29,11 @@ export const HomeNewPage: FC<any> = () => {
   const [missionCountdowns, setMissionCountdowns] = useState<{ [id: number]: number }>({})
   const [missionDone, setMissionDone] = useState<{ [id: number]: boolean }>({})
   const [openSpinHistory, setOpenSpinHistory] = useState(false)
+  const [openModalCongrats, setOpenModalCongrats] = useState(false)
+  const [openHowToPlay, setOpenHowToPlay] = useState(false)
+  const [openAboutPoints, setOpenAboutPoints] = useState(false)
+  const [openIntroAdam, setOpenIntroAdam] = useState(false)
+  const [openIntroPoints, setOpenIntroPoints] = useState(false)
 
   const { data: missionList, isLoading: gettingMissionList } = useSWR(["get-mission-list", token], async () => {
     const res = await Service.mission.getListMissions()
@@ -75,7 +84,11 @@ export const HomeNewPage: FC<any> = () => {
 
     if (res?.status === true) {
       setMissionDone((prev) => ({ ...prev, [missionId]: true }))
-      // refreshMissionStreak()
+      if (res?.mission_success === res?.mission_config_in_day) {
+        setOpenModalCongrats(true)
+        refreshMissionStreak()
+        mutateUserBalance()
+      }
     }
   }
 
@@ -202,7 +215,7 @@ export const HomeNewPage: FC<any> = () => {
                 filter: "blur(220.12783813476562px)",
               }}
             ></div>
-            <SpinWheel />
+            <SpinWheel refreshSpinHistory={refreshSpinHistory} />
           </div>
 
           <div className="relative mt-8 flex items-center gap-10">
@@ -210,18 +223,22 @@ export const HomeNewPage: FC<any> = () => {
               src="/icons/pop-1.png"
               className="h-[52px] w-[52px] cursor-pointer transition-all hover:scale-105"
               alt=""
+              onClick={() => setOpenIntroAdam(true)}
             />
             <img
               src="/icons/pop-2.png"
               className="h-[52px] w-[52px] cursor-pointer transition-all hover:scale-105"
               alt=""
+              onClick={() => setOpenIntroPoints(true)}
             />
             <img
+              onClick={() => setOpenHowToPlay(true)}
               src="/icons/pop-3.png"
               className="h-[52px] w-[52px] cursor-pointer transition-all hover:scale-105"
               alt=""
             />
             <img
+              onClick={() => setOpenAboutPoints(true)}
               src="/icons/pop-4.png"
               className="h-[52px] w-[52px] cursor-pointer transition-all hover:scale-105"
               alt=""
@@ -264,7 +281,18 @@ export const HomeNewPage: FC<any> = () => {
         width={928}
       />
 
-      <ModalCongrats width={580}>
+      <ModalHowToPlay width={569} open={openHowToPlay} onCancel={() => setOpenHowToPlay(false)} />
+      <ModalAboutPoints width={569} open={openAboutPoints} onCancel={() => setOpenAboutPoints(false)} />
+      <ModalIntroAdam width={569} open={openIntroAdam} onCancel={() => setOpenIntroAdam(false)} />
+      <ModalIntroPoints width={569} open={openIntroPoints} onCancel={() => setOpenIntroPoints(false)} />
+        
+      <ModalCongrats open={openModalCongrats} onCancel={() => setOpenModalCongrats(false)} width={580}>
+        <img
+          onClick={() => setOpenModalCongrats(false)}
+          src="/icons/close.png"
+          className="absolute -right-10 top-0 z-20 h-8 w-8 cursor-pointer hover:scale-105 active:scale-95"
+          alt=""
+        />
         <div className="flex flex-col items-center space-y-[60px]">
           <div className="relative">
             <img src="/images/spin-modal.png" className="relative z-10 h-[200px] w-[200px]" alt="" />

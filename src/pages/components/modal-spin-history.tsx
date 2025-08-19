@@ -13,7 +13,6 @@ interface ModalSpinHistoryProps extends ModalProps {
 }
 
 export const ModalSpinHistory: FC<ModalSpinHistoryProps> = ({ data, isLoading, ...props }) => {
-  console.log("🚀 ~ ModalSpinHistory ~  data, isLoading,:", data, isLoading)
   const contentNode = () => {
     if (isLoading) {
       return (
