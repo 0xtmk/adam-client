@@ -31,6 +31,7 @@ interface Userrank {
   balance: number
   rank: number
   total_invite: number
+  avatar: string
 }
 
 interface Listtop {
@@ -39,4 +40,6 @@ interface Listtop {
   address: string
   total_invite: number
   balance: string
+  avatar: string
+
 }

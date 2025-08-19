@@ -67,8 +67,14 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
                         <div className="flex h-full w-full items-center bg-[linear-gradient(84deg,#000618_-1.75%,#005EBC_90.22%)]">
                           <div className="w-[15%] pl-12">{leaderboardData?.user_rank?.rank}</div>
                           <div className="w-[30%]">
-                            {leaderboardData?.user_rank?.twitter_username ||
-                              truncateAddress(leaderboardData?.user_rank?.address || "")}
+                            {leaderboardData?.user_rank?.twitter_username ? (
+                              <div className="flex items-center gap-1">
+                                <img src={leaderboardData?.user_rank?.avatar} className="h-8 w-8 rounded-full" alt="" />
+                                <Text>{leaderboardData?.user_rank?.twitter_username}</Text>
+                              </div>
+                            ) : (
+                              truncateAddress(leaderboardData?.user_rank?.address || "")
+                            )}
                           </div>
                           <div className="w-[30%]">
                             {formatNumber(Number(leaderboardData?.user_rank?.balance || 0))}
@@ -109,7 +115,14 @@ export const LeaderboardPage: FC<LeaderboardPageProps> = () => {
                                 {index > 2 && <Text className="pl-4">{index + 1}</Text>}
                               </td>
                               <td className="w-[30%]">
-                                {item.twitter_username || truncateAddress(item.address || "")}
+                                {item.twitter_username ? (
+                                  <div className="flex items-center gap-1">
+                                    <img src={item.avatar} className="h-8 w-8 rounded-full" alt="" />
+                                    <Text>{item.twitter_username}</Text>
+                                  </div>
+                                ) : (
+                                  truncateAddress(item.address || "")
+                                )}
                               </td>
                               <td className="w-[30%]">{formatNumber(Number(item.balance || 0))}</td>
                               <td className="w-[25%]">{item.total_invite || 0}</td>
