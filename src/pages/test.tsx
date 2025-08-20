@@ -1,40 +1,54 @@
-import { Container } from "@/components/layouts/container"
-import { MetaHead } from "@/components/layouts/metahead"
-import { Button } from "@/libs/ui/button"
-import { Service } from "@/services/app.service"
-import useSWR from "swr"
-
+import { useCallback } from "react"
+import { confetti } from "tsparticles-confetti"
 const TestPage = () => {
+  const count = 200
+  const defaults = {
+    origin: { y: 0.7 },
+  }
 
-  useSWR(['get-data'] , async () => {
-    const res = await Service.mission.getListMissions()
-    console.log('res', res)
-  })
+  const fire = useCallback((particleRatio: any, opts: any) => {
+    confetti(
+      Object.assign({}, defaults, opts, {
+        particleCount: Math.floor(count * particleRatio),
+      }),
+    )
+  }, [])
+
+  const run = useCallback(() => {
+    fire(0.25, {
+      spread: 26,
+      startVelocity: 55,
+    })
+
+    fire(0.2, {
+      spread: 60,
+    })
+
+    fire(0.35, {
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8,
+    })
+
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2,
+    })
+
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 45,
+    })
+  }, [fire])
 
   return (
-    <>
-      <MetaHead title="Test" />
-      <Container className="">
-        <Button
-          onClick={async () => {
-            const res = await Service.common.getTwitterUrl()
-            if (res) {
-              window.open(res)
-            }
-            console.log("res", res)
-          }}
-        >
-          avc
-        </Button>
-        <Button
-          onClick={async () => {
-            await Service.common.logoutTwitter()
-          }}
-        >
-          logout
-        </Button>
-      </Container>
-    </>
+    <div className="flex min-h-screen flex-col items-center justify-center">
+      <button onClick={run} className="rounded-lg bg-blue-500 px-6 py-3 text-white hover:bg-blue-600">
+        🎉 Run Confetti
+      </button>
+    </div>
   )
 }
 

@@ -6,7 +6,8 @@ import { Service } from "@/services/app.service"
 import { cn } from "@/utils/classnames"
 import { openLinkInNewTab } from "@/utils/common"
 import { toastContent } from "@/utils/toast"
-import React, { useMemo, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
+import { confetti } from "tsparticles-confetti"
 import { ModalCongrats } from "../components/modal-congras"
 import PrimaryButton from "../components/primary-btn"
 
@@ -34,6 +35,25 @@ function getRandomOffsetPerSegment() {
   return (Math.random() - 0.5) * (360 / SEGMENTS) * 0.1
 }
 
+const count = 200
+const defaults = { origin: { y: 0.7 } }
+
+function fire(particleRatio: number, opts: any) {
+  confetti(
+    Object.assign({}, defaults, opts, {
+      particleCount: Math.floor(count * particleRatio),
+    }),
+  )
+}
+
+function runConfetti() {
+  fire(0.25, { spread: 26, startVelocity: 55 })
+  fire(0.2, { spread: 60 })
+  fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 })
+  fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 })
+  fire(0.1, { spread: 120, startVelocity: 45 })
+}
+
 const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory }) => {
   const [spinning, setSpinning] = useState(false)
   const [angle, setAngle] = useState(0)
@@ -46,6 +66,12 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
   const itemResult = useMemo(() => {
     if (resultIdx === null) return null
     return rewards[resultIdx]
+  }, [resultIdx])
+
+  useEffect(() => {
+    if (resultIdx !== null) {
+      runConfetti()
+    }
   }, [resultIdx])
 
   const handleSpin = async () => {
