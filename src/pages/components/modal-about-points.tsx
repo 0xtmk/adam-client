@@ -8,7 +8,7 @@ export const ModalAboutPoints: FC<ModalAboutPointsProps> = ({ ...props }) => {
   return (
     <Modal footer={null} className="primary-modal" {...props}>
       <div className="h-fit rounded-[32px] bg-[radial-gradient(circle_at_20%_4%,_#116191_0%,_#52B8FC_71%,_#243358_100%)] p-[2px]">
-        <div className="h-full w-full rounded-[32px] bg-[#111932] p-8">
+        <div className="h-full w-full rounded-[32px] bg-[#111932] p-8 max-sm:p-4">
           <div className="flex justify-center">
             <img src="/images/tokens/points.png" className="h-[120px] w-[120px]" alt="" />
           </div>
@@ -19,11 +19,11 @@ export const ModalAboutPoints: FC<ModalAboutPointsProps> = ({ ...props }) => {
               backgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
-            className="font-neueMachinaBold mt-6 text-center text-3xl"
+            className="font-neueMachinaBold mt-6 text-center text-3xl max-md:mt-3"
           >
             About points
           </Text>
-          <div className="mt-6">
+          <div className="mt-6 max-sm:mt-3">
             <Text>Points are the heartbeat of the ADAM ecosystem. Here&apos;s why they matter: </Text>
             <Text className="font-neueMachinaBold">• Convert into $ADAM airdrops when token revvards go live. </Text>
             <Text className="font-neueMachinaBold">

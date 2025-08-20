@@ -12,7 +12,7 @@ const PrimaryButton = ({ childClassName, children, ...props }: PrimaryButtonProp
     >
       <div
         className={cn(
-          "flex h-10 min-w-[72px] items-center justify-center rounded-full bg-[radial-gradient(91.73%_131.24%_at_20.47%_4%,_#116191_0%,_#52B8FC_71.41%,_#243358_100%)]",
+          "flex h-10 min-w-[72px] max-lg:h-8 max-lg:text-xs items-center justify-center rounded-full bg-[radial-gradient(91.73%_131.24%_at_20.47%_4%,_#116191_0%,_#52B8FC_71.41%,_#243358_100%)]",
           childClassName,
         )}
       >

@@ -24,13 +24,14 @@
 
 .primary-modal {
   .ant-modal-content {
-    @apply bg-transparent shadow-none;
+    @apply bg-transparent shadow-none max-md:!p-0;
   }
   .ant-modal-close {
     top: 50px;
     right: 50px;
+    @apply max-md:top-4 max-md:right-4;
     .ant-modal-close-x {
-      @apply text-xl;
+      @apply text-xl max-md:text-base;
     }
   }
 }

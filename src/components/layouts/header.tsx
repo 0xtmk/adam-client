@@ -9,6 +9,7 @@ import { RefLink } from "@/libs/ui/ref-link"
 import { Text } from "@/libs/ui/text"
 import { useSolanaWallet } from "@/libs/web3/solana/hooks/use-solana-wallet"
 import { routePath, routes } from "@/routes/routes"
+import { cn } from "@/utils/classnames"
 import { formatNumber } from "@/utils/number"
 import { truncateString } from "@/utils/string"
 import { toastContent } from "@/utils/toast"
@@ -67,8 +68,8 @@ export const Header: FC<HeaderProps> = () => {
 
     return (
       <div className="relative" ref={dropdownRef}>
-        <Button type="secondary" onClick={() => setOpen((v) => !v)}>
-          <Text variant="span" className="text-xs text-white">
+        <Button type="secondary" className="max-sm:h-6 max-sm:px-2" onClick={() => setOpen((v) => !v)}>
+          <Text variant="span" className="text-xs max-sm:text-[10px] text-white">
             {truncateString(address)}
           </Text>
         </Button>
@@ -107,12 +108,14 @@ export const Header: FC<HeaderProps> = () => {
   }
 
   return (
-    <header className="fixed top-0 z-50 h-[76px] w-full bg-[rgba(255,255,255,0.01)] backdrop-blur-[25px]">
+    <header className="fixed top-0 z-50 h-[76px] w-full bg-[rgba(255,255,255,0.01)] backdrop-blur-[25px] max-lg:h-14">
       <Container size="header" className="flex h-full items-center justify-between">
-        <div className="flex items-center gap-20">
+        <div className="flex items-center gap-20 max-lg:gap-10 max-sm:gap-3">
           <Link to={routePath.home} className="flex items-center gap-1">
-            <img src="/logo/logo.png" alt="" className="h-11 w-11 max-sm:h-6 max-sm:w-6" />
-            <Text className="font-neueMachinaBold text-2xl max-sm:text-sm">$ADAM</Text>
+            <img src="/logo/logo.png" alt="" className="h-11 w-11 max-lg:h-8 max-lg:w-8 max-sm:h-6 max-sm:w-6" />
+            <Text className={cn("font-neueMachinaBold text-2xl max-lg:text-base max-sm:text-sm", "max-sm:hidden")}>
+              $ADAM
+            </Text>
           </Link>
 
           {routes?.map((route) => {
@@ -125,13 +128,12 @@ export const Header: FC<HeaderProps> = () => {
               <RefLink
                 key={route.to}
                 to={route.to}
-                className={
-                  isActive
-                    ? "font-neueMachinaBold flex items-center gap-1 text-xl"
-                    : "font-neueMachinaBold flex items-center gap-1 text-xl text-white"
-                }
+                className={cn(
+                  "font-neueMachinaBold flex items-center gap-1 text-xl max-lg:text-base max-sm:text-xs",
+                  !isActive && "text-white",
+                )}
               >
-                {route.to === routePath.leaderboard && <span>🏆</span>}
+                {route.to === routePath.leaderboard && <span className="max-sm:hidden">🏆</span>}
                 <span
                   className={isActive ? "animate-gradient-text" : undefined}
                   style={
@@ -156,7 +158,7 @@ export const Header: FC<HeaderProps> = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
+          <div className={cn("flex items-center gap-2", "max-md:hidden")}>
             <img src="/images/tokens/points.png" className="h-5 w-5" alt="" />
             <Text className="font-neueMachinaBold text-base">{formatNumber(+userBalance?.point || 0)}</Text>
           </div>

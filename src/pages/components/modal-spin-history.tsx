@@ -72,7 +72,7 @@ export const ModalSpinHistory: FC<ModalSpinHistoryProps> = ({ data, isLoading, .
   return (
     <Modal footer={null} className="primary-modal" {...props}>
       <div className="h-[655px] rounded-[32px] bg-[radial-gradient(circle_at_20%_4%,_#116191_0%,_#52B8FC_71%,_#243358_100%)] bg-fixed p-[2px]">
-        <div className="h-full w-full rounded-[32px] bg-[#111932] p-8">
+        <div className="h-full w-full rounded-[32px] bg-[#111932] p-8 max-sm:p-4">
           <Text className="font-neueMachinaBold text-center text-2xl">Spin history</Text>
           <div className="mt-6">
             <div className=" rounded-[32px] bg-[linear-gradient(172deg,#456396_-27.86%,#000D1F_82.05%)] p-[2px]">

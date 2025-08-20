@@ -50,7 +50,7 @@ const ProfilePage: FC<ProfilePageProps> = () => {
     },
     { refreshInterval: 10000 },
   )
-  const { data: referralList , isLoading: isLoadingReferralList } = useSWR(["get-ref-list", token], async () => {
+  const { data: referralList, isLoading: isLoadingReferralList } = useSWR(["get-ref-list", token], async () => {
     const response = await Service.user.listReferrals()
     return response
   })
@@ -69,11 +69,13 @@ const ProfilePage: FC<ProfilePageProps> = () => {
   const twitterNode = () => {
     if (!userInfo?.twitter_id) {
       return (
-        <div className="flex items-center gap-5">
-          <img src="/images/default-avatar.png" alt="" />
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <Text className="font-neueMachinaBold text-[28px] leading-[32px]">{truncateAddress(address)}</Text>
+        <div className="flex items-center gap-5 max-lg:gap-3">
+          <img src="/images/default-avatar.png" className="max-lg:h-14 max-lg:w-14" alt="" />
+          <div className="space-y-3 max-lg:space-y-1">
+            <div className="flex items-center gap-3 max-lg:gap-1">
+              <Text className="font-neueMachinaBold text-[28px] leading-[32px] max-lg:text-lg">
+                {truncateAddress(address)}
+              </Text>
               <div
                 className="cursor-pointer hover:scale-105 active:scale-95"
                 onClick={() => {
@@ -84,13 +86,13 @@ const ProfilePage: FC<ProfilePageProps> = () => {
                   })
                 }}
               >
-                <CopyIcon />
+                <CopyIcon className="max-lg:h-4 max-lg:w-4" />
               </div>
             </div>
-            <PrimaryButton onClick={handleConnectX} childClassName="w-[129px]">
-              <div className="flex items-center gap-2">
+            <PrimaryButton onClick={handleConnectX} childClassName="w-[129px] max-lg:w-[100px]">
+              <div className="flex items-center gap-2 max-lg:gap-1">
                 <Text className="font-neueMachinaBold text-white">Connect</Text>
-                <TwitterIcon />
+                <TwitterIcon className="max-lg:h-4 max-lg:w-4" />
               </div>
             </PrimaryButton>
           </div>
@@ -98,11 +100,13 @@ const ProfilePage: FC<ProfilePageProps> = () => {
       )
     }
     return (
-      <div className="flex items-center gap-5">
-        <img src={userInfo?.avatar} className="h-[100px] w-[100px] rounded-full" alt="" />
-        <div className="space-y-3">
-          <div className="flex items-center gap-3">
-            <Text className="font-neueMachinaBold text-[28px] leading-[32px]">{truncateAddress(address)}</Text>
+      <div className="flex items-center gap-5 max-lg:gap-3">
+        <img src={userInfo?.avatar} className="h-[100px] w-[100px] rounded-full max-lg:h-14 max-lg:w-14" alt="" />
+        <div className="space-y-3 max-lg:space-y-1">
+          <div className="flex items-center gap-3 max-lg:gap-1">
+            <Text className="font-neueMachinaBold text-[28px] leading-[32px] max-lg:text-lg">
+              {truncateAddress(address)}
+            </Text>
             <div
               className="cursor-pointer hover:scale-105 active:scale-95"
               onClick={() => {
@@ -113,7 +117,7 @@ const ProfilePage: FC<ProfilePageProps> = () => {
                 })
               }}
             >
-              <CopyIcon />
+              <CopyIcon className="max-lg:h-4 max-lg:w-4" />
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -125,7 +129,7 @@ const ProfilePage: FC<ProfilePageProps> = () => {
               />
             </svg>
 
-            <Text className="text-[rgba(255,255,255,0.80)]">@{userInfo?.twitter_username}</Text>
+            <Text className="text-[rgba(255,255,255,0.80)] max-lg:text-xs">@{userInfo?.twitter_username}</Text>
             <img
               onClick={async () => {
                 const res = await Service.common.logoutTwitter()
@@ -146,15 +150,17 @@ const ProfilePage: FC<ProfilePageProps> = () => {
     <div>
       <img src="/images/bg-profile.png" className="absolute left-0 right-0 top-0" alt="" />
 
-      <Container size="blessing" className="relative pt-10">
+      <Container size="blessing" className="relative pt-10 max-lg:pt-4">
         <div className="rounded-[32px] bg-[radial-gradient(63.22%_110.29%_at_20.47%_4%,#116191_0%,#52B8FC_71.41%,#243358_100%)] p-[2px]">
-          <div className="h-full w-full space-y-8 rounded-[32px] bg-[#111932] p-8">
-            <div className="flex items-center justify-between">
+          <div className="h-full w-full space-y-8 rounded-[32px] bg-[#111932] p-8 max-lg:space-y-4 max-lg:p-4">
+            <div className="flex items-center justify-between max-md:flex-col max-md:items-start max-md:gap-2">
               {twitterNode()}
-              <div className="space-y-3">
-                <Text className="font-neueMachinaBold text-xl">Earn 10 points for every invite</Text>
-                <div className="bg-fill flex h-[52px] w-[436px] items-center justify-between bg-[url('/images/border-share.png')] bg-no-repeat px-3">
-                  <Text>{truncateAddress(`${HOST}?ref_code=${userInfo?.referral_code}`, 10)}</Text>
+              <div className="space-y-3 max-md:w-full">
+                <Text className="font-neueMachinaBold text-xl max-lg:text-sm">Earn 10 points for every invite</Text>
+                <div className="bg-fill flex h-[52px] w-[436px] items-center  justify-between bg-[url('/images/border-share.png')] bg-no-repeat px-3 max-lg:h-12 max-sm:w-full">
+                  <Text className="max-lg:text-sm">
+                    {truncateAddress(`${HOST}?ref_code=${userInfo?.referral_code}`, 10)}
+                  </Text>
                   <PrimaryButton
                     onClick={() => {
                       copy(`${HOST}?ref_code=${userInfo?.referral_code}`)
@@ -163,7 +169,7 @@ const ProfilePage: FC<ProfilePageProps> = () => {
                         message: "Link copied to clipboard",
                       })
                     }}
-                    childClassName="w-[114px]"
+                    childClassName="w-[114px] max-lg:w-20"
                   >
                     <Text className="font-neueMachinaBold">Copy link</Text>
                   </PrimaryButton>
@@ -171,14 +177,14 @@ const ProfilePage: FC<ProfilePageProps> = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-5">
-              <div className="space-y-5 rounded-[20px] bg-[#1B2547] p-4">
-                <div className="flex items-center gap-3">
-                  <img src="/images/tokens/usdc.png" className="h-7 w-7" alt="" />
-                  <Text className="font-neueMachinaBold text-xl">Your USDC</Text>
+            <div className="grid grid-cols-3 gap-5 max-lg:gap-2 max-md:grid-cols-1">
+              <div className="space-y-5 rounded-[20px] bg-[#1B2547] p-4 max-lg:space-y-3">
+                <div className="flex items-center gap-3 max-lg:gap-1">
+                  <img src="/images/tokens/usdc.png" className="h-7 w-7 max-lg:h-5 max-lg:w-5" alt="" />
+                  <Text className="font-neueMachinaBold text-xl max-lg:text-base">Your USDC</Text>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Text className="font-neueMachinaBold text-2xl">{userBalance?.usd || 0}</Text>
+                  <Text className="font-neueMachinaBold text-2xl max-lg:text-base">{userBalance?.usd || 0}</Text>
                   {userBalance?.usd > 0 && (
                     <PrimaryButton
                       onClick={async () => {
@@ -194,40 +200,45 @@ const ProfilePage: FC<ProfilePageProps> = () => {
                 </div>
               </div>
 
-              <div className="space-y-5 rounded-[20px] bg-[#1B2547] p-4">
-                <div className="flex items-center gap-3">
-                  <img src="/images/tokens/points.png" className="h-7 w-7" alt="" />
-                  <Text className="font-neueMachinaBold text-xl">Your Points</Text>
+              <div className="space-y-5 rounded-[20px] bg-[#1B2547] p-4 max-lg:space-y-3">
+                <div className="flex items-center gap-3 max-lg:gap-1">
+                  <img src="/images/tokens/points.png" className="h-7 w-7 max-lg:h-5 max-lg:w-5" alt="" />
+                  <Text className="font-neueMachinaBold text-xl max-lg:text-base">Your Points</Text>
                 </div>
-                <Text className="font-neueMachinaBold text-2xl">{userBalance?.point || 0}</Text>
+                <Text className="font-neueMachinaBold text-2xl max-lg:text-base">{userBalance?.point || 0}</Text>
               </div>
 
-              <div className="space-y-5 rounded-[20px] bg-[#1B2547] p-4">
+              <div className="space-y-5 rounded-[20px] bg-[#1B2547] p-4 max-lg:space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <UserIcon />
-                    <Text className="font-neueMachinaBold text-xl">Invited</Text>
+                  <div className="flex items-center gap-3 max-lg:gap-1">
+                    <UserIcon className="max-lg:h-4 max-lg:w-4" />
+                    <Text className="font-neueMachinaBold text-xl max-lg:text-base">Invited</Text>
                   </div>
-                  <Text onClick={() => setOpenInviteList(true)} className="cursor-pointer text-[#40BFE5] hover:underline">View detail</Text>
+                  <Text
+                    onClick={() => setOpenInviteList(true)}
+                    className="cursor-pointer text-[#40BFE5] hover:underline max-lg:text-xs"
+                  >
+                    View detail
+                  </Text>
                 </div>
-                <Text className="font-neueMachinaBold text-2xl">{userBalance?.total_invite || 0}</Text>
+                <Text className="font-neueMachinaBold text-2xl max-lg:text-base">{userBalance?.total_invite || 0}</Text>
               </div>
             </div>
           </div>
         </div>
-        <div className="mt-20">
-          <Text className="font-neueMachinaBold text-2xl">Claim history</Text>
+        <div className="mt-20 max-lg:mt-6 max-md:mt-4">
+          <Text className="font-neueMachinaBold text-2xl max-lg:text-lg">Claim history</Text>
           {isLoadingWithdrawalList ? (
             <div className="mt-[105px] flex justify-center">
               <Loading className="h-10 w-10" />
             </div>
           ) : withdrawalList?.length > 0 ? (
-            <div className="mt-6 rounded-[32px] bg-[linear-gradient(172deg,#456396_-27.86%,#000D1F_82.05%)] p-[2px]">
-              <div className="modal-scroll-bar h-[536px]  w-full overflow-y-auto rounded-[32px]">
-                <div className="grid h-14 grid-cols-3 items-center rounded-t-[32px] bg-[#1B2547]">
-                  <Text className="font-neueMachinaBold text-center">Date</Text>
-                  <Text className="font-neueMachinaBold text-center">Amount</Text>
-                  <Text className="font-neueMachinaBold text-center">Status</Text>
+            <div className="mt-6 rounded-[32px] bg-[linear-gradient(172deg,#456396_-27.86%,#000D1F_82.05%)] p-[2px] max-md:mt-4">
+              <div className="modal-scroll-bar h-[536px] max-md:h-[400px] w-full overflow-y-auto rounded-[32px]">
+                <div className="grid h-14 grid-cols-3 items-center rounded-t-[32px] bg-[#1B2547] max-md:h-10">
+                  <Text className="font-neueMachinaBold text-center max-md:text-sm">Date</Text>
+                  <Text className="font-neueMachinaBold text-center max-md:text-sm">Amount</Text>
+                  <Text className="font-neueMachinaBold text-center max-md:text-sm">Status</Text>
                 </div>
 
                 <div className="">
@@ -236,21 +247,21 @@ const ProfilePage: FC<ProfilePageProps> = () => {
                       <div
                         key={index}
                         className={cn(
-                          "grid h-[60px] grid-cols-3 items-center",
+                          "grid h-[60px] grid-cols-3 items-center max-md:h-10",
                           index % 2 === 0 ? "bg-[#111932]" : "bg-[#1B2547]",
                         )}
                       >
-                        <Text className="font-neueMachinaBold text-center">
+                        <Text className="font-neueMachinaBold text-center max-md:text-sm">
                           {moment(item?.created_time).format("DD/MM/YYYY")}
                         </Text>
-                        <div className="flex items-center justify-center gap-3">
-                          <img src="/images/tokens/usdc.png" className="h-5 w-5" alt="" />
-                          <div className="flex items-center gap-1">
+                        <div className="flex items-center justify-center gap-3 max-md:gap-1">
+                          <img src="/images/tokens/usdc.png" className="h-5 w-5 max-md:h-4 max-md:w-4" alt="" />
+                          <div className="flex items-center gap-1 max-md:text-sm">
                             <Text>{formatNumber(+item?.quantity)}</Text>
                             <Text>USDC</Text>
                           </div>
                         </div>
-                        <div className="text-center">
+                        <div className="text-center max-md:text-sm">
                           {item?.status === WithdrawalStatus.DONE && (
                             <Text className="text-success-500 font-neueMachinaBold">Done</Text>
                           )}
@@ -280,16 +291,29 @@ const ProfilePage: FC<ProfilePageProps> = () => {
         </div>
       </Container>
       <ModalClaimUsdc open={Boolean(openClaim)} data={openClaim} onCancel={() => setOpenClaim(undefined)} />
-      <ModalInviteList width={928} open={openInviteList} data={referralList?.data} isLoading={isLoadingReferralList} onCancel={() => setOpenInviteList(false)} />
+      <ModalInviteList
+        width={928}
+        open={openInviteList}
+        data={referralList?.data}
+        isLoading={isLoadingReferralList}
+        onCancel={() => setOpenInviteList(false)}
+      />
     </div>
   )
 }
 
 export default ProfilePage
 
-const CopyIcon = () => {
+const CopyIcon = ({ className }: { className?: string }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      className={className}
+    >
       <g clipPath="url(#clip0_10417_300)">
         <path
           fillRule="evenodd"
@@ -307,9 +331,16 @@ const CopyIcon = () => {
   )
 }
 
-const TwitterIcon = () => {
+const TwitterIcon = ({ className }: { className?: string }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      className={className}
+    >
       <g clipPath="url(#clip0_10417_305)">
         <path
           d="M10.6686 9.65845L15.1694 16.0961H13.3223L9.64957 10.843V10.8426L9.11037 10.0715L4.82007 3.93457H6.66718L10.1294 8.8873L10.6686 9.65845Z"
@@ -329,9 +360,16 @@ const TwitterIcon = () => {
   )
 }
 
-const UserIcon = () => {
+const UserIcon = ({ className }: { className?: string }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="29" height="28" viewBox="0 0 29 28" fill="none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="29"
+      height="28"
+      viewBox="0 0 29 28"
+      fill="none"
+      className={className}
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"

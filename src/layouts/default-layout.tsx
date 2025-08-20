@@ -11,7 +11,7 @@ export const DefaultLayout: FC<DefaultLayoutProps> = () => {
   return (
     <div className={cn("relative", "min-h-svh bg-[#000D1F] bg-fixed")}>
       <Header />
-      <main className="pb-16 pt-[76px]">
+      <main className="pb-16 pt-[76px] max-lg:pt-14">
         <Outlet />
       </main>
       <Footer />

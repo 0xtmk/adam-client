@@ -36,12 +36,16 @@ export const ModalInviteList: FC<ModalInviteListProps> = ({ data, isLoading, ...
               key={index}
               className={cn("flex h-[60px] items-center", index % 2 === 0 ? "bg-[#111932]" : "bg-[#1B2547]")}
             >
-              <div className=" w-[10%] text-center">#{index + 1}</div>
+              <div className=" w-[10%] max-sm:w-[15%] text-center">#{index + 1}</div>
               <div className=" flex w-[40%] items-center gap-2 text-left">
-                <img className="h-8 w-8 rounded-full" src={item?.avatar || "/images/default-avatar.png"} alt="" />
-                <Text>{item?.twitter_username}</Text>
+                <img
+                  className="h-8 w-8 rounded-full max-md:h-6 max-md:w-6"
+                  src={item?.avatar || "/images/default-avatar.png"}
+                  alt=""
+                />
+                <Text className="max-sm:text-sm">{item?.twitter_username}</Text>
               </div>
-              <div className="w-[50%] text-left">{truncateAddress(item?.address || "")} </div>
+              <div className="w-[50%] max-sm:w-[45%] text-left">{truncateAddress(item?.address || "")} </div>
             </div>
           )
         })}
@@ -50,16 +54,16 @@ export const ModalInviteList: FC<ModalInviteListProps> = ({ data, isLoading, ...
   }
   return (
     <Modal footer={null} className="primary-modal" {...props}>
-      <div className="h-[655px] rounded-[32px] bg-[radial-gradient(circle_at_20%_4%,_#116191_0%,_#52B8FC_71%,_#243358_100%)] bg-fixed p-[2px]">
-        <div className="h-full w-full rounded-[32px] bg-[#111932] p-8">
-          <Text className="font-neueMachinaBold text-center text-2xl">Invited list</Text>
-          <div className="mt-6">
+      <div className="h-fit rounded-[32px] bg-[radial-gradient(circle_at_20%_4%,_#116191_0%,_#52B8FC_71%,_#243358_100%)] bg-fixed p-[2px]">
+        <div className="h-full w-full rounded-[32px] bg-[#111932] p-8 max-md:p-4 max-md:px-2">
+          <Text className="font-neueMachinaBold text-center text-2xl max-md:text-lg">Invited list</Text>
+          <div className="mt-6 max-sm:mt-3">
             <div className=" rounded-[32px] bg-[linear-gradient(172deg,#456396_-27.86%,#000D1F_82.05%)] p-[2px]">
-              <div className="modal-scroll-bar h-[536px]  w-full overflow-y-auto rounded-[32px]">
+              <div className="modal-scroll-bar h-[536px] w-full overflow-y-auto rounded-[32px] max-md:h-[400px]">
                 <div className="flex h-14 items-center rounded-t-[32px] bg-[#1B2547]">
-                  <Text className="font-neueMachinaBold w-[10%] text-center">#</Text>
+                  <Text className="font-neueMachinaBold w-[10%] max-sm:w-[15%] text-center">#</Text>
                   <Text className="font-neueMachinaBold w-[40%] text-left">Username</Text>
-                  <Text className="font-neueMachinaBold w-[50%] text-left">Wallet address</Text>
+                  <Text className="font-neueMachinaBold w-[50%] max-sm:w-[45%] text-left">Wallet address</Text>
                 </div>
 
                 {contentNode()}

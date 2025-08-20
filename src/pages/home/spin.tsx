@@ -1,6 +1,7 @@
 import { HOST } from "@/configs/host.config"
 import { useUserStore } from "@/hooks/stores/use-user-store"
 import useUserInfo from "@/hooks/use-user-balance"
+import { Button } from "@/libs/ui/button"
 import { Text } from "@/libs/ui/text"
 import { Service } from "@/services/app.service"
 import { cn } from "@/utils/classnames"
@@ -28,7 +29,7 @@ const rewards: (SpinReward & { icon?: string })[] = [
 ]
 
 const WHEEL_SIZE = 530
-const CENTER = WHEEL_SIZE / 2
+// const CENTER = WHEEL_SIZE / 2
 const SEGMENTS = rewards.length
 
 function getRandomOffsetPerSegment() {
@@ -55,12 +56,23 @@ function runConfetti() {
 }
 
 const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory }) => {
+  const [wheelSize, setWheelSize] = useState(typeof window !== "undefined" && window.innerWidth < 1280 ? 350 : 530)
+
+  const CENTER = wheelSize / 2
+  useEffect(() => {
+    const handleResize = () => {
+      setWheelSize(window.innerWidth < 1280 ? 350 : 530)
+    }
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   const [spinning, setSpinning] = useState(false)
   const [angle, setAngle] = useState(0)
   const [resultIdx, setResultIdx] = useState<number | null>(null)
 
   const animRef = useRef<number | null>(null)
-  const { userInfo } = useUserStore()
+  const { userInfo, token } = useUserStore()
   const { mutateUserBalance, userBalance } = useUserInfo()
 
   const itemResult = useMemo(() => {
@@ -128,55 +140,65 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
     animRef.current = requestAnimationFrame(animate)
   }
 
-  const renderPointer = () => (
-    <img
-      src="/images/spin-pointer.png"
-      alt="pointer"
-      style={{
-        position: "absolute",
-        left: CENTER - 48,
-        top: -8,
-        width: 106,
-        height: 94,
-        zIndex: 2,
-        pointerEvents: "none",
-        userSelect: "none",
-      }}
-    />
-  )
+  const renderPointer = () => {
+    const isSmall = window.innerWidth < 1280
+
+    return (
+      <img
+        src="/images/spin-pointer.png"
+        alt="pointer"
+        style={{
+          position: "absolute",
+          left: isSmall ? CENTER - 32 : CENTER - 48,
+          top: isSmall ? -4 : -8,
+          width: isSmall ? 70 : 106,
+          height: isSmall ? 62 : 94,
+          zIndex: 2,
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      />
+    )
+  }
 
   const renderOuterBorder = () => (
-    <image href="/images/spin-wheel.png" x={0} y={0} width={WHEEL_SIZE} height={WHEEL_SIZE} />
+    <image href="/images/spin-wheel.png" x={0} y={0} width={wheelSize} height={wheelSize} />
   )
 
-  const renderSpinButton = () => (
-    <img
-      className={cn("active:scale-95", userBalance?.spin === 0 && "grayscale")}
-      src="/images/spin-button.png"
-      alt="spin-button"
-      width={150}
-      height={150}
-      onClick={handleSpin}
-      style={{
-        position: "absolute",
-        left: CENTER - 75,
-        top: CENTER - 75,
-        zIndex: 3,
-        cursor: "pointer",
-        userSelect: "none",
-      }}
-      draggable={false}
-    />
-  )
+  const renderSpinButton = () => {
+    const isSmall = window.innerWidth < 1280
+    const width = isSmall ? 100 : 150
+    const height = isSmall ? 100 : 150
+    return (
+      <img
+        className={cn("active:scale-95", (!token || userBalance?.spin === 0) && "grayscale")}
+        src="/images/spin-button.png"
+        alt="spin-button"
+        width={width}
+        height={height}
+        onClick={handleSpin}
+        style={{
+          position: "absolute",
+          left: `${CENTER}px`,
+          top: `${CENTER}px`,
+          transform: "translate(-50%, -50%)",
+          zIndex: 3,
+          cursor: "pointer",
+          userSelect: "none",
+        }}
+        draggable={false}
+      />
+    )
+  }
 
   return (
     <>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 24 }}>
-        <div style={{ position: "relative", width: WHEEL_SIZE, height: WHEEL_SIZE }}>
+        <div style={{ position: "relative", width: wheelSize, height: wheelSize }}>
           {renderPointer()}
           <svg
-            width={WHEEL_SIZE}
-            height={WHEEL_SIZE}
+            width={wheelSize}
+            height={wheelSize}
             style={{ transform: `rotate(${angle}deg)`, transition: spinning ? undefined : "transform 0.2s" }}
           >
             {renderOuterBorder()}
@@ -189,7 +211,7 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
         <img
           onClick={() => setResultIdx(null)}
           src="/icons/close.png"
-          className="absolute -right-10 top-0 z-20 h-8 w-8 cursor-pointer hover:scale-105 active:scale-95"
+          className="absolute -right-10 top-0 z-20 h-8 w-8 cursor-pointer hover:scale-105 active:scale-95 max-md:hidden"
           alt=""
         />
         <div className="flex flex-col items-center space-y-[60px]">
@@ -222,19 +244,22 @@ const SpinWheel: React.FC<{ refreshSpinHistory?: any }> = ({ refreshSpinHistory 
               {itemResult?.amount} {itemResult?.name}
             </Text>
           </div>
-          <PrimaryButton
-            onClick={() => {
-              if (!resultIdx) return
-              const context = `Wait... I just won ${rewards[resultIdx]?.amount} ${rewards[resultIdx]?.name} on @AdamGives_com 😱
+          <div className="space-y-4">
+            <PrimaryButton
+              onClick={() => {
+                if (!resultIdx) return
+                const context = `Wait... I just won ${rewards[resultIdx]?.amount} ${rewards[resultIdx]?.name} on @AdamGives_com 😱
 Your turn: ${HOST}?ref_code=${userInfo?.referral_code}`
-              const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(context)}`
+                const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(context)}`
 
-              openLinkInNewTab(tweetUrl)
-            }}
-            childClassName="w-[229px]"
-          >
-            <Text>Share to earn 10 points</Text>
-          </PrimaryButton>
+                openLinkInNewTab(tweetUrl)
+              }}
+              childClassName="w-[229px]"
+            >
+              <Text>Share to earn 10 points</Text>
+            </PrimaryButton>
+            <Button onClick={() => setResultIdx(null)} type="secondary" className={cn("w-full" , "md:hidden")}>Close</Button>
+          </div>
         </div>
       </ModalCongrats>
     </>
