@@ -3,7 +3,7 @@ import { ENV, Env } from "./env.config"
 export const API_URLS = <const>{
   [Env.development]: "https://adam-sv-production.up.railway.app",
   [Env.staging]: "",
-  [Env.production]: "",
+  [Env.production]: "https://bless-api.adamgives.com",
 }
 
 export const WS_URLS = <const>{
